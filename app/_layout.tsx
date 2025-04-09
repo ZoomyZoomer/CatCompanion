@@ -43,6 +43,7 @@ export default function RootLayout() {
       <StatusBar style="dark" />
       <Stack>
         <Stack.Screen name="(intro)" options={{ headerShown: false }} />
+        <Stack.Screen name="(main)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </>

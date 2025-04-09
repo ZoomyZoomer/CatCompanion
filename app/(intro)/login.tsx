@@ -21,7 +21,7 @@ export default function loginPage() {
     useEffect(() => {
         if (!fillScreen) return;
         setTimeout(() => {
-            router.push('/cat-intro-login');
+            router.push('/(main)/adventures');
         }, 1250)
     }, [fillScreen])
 
