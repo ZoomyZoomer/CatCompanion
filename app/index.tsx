@@ -1,5 +1,6 @@
 import { Redirect } from 'expo-router';
+import React from 'react';
 
 export default function IndexRedirect() {
-  return <Redirect href="/(intro)/login" />;
+  return <Redirect href="/(main)/adventures" />;
 }

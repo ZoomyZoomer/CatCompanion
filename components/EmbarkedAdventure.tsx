@@ -1,20 +1,32 @@
-import { StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, View } from "react-native"
+import React from "react"
+
 import Star from '@/assets/svgs/star_filled_dark.svg'
 import Bolt from '@/assets/svgs/bolt_filled_dark.svg'
 
-const EmbarkedAdventure = () => {
-    return (
-        <View style={styles.adventure_container_inactive}>
+type Adventure = {
+    name: string
+}
 
-            <View style={styles.adventure_banner}>
-                <View style={styles.adventure_circle}/>
+type EmbarkedAdventureTypes = {
+    adventure: Adventure | null
+}
+
+const EmbarkedAdventure = ({adventure} : EmbarkedAdventureTypes) => {
+    return (
+        <View style={[styles.adventure_container, {borderColor: adventure ? '#FCAD72' : '#CDD8EA'}]}>
+
+            <View style={[styles.adventure_banner, {backgroundColor: adventure ? '#FCAD72' : '#E4E7EC'}]}>
+                <View style={styles.adventure_circle}>
+                    <Image source={require('@/assets/pngs/swords.png')} style={styles.banner_icon}/>
+                </View>
             </View>
 
             <View style={{width: '78%', flexDirection: 'row', alignItems: 'center'}}>
 
                 <View style={{marginLeft: 20, justifyContent: 'center', width: '75%', boxSizing: 'border-box'}}>
 
-                    <Text style={styles.adventure_title}>Empty Adventure Slot ·  Inactive</Text>
+                    <Text style={styles.adventure_title}>{adventure ? adventure.name : 'Empty Adventure Slot'} · {adventure ? 'Active' : 'Inactive'}</Text>
                     <Text style={styles.adventure_desc}><strong>Tap</strong> for a random adventure or select one below~</Text>
 
                     <View style={styles.adventure_tag}>
@@ -40,9 +52,8 @@ const EmbarkedAdventure = () => {
 export default EmbarkedAdventure
 
 const styles = StyleSheet.create({
-    adventure_container_inactive: {
+    adventure_container: {
         borderWidth: 1,
-        borderColor: '#CDD8EA',
         borderStyle: 'dashed',
         borderRadius: '0.8rem',
         flexDirection: 'row',
@@ -52,7 +63,6 @@ const styles = StyleSheet.create({
     adventure_banner: {
         height: '100%',
         width: '22%',
-        backgroundColor: '#E4E7EC',
         borderTopLeftRadius: '0.8rem',
         borderBottomLeftRadius: '0.8rem',
         justifyContent: 'center',
@@ -60,6 +70,8 @@ const styles = StyleSheet.create({
     },
     adventure_circle: {
         backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: 60,
         width: 60,
         borderRadius: 60
@@ -107,5 +119,10 @@ const styles = StyleSheet.create({
     bolt_icon: {
         position: 'absolute',
         top: '110%'
+    },
+    banner_icon: {
+        height: 36,
+        width: 36,
+        filter: 'grayscale(0.6)'
     }
 })
