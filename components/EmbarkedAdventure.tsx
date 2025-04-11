@@ -44,6 +44,7 @@ const EmbarkedAdventure = ({adventure} : EmbarkedAdventureTypes) => {
 
             </View>
 
+            <Image source={require('@/assets/cats/cat_sleep.png')} style={styles.cat_sleep_icon}/>
 
         </View>
     )
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
         borderStyle: 'dashed',
         borderRadius: '0.8rem',
         flexDirection: 'row',
+        position: 'relative',
         width: '100%',
         height: 130
     },
@@ -79,31 +81,36 @@ const styles = StyleSheet.create({
     adventure_title: {
         color: '#7C889A',
         fontWeight: '500',
-        fontSize: 14
+        fontSize: 14,
+        fontFamily: 'Poppins'
     },
     adventure_desc: {
         color: '#C8C4C3',
         fontSize: 12,
         marginTop: 4,
-        width: '70%'
+        width: '70%',
+        fontFamily: 'Poppins'
     },
     adventure_tag: {
         borderColor: '#E4E7EC',
         borderWidth: 1,
         borderStyle: 'solid',
         borderRadius: '0.8rem',
-        width: '82%',
+        width: '70%',
         height: 24,
         marginTop: 12,
         alignItems: 'center',
+        justifyContent: 'center',
         flexDirection: 'row',
         paddingLeft: 10,
-        paddingRight: 10
+        paddingRight: 10,
+
     },
     adventure_tag_text: {
         color: '#7C889A',
         fontSize: 12,
-        marginLeft: 6
+        marginLeft: 6,
+        fontFamily: 'Poppins'
     },
     adventure_status_bar: {
         backgroundColor: '#E4E7EC',
@@ -124,5 +131,12 @@ const styles = StyleSheet.create({
         height: 36,
         width: 36,
         filter: 'grayscale(0.6)'
+    },
+    cat_sleep_icon: {
+        position: 'absolute',
+        height: 40,
+        width: 80,
+        right: 20,
+        bottom: '96%'
     }
 })

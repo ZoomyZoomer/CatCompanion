@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import FontText from './FontText'
+import React from 'react';
 
 type CatButtonProps = {
     executeFunction: () => void;
