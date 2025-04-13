@@ -7,6 +7,7 @@ import EmbarkedAdventure from "@/components/EmbarkedAdventure"
 
 import Key from '@/assets/svgs/key_small.svg'
 import CategorySelect from "@/components/CategorySelect"
+import CategoryAdventure from "@/components/CategoryAdventure"
 
 const Shoe = require('@/assets/pngs/shoe_icon.png');
 const Tree = require('@/assets/pngs/tree_icon.png');
@@ -75,7 +76,7 @@ export default function adventures() {
 
                 <View style={styles.category_path_container}>
                     {Array.from(adventureSet)[activeId].paths.map((path) => (
-                        <></>
+                        <CategoryAdventure />
                     ))}
                 </View>
 

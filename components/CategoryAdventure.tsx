@@ -24,7 +24,7 @@ const CategoryAdventure = ({isOngoing, isCompleted, isAvailable, path} : Categor
     const [status, setStatus] = useState(0);
 
     useEffect(() => {
-
+        const res = axios.get('http://http://localhost:8081/api/')
     }, [])
 
     return (
