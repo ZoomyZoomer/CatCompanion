@@ -1,7 +1,8 @@
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from "react-native"
-import React from "react"
+import React, { useState, useEffect } from "react"
 import StarFilledLight from '@/assets/svgs/star_filled.svg'
 import StarEmptyLight from '@/assets/svgs/star_empty.svg'
+import axios from 'axios'
 
 type categoryPath = {
         cp_id: number;
@@ -19,6 +20,13 @@ type CategoryAdventureTypes = {
 }
 
 const CategoryAdventure = ({isOngoing, isCompleted, isAvailable, path} : CategoryAdventureTypes) => {
+
+    const [status, setStatus] = useState(0);
+
+    useEffect(() => {
+
+    }, [])
+
     return (
         <View style={[styles.adventure_container, {borderColor: (isOngoing || isCompleted || isAvailable) ? '#FCAD72' : '#CDD8EA'}]}>
 
