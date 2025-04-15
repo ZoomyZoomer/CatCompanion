@@ -27,7 +27,7 @@ const EmbarkedAdventure = ({adventure} : EmbarkedAdventureTypes) => {
                 <View style={{marginLeft: 20, justifyContent: 'center', width: '75%', boxSizing: 'border-box'}}>
 
                     <Text style={styles.adventure_title}>{adventure ? adventure.name : 'Empty Adventure Slot'} · {adventure ? 'Active' : 'Inactive'}</Text>
-                    <Text style={styles.adventure_desc}><strong>Tap</strong> for a random adventure or select one below~</Text>
+                    <Text style={styles.adventure_desc}>Tap for a random adventure or select one below~</Text>
 
                     <View style={styles.adventure_tag}>
                         <Star />

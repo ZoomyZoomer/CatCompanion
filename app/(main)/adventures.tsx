@@ -1,5 +1,5 @@
 import { ImageSourcePropType, StyleSheet, Text, View } from "react-native"
-import React, { useState } from "react"
+import { useState } from "react"
 
 import Navbar from "@/components/Navbar"
 import CatSelectNavbar from "@/components/CatSelectNavbar"
@@ -8,8 +8,10 @@ import EmbarkedAdventure from "@/components/EmbarkedAdventure"
 import Key from '@/assets/svgs/key_small.svg'
 import CategorySelect from "@/components/CategorySelect"
 import CategoryAdventure from "@/components/CategoryAdventure"
+import React = require("react")
 
 const Shoe = require('@/assets/pngs/shoe_icon.png');
+const Brain = require('@/assets/pngs/brain_icon.png');
 const Tree = require('@/assets/pngs/tree_icon.png');
 
 
@@ -17,30 +19,39 @@ export default function adventures() {
 
     type categoryPaths = {
         cp_id: number;
-        name: string,
-        desc: string,
-        difficulty: number,
-        Icon: ImageSourcePropType
-    }
-
-    type category = {
+        name: string;
+        desc: string;
+        difficulty: number;
+        Icon: ImageSourcePropType;
+      }
+      
+      type category = {
         c_id: number;
         name: string;
-        paths: [categoryPaths]
-    }
+        paths: categoryPaths[];
+      }
+      
 
     const [activeId, setActiveId] = useState(0);
 
-    const adventureSet = new Set<category>([
+    const adventureSet: category[] = [
         {
-            c_id: 0, name: 'Health & Fitness', 
-            paths: [{cp_id: 0, name: 'One Step at a Time', desc: 'Includes: A choice between flexibility and endurance exercises~', difficulty: 1, Icon: Shoe}]
+          c_id: 0, 
+          name: 'Health & Fitness',
+          paths: [
+            { cp_id: 0, name: 'One Step at a Time', desc: 'A choice between flexibility and endurance exercises~', difficulty: 1, Icon: Shoe },
+            { cp_id: 1, name: 'Mind & Muscle', desc: 'A choice between mediation and strength exercises~', difficulty: 2, Icon: Brain }
+          ]
         },
         {
-            c_id: 1, name: 'Outdoors',
-            paths: [{cp_id: 0, name: 'Touch Grass', desc: 'Includes: A choice between calm walks and brisky runs~', difficulty: 1, Icon: Tree}]
+          c_id: 1, 
+          name: 'Outdoors',
+          paths: [
+            { cp_id: 0, name: 'Touch Grass', desc: 'A choice between calm walks and brisky runs~', difficulty: 1, Icon: Tree }
+          ]
         }
-    ])
+      ];
+      
 
     return (
         <View style={{flex: 1, backgroundColor: '#FDFDFD', alignItems: 'center'}}>
@@ -69,16 +80,24 @@ export default function adventures() {
                 </View>
 
                 <View style={styles.category_tags_container}>
-                    {Array.from(adventureSet).map((adventure) => (
-                        <CategorySelect category={adventure.name} id={adventure.c_id} activeId={activeId} setActiveId={setActiveId}/>
+                    {adventureSet.map((adventure) => (
+                        <CategorySelect 
+                        key={adventure.c_id} 
+                        category={adventure.name} 
+                        id={adventure.c_id} 
+                        activeId={activeId} 
+                        setActiveId={setActiveId}
+                        />
                     ))}
                 </View>
 
+
                 <View style={styles.category_path_container}>
-                    {Array.from(adventureSet)[activeId].paths.map((path) => (
-                        <CategoryAdventure />
+                    {adventureSet[activeId].paths.map((pathdata) => (
+                        <CategoryAdventure key={pathdata.cp_id} path={pathdata} />
                     ))}
                 </View>
+
 
             </View>
 

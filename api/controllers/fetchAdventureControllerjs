@@ -1,6 +1,0 @@
-
-
-exports.fetchAdventureCategory = (req, res) => {
-    res.json({ message: "Adventure Category data here" });
-  };
-  

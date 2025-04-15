@@ -1,8 +1,13 @@
 import { Image, ImageSourcePropType, StyleSheet, Text, View } from "react-native"
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
+
 import StarFilledLight from '@/assets/svgs/star_filled.svg'
 import StarEmptyLight from '@/assets/svgs/star_empty.svg'
+
+const Stamp = require('@/assets/pngs/stamp.png');
+
 import axios from 'axios'
+import React = require("react")
 
 type categoryPath = {
         cp_id: number;
@@ -13,26 +18,21 @@ type categoryPath = {
     }
 
 type CategoryAdventureTypes = {
-    isOngoing: boolean;
-    isCompleted: boolean;
-    isAvailable: boolean;
     path: categoryPath;
 }
 
-const CategoryAdventure = ({isOngoing, isCompleted, isAvailable, path} : CategoryAdventureTypes) => {
+const BASE_URL = 'https://localhost:8081/api';
 
-    const [status, setStatus] = useState(0);
+const CategoryAdventure = ({path} : CategoryAdventureTypes) => {
 
-    useEffect(() => {
-        const res = axios.get('http://http://localhost:8081/api/')
-    }, [])
+    const [status, setStatus] = useState(0); // 0 -> Ongoing; 1 -> Completed; 2 -> Available
 
     return (
-        <View style={[styles.adventure_container, {borderColor: (isOngoing || isCompleted || isAvailable) ? '#FCAD72' : '#CDD8EA'}]}>
+        <View style={[styles.adventure_container, {borderColor: (status >= 0) ? '#FCAD72' : '#CDD8EA'}]}>
 
-            <View style={[styles.adventure_banner, {backgroundColor: (isOngoing || isCompleted || isAvailable) ? '#FCAD72' : '#E4E7EC'}]}>
+            <View style={[styles.adventure_banner, {backgroundColor: (status >= 0) ? '#FCAD72' : '#E4E7EC'}]}>
                 <View style={styles.adventure_circle}>
-                <   Image source={path.Icon} style={(isOngoing || isCompleted || isAvailable) ? styles.banner_icon_active : styles.banner_icon}/>
+                    <Image source={path?.Icon} style={(status >= 0) ? styles.banner_icon_active : styles.banner_icon}/>
                 </View>
             </View>
 
@@ -40,17 +40,17 @@ const CategoryAdventure = ({isOngoing, isCompleted, isAvailable, path} : Categor
 
                 <View style={{marginLeft: 20, justifyContent: 'center', width: '75%', boxSizing: 'border-box'}}>
 
-                    <Text style={styles.adventure_title}>{path.name} · {isCompleted ? 'Completed' : (isOngoing ? 'Active' : (isAvailable ? 'Available' : 'Locked'))}</Text>
-                    <Text style={styles.adventure_desc}><strong>Includes: </strong> {path.desc}</Text>
+                    <Text style={styles.adventure_title}>{path?.name} · {status === 1 ? 'Completed' : (status === 0 ? 'Active' : (status === 2 ? 'Available' : 'Locked'))}</Text>
+                    <Text style={styles.adventure_desc}><strong>Includes: </strong> {path?.desc}</Text>
 
                     <View style={styles.adventure_tag}>
                         <Text style={styles.adventure_tag_text}>Difficulty: </Text>
-                        <View style={{ flexDirection: 'row', gap: 2, marginLeft: 4 }}>
+                        <View style={{ flexDirection: 'row', gap: 2, justifyContent: 'center', alignItems: 'center'}}>
                             {Array.from({ length: 5 }).map((_, index) =>
-                            index < path.difficulty ? (
-                                <StarFilledLight key={index}/>
+                            index < path?.difficulty ? (
+                                <StarFilledLight key={index} style={styles.stars}/>
                             ) : (
-                                <StarEmptyLight key={index}/>
+                                <StarEmptyLight key={index} style={styles.stars}/>
                             )
                             )}
                         </View>
@@ -58,8 +58,8 @@ const CategoryAdventure = ({isOngoing, isCompleted, isAvailable, path} : Categor
 
                 </View>
                 
-                <View style={{width: '25%', marginLeft: -20, height: '100%', alignItems: 'center'}}>
-                    
+                <View style={{width: '25%', marginLeft: -30, height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                    <Image source={Stamp} style={styles.stamp} />
                 </View>
 
             </View>
@@ -78,7 +78,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         position: 'relative',
         width: '100%',
-        height: 130
+        height: 130,
+        marginTop: 32
     },
     adventure_banner: {
         height: '100%',
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
         color: '#C8C4C3',
         fontSize: 12,
         marginTop: 4,
-        width: '70%',
+        width: '80%',
         fontFamily: 'Poppins'
     },
     adventure_tag: {
@@ -124,14 +125,12 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderRadius: '0.8rem',
         backgroundColor: '#FCAD72',
-        width: '70%',
+        width: '76%',
         height: 24,
         marginTop: 12,
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row',
-        paddingLeft: 10,
-        paddingRight: 10,
+        flexDirection: 'row'
     },
     adventure_tag_text: {
         color: 'white',
@@ -139,4 +138,12 @@ const styles = StyleSheet.create({
         marginLeft: 6,
         fontFamily: 'Poppins'
     },
+    stars: {
+        height: 16,
+        width: 16
+    },
+    stamp: {
+        height: 60,
+        width: 60
+    }
 })

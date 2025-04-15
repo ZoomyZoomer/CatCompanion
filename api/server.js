@@ -1,12 +1,15 @@
-const express = require("express");
-const cors = require("cors");
-const fetchRoutes = require("./routes/fetchRoutes");
+import express from 'express';
+import adventureRoutes from './routes/adventureRoutes.js';
 
 const app = express();
-app.use(cors());
+const PORT = 3000;
+
 app.use(express.json());
 
-app.use("/api", fetchRoutes);
+// Mount your route modules here
+app.use('/api/adventure', adventureRoutes);
+// app.use('/api/calendar', calendarRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
