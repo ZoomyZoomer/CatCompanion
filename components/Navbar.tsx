@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native"
 import Fish from '@/assets/svgs/fish.svg'
+import React from "react";
 
 type navbarTypes = {
     tabName: string;
@@ -12,7 +13,7 @@ const Navbar = ({tabName, currencyAmount} : navbarTypes) => {
             <Text style={styles.navbar_title}>{tabName}</Text>
             <View style={styles.currency_container}>
                 <Text style={styles.currency_text}>{currencyAmount}</Text>
-                <Fish />
+                <Fish style={styles.fish}/>
             </View>
         </View>
     )
@@ -28,12 +29,12 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: '0.8rem',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 80,
+        height: 70,
         position: 'relative'
     },
     navbar_title: {
         color: '#52637D',
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '600'
     },
     currency_container: {
@@ -46,14 +47,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        height: 30,
-        width: 100,
-        right: 34
+        height: 26,
+        width: 90,
+        right: 20
     },
     currency_text: {
         color: '#52637D',
         marginRight: 6,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '600'
+    },
+    fish: {
+        height: 26,
+        width: 26
     }
 })

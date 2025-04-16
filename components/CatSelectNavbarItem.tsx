@@ -1,3 +1,4 @@
+import React from "react";
 import { FunctionComponent } from "react";
 import { Image, View, Text, StyleSheet } from "react-native"
 import { SvgProps } from "react-native-svg";
@@ -12,8 +13,8 @@ const CatSelectNavbarItem = ({isActive, Icon, tabName} : navbarItemTypes) => {
     return (
         <View style={isActive ?  styles.item_container_active : styles.item_container_inactive}>
 
-            <View style={{flexDirection: 'row'}}>
-                <Icon />
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <Icon style={styles.icons}/>
                 <Text style={isActive ? styles.tab_text_active : styles.tab_text_inactive}>{tabName}</Text>
             </View>
 
@@ -49,17 +50,21 @@ const styles = StyleSheet.create({
     tab_text_active: {
         color: 'white',
         fontWeight: '700',
-        fontSize: 16,
+        fontSize: 14,
         marginLeft: 6
     },
     tab_text_inactive: {
         color: '#52637D',
-        fontSize: 16,
+        fontSize: 14,
         marginLeft: 6
     },
-    cat_hang:{
+    cat_hang: {
         position: 'absolute',
         bottom: '92%',
         left: 10
+    },
+    icons: {
+        height: 22,
+        width: 22
     }
 })

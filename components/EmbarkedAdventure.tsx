@@ -27,7 +27,7 @@ const EmbarkedAdventure = ({adventure} : EmbarkedAdventureTypes) => {
                 <View style={{marginLeft: 20, justifyContent: 'center', width: '75%', boxSizing: 'border-box'}}>
 
                     <Text style={styles.adventure_title}>{adventure ? adventure.name : 'Empty Adventure Slot'} · {adventure ? 'Active' : 'Inactive'}</Text>
-                    <Text style={styles.adventure_desc}>Tap for a random adventure or select one below~</Text>
+                    <Text style={styles.adventure_desc}><Text style={{fontWeight: 600}}>Tap</Text> for a random adventure or select one below~</Text>
 
                     <View style={styles.adventure_tag}>
                         <Star />
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         position: 'relative',
         width: '100%',
-        height: 130
+        height: 115
     },
     adventure_banner: {
         height: '100%',
@@ -74,29 +74,27 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 60,
-        width: 60,
-        borderRadius: 60
+        height: 54,
+        width: 54,
+        borderRadius: 54
     },
     adventure_title: {
         color: '#7C889A',
         fontWeight: '500',
-        fontSize: 14,
-        fontFamily: 'Poppins'
+        fontSize: 12
     },
     adventure_desc: {
-        color: '#C8C4C3',
-        fontSize: 12,
+        color: '#AFAFAF',
+        fontSize: 10,
         marginTop: 4,
-        width: '70%',
-        fontFamily: 'Poppins'
+        width: '80%'
     },
     adventure_tag: {
         borderColor: '#E4E7EC',
         borderWidth: 1,
         borderStyle: 'solid',
         borderRadius: '0.8rem',
-        width: '70%',
+        width: '85%',
         height: 24,
         marginTop: 12,
         alignItems: 'center',
@@ -108,9 +106,8 @@ const styles = StyleSheet.create({
     },
     adventure_tag_text: {
         color: '#7C889A',
-        fontSize: 12,
-        marginLeft: 6,
-        fontFamily: 'Poppins'
+        fontSize: 10,
+        marginLeft: 6
     },
     adventure_status_bar: {
         backgroundColor: '#E4E7EC',
@@ -128,8 +125,8 @@ const styles = StyleSheet.create({
         top: '110%'
     },
     banner_icon: {
-        height: 36,
-        width: 36,
+        height: 32,
+        width: 32,
         filter: 'grayscale(0.6)'
     },
     cat_sleep_icon: {

@@ -11,7 +11,7 @@ type CategorySelectTypes = {
 const CategorySelect = ({category, id, activeId, setActiveId} : CategorySelectTypes) => {
     return (
         <TouchableOpacity style={[styles.category_container, {borderColor: id === activeId ? '#FCAD72' : '#CDD8EA', backgroundColor: id === activeId ? '#FCAD72' : 'white'}]} onPress={() => setActiveId(id)}>
-            <Text style={{color: id === activeId ? 'white' : '#52637D' }}>{category}</Text>
+            <Text style={[styles.category_text, {color: id === activeId ? 'white' : '#52637D'}]}>{category}</Text>
         </TouchableOpacity>
     )
 }
@@ -29,11 +29,12 @@ const styles = StyleSheet.create({
         paddingBottom: 14,
         marginLeft: 4,
         marginRight: 4,
+        marginBottom: 10,
         borderWidth: 1,
         borderStyle: 'solid',
-        borderRadius: '1.2rem',
+        borderRadius: '1.2rem'
     },
     category_text: {
-        fontSize: 14
+        fontSize: 12
     }
 })
