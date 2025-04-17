@@ -16,23 +16,26 @@ type categoryPath = {
         name: string,
         desc: string,
         difficulty: number,
-        Icon: ImageSourcePropType
+        Icon: ImageSourcePropType,
+        optionsLabels: Object[],
+        options: Object[]
     }
 
 type CategoryAdventureTypes = {
     path: categoryPath;
     isLastAdventure: boolean,
-    setShowSelectAdventurePopup: (arg: (arg: boolean) => (boolean)) => (void)
+    setShowSelectAdventurePopup: (arg: (arg: boolean) => (boolean)) => (void);
+    setPopupData: (arg: object) => (void)
 }
 
 const BASE_URL = 'https://localhost:8081/api';
 
-const CategoryAdventure = ({path, isLastAdventure, setShowSelectAdventurePopup} : CategoryAdventureTypes) => {
+const CategoryAdventure = ({path, isLastAdventure, setShowSelectAdventurePopup, setPopupData} : CategoryAdventureTypes) => {
 
     const [status, setStatus] = useState(0); // 0 -> Ongoing; 1 -> Completed; 2 -> Available
 
     return (
-        <TouchableOpacity style={{width: '100%', justifyContent: 'center', alignItems: 'center'}} onPress={() => setShowSelectAdventurePopup(prev => !prev)}>
+        <TouchableOpacity style={{width: '100%', justifyContent: 'center', alignItems: 'center'}} onPress={() => {setPopupData(path); setShowSelectAdventurePopup(prev => !prev)}}>
 
             <View style={[styles.adventure_container, {borderColor: (status >= 0) ? '#FCAD72' : '#CDD8EA'}]}>
 

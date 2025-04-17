@@ -1,5 +1,5 @@
 import { ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 import Navbar from "@/components/Navbar"
 import CatSelectNavbar from "@/components/CatSelectNavbar"
@@ -19,6 +19,9 @@ const Shoe = require('@/assets/pngs/shoe_icon.png');
 const Brain = require('@/assets/pngs/brain_icon.png');
 const Tree = require('@/assets/pngs/tree_icon.png');
 
+const Flexibility = require('@/assets/pngs/flexibility.png');
+const Endurance = require('@/assets/pngs/endurance.png');
+
 
 export default function adventures() {
 
@@ -28,6 +31,8 @@ export default function adventures() {
         desc: string;
         difficulty: number;
         Icon: ImageSourcePropType;
+        optionsLabels: Object[];
+        options: Object[];
       }
       
       type category = {
@@ -38,6 +43,7 @@ export default function adventures() {
       
 
     const [activeId, setActiveId] = useState(0);
+    const [popupData, setPopupData] = useState({});
     
     const [showSelectAdventurePopup, setShowSelectAdventurePopup] = useState(false);
 
@@ -46,15 +52,30 @@ export default function adventures() {
           c_id: 0, 
           name: 'Health & Fitness',
           paths: [
-            { cp_id: 0, name: 'One Step at a Time (I)', desc: 'Flexibility or Endurance exercises~', difficulty: 1, Icon: Shoe },
-            { cp_id: 1, name: 'Mind & Muscle (II)', desc: 'Mediation or Strength exercises~', difficulty: 2, Icon: Brain }
+            { cp_id: 0, name: 'One Step at a Time (I)', desc: 'Flexibility or Endurance exercises~', difficulty: 1, Icon: Shoe,
+                optionsLabels: [
+                    {label: 'Flexibility', type: 'minute exercise', duration: 15, Icon: Flexibility, colorId: 0},
+                    {label: 'Endurance', type: 'minute exercise', duration: 20, Icon: Endurance, colorId: 1}
+                ],
+                options: [
+                    [{name: 'Butterfly Stretch', difficulty: 1}, {name: 'Pike', difficulty: 1}, {name: 'Pigeon Pose', difficulty: 1}, {name: 'Deep Lunge', difficulty: 2}],
+                    [{name: 'Plank', difficulty: 2}, {name: 'Jumping Jacks', difficulty: 1}, {name: 'Running in Place', difficulty: 1}, {name: 'Wall Sits', difficulty: 2}]
+                ]
+             },
+            { cp_id: 1, name: 'Mind & Muscle (II)', desc: 'Mediation or Strength exercises~', difficulty: 2, Icon: Brain,
+                optionsLabels: [],
+                options: []
+             }
           ]
         },
         {
           c_id: 1, 
           name: 'Outdoors',
           paths: [
-            { cp_id: 0, name: 'Touch Grass (I)', desc: 'Calm, scenic walks or Brisky runs~', difficulty: 1, Icon: Tree }
+            { cp_id: 0, name: 'Touch Grass (I)', desc: 'Calm, scenic walks or Brisky runs~', difficulty: 1, Icon: Tree,
+                optionsLabels: [], 
+                options: []
+            }
           ]
         },
         {
@@ -77,7 +98,7 @@ export default function adventures() {
     return (
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-            {showSelectAdventurePopup && <SelectAdventurePopup />}
+            {showSelectAdventurePopup && <SelectAdventurePopup popupData={popupData} setShowSelectAdventurePopup={setShowSelectAdventurePopup}/>}
 
         <View style={{flex: 1, backgroundColor: '#FDFDFD', alignItems: 'center', overflowY: 'auto', filter: showSelectAdventurePopup ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: showSelectAdventurePopup ? 'none' : 'auto'}}>
 
@@ -132,7 +153,7 @@ export default function adventures() {
                 <View style={styles.category_path_container}>
                     {adventureSet[activeId].paths.map((pathdata, index) => (
                         <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-                            <CategoryAdventure path={pathdata} isLastAdventure={index == adventureSet[activeId].paths.length - 1} setShowSelectAdventurePopup={setShowSelectAdventurePopup} />
+                            <CategoryAdventure path={pathdata} isLastAdventure={index == adventureSet[activeId].paths.length - 1} setShowSelectAdventurePopup={setShowSelectAdventurePopup} setPopupData={setPopupData} />
                         </View>
                     ))}
                 </View>
