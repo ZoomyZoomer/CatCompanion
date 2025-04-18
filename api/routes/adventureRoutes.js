@@ -1,10 +1,10 @@
-import express from 'express';
-
-import { getAdventureByCategory, getAllAdventures } from '../controllers/adventureController';
+const express = require('express')
+const { confirmAdventure, fetchCategory } = require('../controllers/adventureController');
 
 const router = express.Router();
 
-router.get('/', getAllAdventures);
-router.get('/:categoryId', getAdventureByCategory);
+router.post('/confirmAdventure', confirmAdventure);
+router.get('/fetchCategory/:categoryId', fetchCategory);
 
-export default router;
+module.exports = router;
+

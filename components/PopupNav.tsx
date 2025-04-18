@@ -2,15 +2,17 @@ import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 type PopupNavTypes = {
-    buttonText: String
+    buttonText: String;
+    setOpenPopup: (arg: boolean) => (void);
+    processPostReq: () => (void);
 }
 
-const PopupNav = ({buttonText} : PopupNavTypes) => {
+const PopupNav = ({buttonText, setOpenPopup, processPostReq} : PopupNavTypes) => {
     return (
         <View style={{justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%'}}>
 
-            <TouchableOpacity style={styles.slideButton}>
-                <Text style={{color: 'white', fontWeight: 500, fontSize: 16}}>{buttonText}</Text>
+            <TouchableOpacity style={styles.slideButton} onPress={() => {processPostReq(); setOpenPopup(false)}}>
+                <Text style={{color: 'white', fontWeight: 500, fontSize: 14}}>{buttonText}</Text>
             </TouchableOpacity>
 
         </View>

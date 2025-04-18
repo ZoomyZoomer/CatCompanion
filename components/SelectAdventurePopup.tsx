@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Easing, StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import Animated, { useSharedValue, useAnimatedStyle, withSequence, withTiming } from "react-native-reanimated"
 
@@ -7,8 +7,10 @@ import SelectPath from "./SelectPath"
 import PopupNav from "./PopupNav"
 
 import Close from '@/assets/svgs/close.svg'
+import axios from "axios"
 
-const SelectAdventurePopup = ({ popupData, setShowSelectAdventurePopup } : any) => {
+const SelectAdventurePopup = ({ popupData, setShowSelectAdventurePopup, activeId } : any) => {
+
   const scale = useSharedValue(0.7)
 
   useEffect(() => {
@@ -21,6 +23,15 @@ const SelectAdventurePopup = ({ popupData, setShowSelectAdventurePopup } : any) 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }]
   }))
+
+  const processAdventure = async() => {
+    await axios.post('http://10.72.104.118:5000/confirmAdventure', {
+      username: 'Wholemilky',
+      uid: 0,
+      cid: activeId,
+      cpid: popupData.cpid
+    })
+  }
 
   return (
     <Animated.View style={[styles.popup_container, animatedStyle]}>
@@ -36,10 +47,10 @@ const SelectAdventurePopup = ({ popupData, setShowSelectAdventurePopup } : any) 
         </View>
       </View>
 
-      <SelectPath popupData={popupData} />
+      <SelectPath popupData={popupData}/>
 
       <View style={{ height: '16%', width: '100%' }}>
-        <PopupNav buttonText={'Next'} />
+        <PopupNav buttonText={'Confirm Adventure'} setOpenPopup={setShowSelectAdventurePopup} processPostReq={processAdventure}/>
       </View>
     </Animated.View>
   )

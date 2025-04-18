@@ -26,7 +26,7 @@ const Endurance = require('@/assets/pngs/endurance.png');
 export default function adventures() {
 
     type categoryPaths = {
-        cp_id: number;
+        cpid: number;
         name: string;
         desc: string;
         difficulty: number;
@@ -36,7 +36,7 @@ export default function adventures() {
       }
       
       type category = {
-        c_id: number;
+        cid: number;
         name: string;
         paths: categoryPaths[];
       }
@@ -49,10 +49,10 @@ export default function adventures() {
 
     const adventureSet: category[] = [
         {
-          c_id: 0, 
+          cid: 0, 
           name: 'Health & Fitness',
           paths: [
-            { cp_id: 0, name: 'One Step at a Time (I)', desc: 'Flexibility or Endurance exercises~', difficulty: 1, Icon: Shoe,
+            { cpid: 0, name: 'One Step at a Time (I)', desc: 'Flexibility or Endurance exercises~', difficulty: 1, Icon: Shoe,
                 optionsLabels: [
                     {label: 'Flexibility', type: 'minute exercise', duration: 15, Icon: Flexibility, colorId: 0},
                     {label: 'Endurance', type: 'minute exercise', duration: 20, Icon: Endurance, colorId: 1}
@@ -62,34 +62,34 @@ export default function adventures() {
                     [{name: 'Plank', difficulty: 2}, {name: 'Jumping Jacks', difficulty: 1}, {name: 'Running in Place', difficulty: 1}, {name: 'Wall Sits', difficulty: 2}]
                 ]
              },
-            { cp_id: 1, name: 'Mind & Muscle (II)', desc: 'Mediation or Strength exercises~', difficulty: 2, Icon: Brain,
+            { cpid: 1, name: 'Mind & Muscle (II)', desc: 'Mediation or Strength exercises~', difficulty: 2, Icon: Brain,
                 optionsLabels: [],
                 options: []
              }
           ]
         },
         {
-          c_id: 1, 
+          cid: 1, 
           name: 'Outdoors',
           paths: [
-            { cp_id: 0, name: 'Touch Grass (I)', desc: 'Calm, scenic walks or Brisky runs~', difficulty: 1, Icon: Tree,
+            { cpid: 0, name: 'Touch Grass (I)', desc: 'Calm, scenic walks or Brisky runs~', difficulty: 1, Icon: Tree,
                 optionsLabels: [], 
                 options: []
             }
           ]
         },
         {
-          c_id: 2,
+          cid: 2,
           name: 'Friends',
           paths: []
         },
         {
-          c_id: 3,
+          cid: 3,
           name: 'School & Work',
           paths: []
         },
         {
-          c_id: 4,
+          cid: 4,
           name: 'Wellness',
           paths: []
         }
@@ -98,7 +98,7 @@ export default function adventures() {
     return (
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-            {showSelectAdventurePopup && <SelectAdventurePopup popupData={popupData} setShowSelectAdventurePopup={setShowSelectAdventurePopup}/>}
+            {showSelectAdventurePopup && <SelectAdventurePopup popupData={popupData} setShowSelectAdventurePopup={setShowSelectAdventurePopup} activeId={activeId}/>}
 
         <View style={{flex: 1, backgroundColor: '#FDFDFD', alignItems: 'center', overflowY: 'auto', filter: showSelectAdventurePopup ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: showSelectAdventurePopup ? 'none' : 'auto'}}>
 
@@ -128,9 +128,9 @@ export default function adventures() {
                 <View style={styles.category_tags_container}>
                     {adventureSet.map((adventure) => (
                         <CategorySelect 
-                        key={adventure.c_id} 
+                        key={adventure.cid} 
                         category={adventure.name} 
-                        id={adventure.c_id} 
+                        id={adventure.cid} 
                         activeId={activeId} 
                         setActiveId={setActiveId}
                         />

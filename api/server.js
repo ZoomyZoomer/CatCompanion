@@ -1,15 +1,30 @@
-import express from 'express';
-import adventureRoutes from './routes/adventureRoutes.js';
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const adventureRoutes = require('./routes/adventureRoutes.js');
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+// Use CORS middleware — allows requests from other origins
+app.use(cors({
+  origin: '*'
+}));
 
 app.use(express.json());
 
-// Mount your route modules here
-app.use('/api/adventure', adventureRoutes);
-// app.use('/api/calendar', calendarRoutes);
+// Your API routes
+app.use('/confirmAdventure', adventureRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+// Connect to MongoDB (replace with your real URI)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
+
+// Start server
+const PORT = 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

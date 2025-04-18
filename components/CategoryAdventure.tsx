@@ -12,7 +12,7 @@ import React from "react";
 import AdventureLine from "./AdventureLine";
 
 type categoryPath = {
-        cp_id: number;
+        cpid: number;
         name: string,
         desc: string,
         difficulty: number,

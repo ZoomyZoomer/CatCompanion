@@ -1,20 +1,44 @@
-// Dummy adventure data
-const adventures = {
-  '1': { id: 1, name: 'Mountain Adventure', description: 'Climb the highest peaks!' },
-  '2': { id: 2, name: 'Beach Adventure', description: 'Relax by the ocean!' },
-};
+const Adventure = require('../models/Adventures.js');
 
-export const getAllAdventures = (req, res) => {
-  res.json(Object.values(adventures));
-};
+const confirmAdventure = async (req, res) => {
+  try {
 
-export const getAdventureByCategory = (req, res) => {
-  const { categoryId } = req.params;
-  const adventure = adventures[categoryId];
+    const { username, uid, cid, cpid } = req.body;
+    
+    
+    const adventure = await Adventure.findOne({ uid: uid });
 
-  if (!adventure) {
-    return res.status(404).json({ message: 'Adventure not found' });
+    // If not found, create the schema
+    if (!adventure) {
+      await Adventure.create({username, uid, activeAdventure: {cid, cpid}});
+      res.status(201).json({message: 'Adventure Schema created and Adventure Confirmed.'});
+      return;
+    }
+
+    adventure.activeAdventure = {cid, cpid};
+    await adventure.save();
+
+    res.status(200).json({message: 'Adventure Confirmed.'});
+    return;
+
+  } catch (err) {
+    console.error('Error accessing adventure:', err);
+    res.status(500).send('Internal server error');
   }
-
-  res.json(adventure);
 };
+
+const fetchCategory = async (req, res) => {
+  try {
+
+    const { username, uid, cid } = req.body;
+
+    
+
+
+  } catch (err) {
+    console.error('Error accessing adventure:', err);
+    res.status(500).send('Internal server error');
+  }
+};
+
+module.exports = confirmAdventure;
