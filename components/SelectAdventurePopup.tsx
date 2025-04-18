@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Easing, StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import Animated, { useSharedValue, useAnimatedStyle, withSequence, withTiming } from "react-native-reanimated"
-
+import dotenv from 'dotenv'
 
 import SelectPath from "./SelectPath"
 import PopupNav from "./PopupNav"

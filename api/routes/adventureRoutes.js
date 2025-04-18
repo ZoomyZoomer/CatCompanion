@@ -4,7 +4,7 @@ const { confirmAdventure, fetchCategory } = require('../controllers/adventureCon
 const router = express.Router();
 
 router.post('/confirmAdventure', confirmAdventure);
-router.get('/fetchCategory/:categoryId', fetchCategory);
+router.get('/fetchCategory', fetchCategory);
 
 module.exports = router;
 

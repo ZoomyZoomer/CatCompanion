@@ -1,5 +1,6 @@
 import { ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
+import axios from "axios"
 
 import Navbar from "@/components/Navbar"
 import CatSelectNavbar from "@/components/CatSelectNavbar"
@@ -21,6 +22,8 @@ const Tree = require('@/assets/pngs/tree_icon.png');
 
 const Flexibility = require('@/assets/pngs/flexibility.png');
 const Endurance = require('@/assets/pngs/endurance.png');
+
+import dotenv from 'dotenv'
 
 
 export default function adventures() {
@@ -46,6 +49,20 @@ export default function adventures() {
     const [popupData, setPopupData] = useState({});
     
     const [showSelectAdventurePopup, setShowSelectAdventurePopup] = useState(false);
+
+    const fetchAdventures = async() => {
+        const res = await axios.get('http://10.72.104.118:5000/fetchCategory', {
+            params: {
+                username: 'Wholemilky',
+                uid: 0,
+                cid: activeId
+            }
+        })
+    }
+
+    useEffect(() => {
+        fetchAdventures();
+    }, [activeId])
 
     const adventureSet: category[] = [
         {

@@ -15,7 +15,7 @@ app.use(cors({
 app.use(express.json());
 
 // Your API routes
-app.use('/confirmAdventure', adventureRoutes);
+app.use('/', adventureRoutes);
 
 // Connect to MongoDB (replace with your real URI)
 mongoose.connect(process.env.MONGO_URI, {
