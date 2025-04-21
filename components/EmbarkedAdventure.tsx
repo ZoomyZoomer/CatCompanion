@@ -1,24 +1,42 @@
 import { Image, StyleSheet, Text, View } from "react-native"
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 import Star from '@/assets/svgs/star_filled_dark.svg'
+import StarLight from '@/assets/svgs/star_filled.svg'
 import Bolt from '@/assets/svgs/bolt_filled_dark.svg'
+import axios from "axios"
 
-type Adventure = {
-    name: string
-}
+const EmbarkedAdventure = ({ refresh, adventureSet } : any) => {
 
-type EmbarkedAdventureTypes = {
-    adventure: Adventure | null
-}
+    const [activeAdventure, setActiveAdventure] = useState(null);
 
-const EmbarkedAdventure = ({adventure} : EmbarkedAdventureTypes) => {
+    const fetchActiveAdventure = async() => {
+
+        const res = await axios.get('http://10.75.180.60:5000/fetchActiveAdventure', {
+            params: {
+                uid: 0
+            }
+        })
+
+        setActiveAdventure(res.data);
+
+    }
+
+    useEffect(() => {
+        fetchActiveAdventure();
+    }, [refresh])
+
+    const pathColors = [
+        {main: '#F074CF', tag: '#FEC1EE', bubble: '#FFE1F7', bg: '#FCFCFC'},
+        {main: '#72BEFC', tag: '#A0D4FF', bubble: '#D6EDFF', bg: '#F6F9FB'}
+    ]
+
     return (
-        <View style={[styles.adventure_container, {borderColor: adventure ? '#FCAD72' : '#CDD8EA'}]}>
+        <View style={[styles.adventure_container, {borderColor: activeAdventure ? pathColors[activeAdventure?.pathIndex]?.main : '#CDD8EA'}]}>
 
-            <View style={[styles.adventure_banner, {backgroundColor: adventure ? '#FCAD72' : '#E4E7EC'}]}>
+            <View style={[styles.adventure_banner, {backgroundColor: activeAdventure ? pathColors[activeAdventure?.pathIndex]?.tag : '#E4E7EC'}]}>
                 <View style={styles.adventure_circle}>
-                    <Image source={require('@/assets/pngs/swords.png')} style={styles.banner_icon}/>
+                    <Image source={!activeAdventure ? require('@/assets/pngs/swords.png') : adventureSet[activeAdventure?.cid]?.paths[activeAdventure?.cpid]?.Icon} style={!activeAdventure ? styles.banner_icon : styles.banner_icon_active}/>
                 </View>
             </View>
 
@@ -26,19 +44,40 @@ const EmbarkedAdventure = ({adventure} : EmbarkedAdventureTypes) => {
 
                 <View style={{marginLeft: 20, justifyContent: 'center', width: '75%', boxSizing: 'border-box'}}>
 
-                    <Text style={styles.adventure_title}>{adventure ? adventure.name : 'Empty Adventure Slot'} · {adventure ? 'Active' : 'Inactive'}</Text>
-                    <Text style={styles.adventure_desc}><Text style={{fontWeight: 600}}>Tap</Text> for a random adventure or select one below~</Text>
+                    <Text style={styles.adventure_title}>{activeAdventure ? adventureSet[activeAdventure?.cid]?.paths[activeAdventure?.cpid]?.name : 'Empty Adventure Slot'}</Text>
+                    {!activeAdventure && <Text style={styles.adventure_desc}><Text style={{fontWeight: 600}}>Tap</Text> for a random adventure or select one below~</Text>}
+                    {activeAdventure && <Text style={styles.adventure_desc}>
+                        <Text style={{fontWeight: 600}}>{adventureSet[activeAdventure?.cid]?.paths[activeAdventure?.cpid]?.optionsLabels[activeAdventure?.pathIndex]?.label}: </Text>
+                        {adventureSet[activeAdventure?.cid]?.paths[activeAdventure?.cpid]?.options[activeAdventure?.pathIndex].map((label, index) => (
+                            <>
+                                {label?.name}{index <= 2 ? `, ` : ''}
+                            </>
+                        ))}
+                    </Text>}
 
-                    <View style={styles.adventure_tag}>
-                        <Star />
-                        <Text style={styles.adventure_tag_text}>Get random adventure</Text>
+                    <View style={[styles.adventure_tag, {borderColor: activeAdventure ? pathColors[activeAdventure?.pathIndex]?.tag : '#E4E7EC', backgroundColor: activeAdventure ? pathColors[activeAdventure?.pathIndex]?.tag : 'white'}]}>
+                        
+                        {!activeAdventure && (
+                            <>
+                                <Star />
+                                <Text style={styles.adventure_tag_text}>Get random adventure</Text>
+                            </>
+                        )}
+
+                        {activeAdventure && (
+                            <>
+                                <StarLight style={styles.starIcon}/>
+                                <Text style={{color: 'white', fontWeight: 400, fontSize: 10, marginLeft: 2}}><Text style={{fontWeight: 500}}>Next Up: </Text>{adventureSet[activeAdventure?.cid]?.paths[activeAdventure?.cpid]?.options[activeAdventure?.pathIndex][activeAdventure?.numCompleted]?.name}</Text>
+                            </>
+                        )}
+                        
                     </View>
 
                 </View>
                 
                 <View style={{width: '25%', marginLeft: -20, height: '100%', alignItems: 'center'}}>
                     <View style={styles.adventure_status_bar}>
-                        <Bolt style={styles.bolt_icon}/>
+                    <Bolt style={{ ...styles.bolt_icon, color: !activeAdventure ? '#52637D' : pathColors[activeAdventure?.pathIndex]?.tag }} />
                     </View>
                 </View>
 
@@ -94,11 +133,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: 'solid',
         borderRadius: '0.8rem',
-        width: '85%',
+        width: '84%',
         height: 24,
         marginTop: 12,
         alignItems: 'center',
-        justifyContent: 'center',
         flexDirection: 'row',
         paddingLeft: 10,
         paddingRight: 10,
@@ -122,12 +160,17 @@ const styles = StyleSheet.create({
     },
     bolt_icon: {
         position: 'absolute',
-        top: '110%'
+        top: '110%',
+        transform: 'rotate(20deg)'
     },
     banner_icon: {
         height: 32,
         width: 32,
         filter: 'grayscale(0.6)'
+    },
+    banner_icon_active: {
+        height: 32,
+        width: 32
     },
     cat_sleep_icon: {
         position: 'absolute',
@@ -135,5 +178,9 @@ const styles = StyleSheet.create({
         width: 80,
         right: 20,
         bottom: '96%'
+    },
+    starIcon: {
+        height: 14,
+        width: 14
     }
 })

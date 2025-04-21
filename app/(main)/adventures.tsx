@@ -13,8 +13,8 @@ import Key from '@/assets/svgs/key_small.svg'
 import Notes from '@/assets/svgs/notes.svg'
 import Question from '@/assets/svgs/question_mark.svg'
 
-import React from "react"
 import SelectAdventurePopup from "@/components/SelectAdventurePopup"
+import React = require("react")
 
 const Shoe = require('@/assets/pngs/shoe_icon.png');
 const Brain = require('@/assets/pngs/brain_icon.png');
@@ -23,7 +23,6 @@ const Tree = require('@/assets/pngs/tree_icon.png');
 const Flexibility = require('@/assets/pngs/flexibility.png');
 const Endurance = require('@/assets/pngs/endurance.png');
 
-import dotenv from 'dotenv'
 
 
 export default function adventures() {
@@ -49,15 +48,24 @@ export default function adventures() {
     const [popupData, setPopupData] = useState({});
     
     const [showSelectAdventurePopup, setShowSelectAdventurePopup] = useState(false);
+    const [categoryData, setCategoryData] = useState({cid: null, adventureStatus: []});
 
     const fetchAdventures = async() => {
-        const res = await axios.get('http://10.72.104.118:5000/fetchCategory', {
-            params: {
-                username: 'Wholemilky',
-                uid: 0,
-                cid: activeId
-            }
-        })
+
+        try {
+
+            const res = await axios.get('http://10.75.180.60:5000/fetchCategory', {
+                params: {
+                    username: 'Wholemilky',
+                    uid: 0,
+                    cid: activeId
+                }
+            })
+
+            setCategoryData(res.data);
+
+        } catch(e){}
+
     }
 
     useEffect(() => {
@@ -129,7 +137,7 @@ export default function adventures() {
                     <Text style={styles.section_text}>Your Embarked Adventures</Text>
                 </View>
 
-                <EmbarkedAdventure adventure={null}/>
+                <EmbarkedAdventure refresh={showSelectAdventurePopup} adventureSet={adventureSet}/>
 
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 30}}>
                     <View style={{width: '45%', flexDirection: 'row', alignItems: 'center'}}>
@@ -170,7 +178,7 @@ export default function adventures() {
                 <View style={styles.category_path_container}>
                     {adventureSet[activeId].paths.map((pathdata, index) => (
                         <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-                            <CategoryAdventure path={pathdata} isLastAdventure={index == adventureSet[activeId].paths.length - 1} setShowSelectAdventurePopup={setShowSelectAdventurePopup} setPopupData={setPopupData} />
+                            <CategoryAdventure path={pathdata} categoryData={categoryData?.adventureStatus[index]} isLastAdventure={index == adventureSet[activeId].paths.length - 1} setShowSelectAdventurePopup={setShowSelectAdventurePopup} setPopupData={setPopupData} />
                         </View>
                     ))}
                 </View>

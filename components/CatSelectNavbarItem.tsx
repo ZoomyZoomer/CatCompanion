@@ -1,5 +1,5 @@
-import React from "react";
 import { FunctionComponent } from "react";
+import React = require("react");
 import { Image, View, Text, StyleSheet } from "react-native"
 import { SvgProps } from "react-native-svg";
 

@@ -4,9 +4,7 @@ import Path from "./Path"
 
 import Question from '@/assets/svgs/question_mark.svg'
 
-const SelectPath = ({popupData} : any) => {
-
-    const [currPath, setCurrPath] = useState(true);
+const SelectPath = ({popupData, currPath, setCurrPath} : any) => {
 
     return (
         <View style={styles.content_container}>

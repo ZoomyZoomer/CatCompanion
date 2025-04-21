@@ -3,13 +3,16 @@ import { useState, useEffect } from "react"
 
 import StarFilledLight from '@/assets/svgs/star_filled.svg'
 import StarEmptyLight from '@/assets/svgs/star_empty.svg'
+import StarFilledDark from '@/assets/svgs/star_filled_dark.svg'
+import StarEmptyDark from '@/assets/svgs/star_empty_dark.svg'
 
 const Stamp = require('@/assets/pngs/stamp.png');
 
 import axios from 'axios'
-import React from "react";
+
 
 import AdventureLine from "./AdventureLine";
+import React = require("react");
 
 type categoryPath = {
         cpid: number;
@@ -24,24 +27,35 @@ type categoryPath = {
 type CategoryAdventureTypes = {
     path: categoryPath;
     isLastAdventure: boolean,
+    categoryData: any
     setShowSelectAdventurePopup: (arg: (arg: boolean) => (boolean)) => (void);
     setPopupData: (arg: object) => (void)
 }
 
-const BASE_URL = 'https://localhost:8081/api';
+const CategoryAdventure = ({path, categoryData, isLastAdventure, setShowSelectAdventurePopup, setPopupData} : CategoryAdventureTypes) => {
 
-const CategoryAdventure = ({path, isLastAdventure, setShowSelectAdventurePopup, setPopupData} : CategoryAdventureTypes) => {
+    const [status, setStatus] = useState(0); // 0 -> Active; 1 -> Completed; 2 -> Available; 3 -> Locked
 
-    const [status, setStatus] = useState(0); // 0 -> Ongoing; 1 -> Completed; 2 -> Available
+    useEffect(() => {
+        if (categoryData?.status === 'Active'){
+            setStatus(0);
+        } else if (categoryData?.status === 'Completed'){
+            setStatus(1);
+        } else if (categoryData?.status === 'Available'){
+            setStatus(2);
+        } else {
+            setStatus(3);
+        }
+    }, [categoryData])
 
     return (
         <TouchableOpacity style={{width: '100%', justifyContent: 'center', alignItems: 'center'}} onPress={() => {setPopupData(path); setShowSelectAdventurePopup(prev => !prev)}}>
 
-            <View style={[styles.adventure_container, {borderColor: (status >= 0) ? '#FCAD72' : '#CDD8EA'}]}>
+            <View style={[styles.adventure_container, {borderColor: (status <= 2) ? '#FCAD72' : '#CDD8EA'}]}>
 
-                <View style={[styles.adventure_banner, {backgroundColor: (status >= 0) ? '#FCAD72' : '#E4E7EC'}]}>
+                <View style={[styles.adventure_banner, {backgroundColor: (status <= 2) ? '#FCAD72' : '#E4E7EC'}]}>
                     <View style={styles.adventure_circle}>
-                        <Image source={path?.Icon} style={(status >= 0) ? styles.banner_icon_active : styles.banner_icon}/>
+                        <Image source={path?.Icon} style={(status <= 2) ? styles.banner_icon_active : styles.banner_icon}/>
                     </View>
                 </View>
 
@@ -49,17 +63,17 @@ const CategoryAdventure = ({path, isLastAdventure, setShowSelectAdventurePopup, 
 
                     <View style={{marginLeft: 20, justifyContent: 'center', width: '75%', boxSizing: 'border-box'}}>
 
-                        <Text style={styles.adventure_title}>{path?.name} · {status === 1 ? 'Completed' : (status === 0 ? 'Active' : (status === 2 ? 'Available' : 'Locked'))}</Text>
+                        <Text style={styles.adventure_title}>{path?.name}</Text>
                         <Text style={styles.adventure_desc}><strong>Includes: </strong> {path?.desc}</Text>
 
-                        <View style={styles.adventure_tag}>
-                            <Text style={styles.adventure_tag_text}>Difficulty: </Text>
+                        <View style={[styles.adventure_tag, {backgroundColor: status <= 2 ? '#FCAD72' : '#E4E7EC'}]}>
+                            <Text style={[styles.adventure_tag_text, {color: status <= 2 ? 'white' : '#7C889A'}]}>Difficulty: </Text>
                             <View style={{ flexDirection: 'row', gap: 2, justifyContent: 'center', alignItems: 'center'}}>
                                 {Array.from({ length: 5 }).map((_, index) =>
                                 index < path?.difficulty ? (
-                                    <StarFilledLight key={index} style={styles.stars}/>
+                                    status <= 2 ? <StarFilledLight key={index} style={styles.stars}/> : <StarFilledDark key={index} style={styles.stars}/>
                                 ) : (
-                                    <StarEmptyLight key={index} style={styles.stars}/>
+                                    status <= 2 ? <StarEmptyLight key={index} style={styles.stars}/> : <StarEmptyDark key={index} style={styles.stars}/>
                                 )
                                 )}
                             </View>
@@ -68,14 +82,14 @@ const CategoryAdventure = ({path, isLastAdventure, setShowSelectAdventurePopup, 
                     </View>
                     
                     <View style={{width: '25%', marginLeft: -22, height: '100%', alignItems: 'center', marginTop: 30}}>
-                        <Image source={Stamp} style={styles.stamp} />
+                        <Image source={Stamp} style={status <= 2 ? styles.stamp_active : styles.stamp_inactive} />
                     </View>
 
                 </View>
 
             </View>
 
-            {!isLastAdventure && <AdventureLine />}
+            {!isLastAdventure && <AdventureLine status={status}/>}
 
         </TouchableOpacity>
     )
@@ -131,11 +145,8 @@ const styles = StyleSheet.create({
         width: '90%'
     },
     adventure_tag: {
-        borderColor: '#FCAD72',
-        borderWidth: 1,
         borderStyle: 'solid',
         borderRadius: '0.8rem',
-        backgroundColor: '#FCAD72',
         width: '74%',
         height: 24,
         marginTop: 12,
@@ -144,16 +155,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     adventure_tag_text: {
-        color: 'white',
         fontSize: 10,
-        marginLeft: 6
+        marginLeft: 6,
     },
     stars: {
         height: 12,
         width: 12
     },
-    stamp: {
+    stamp_active: {
         height: 40,
         width: 40
+    },
+    stamp_inactive: {
+        height: 40,
+        width: 40,
+        filter: 'grayscale(1)'
     }
 })
