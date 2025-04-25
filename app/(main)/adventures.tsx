@@ -54,7 +54,7 @@ export default function adventures() {
 
         try {
 
-            const res = await axios.get('http://10.75.180.60:5000/fetchCategory', {
+            const res = await axios.get('http://10.72.104.118:5000/fetchCategory', {
                 params: {
                     username: 'Wholemilky',
                     uid: 0,
@@ -128,7 +128,7 @@ export default function adventures() {
         <View style={{flex: 1, backgroundColor: '#FDFDFD', alignItems: 'center', overflowY: 'auto', filter: showSelectAdventurePopup ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: showSelectAdventurePopup ? 'none' : 'auto'}}>
 
             <Navbar tabName={"Adventures"} currencyAmount={103}/>
-            <CatSelectNavbar />
+            <CatSelectNavbar tabNames={["Solo", "Group", "Exclusive"]}/>
 
             <View style={{flex: 1, width: '88%', alignItems: 'center', marginTop: 40}}>
 

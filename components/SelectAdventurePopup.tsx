@@ -25,7 +25,7 @@ const SelectAdventurePopup = ({ popupData, setShowSelectAdventurePopup, activeId
   }))
 
   const processAdventure = async() => {
-    await axios.post('http://10.75.180.60:5000/confirmAdventure', {
+    await axios.post('http://110.72.104.118:5000/confirmAdventure', {
       username: 'Wholemilky',
       uid: 0,
       cid: activeId,

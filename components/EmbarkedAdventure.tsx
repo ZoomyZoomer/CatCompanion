@@ -12,7 +12,7 @@ const EmbarkedAdventure = ({ refresh, adventureSet } : any) => {
 
     const fetchActiveAdventure = async() => {
 
-        const res = await axios.get('http://10.75.180.60:5000/fetchActiveAdventure', {
+        const res = await axios.get('http://10.72.104.118:5000/fetchActiveAdventure', {
             params: {
                 uid: 0
             }
