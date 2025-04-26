@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar"
 import CalendarIcon from '@/assets/svgs/calendar.svg'
 import ChevronDown from '@/assets/svgs/chevron_down.svg'
 import DatePopup from "@/components/DatePopup"
+import Restart from '@/assets/svgs/restart.svg'
 
 
 const logs = () => {
@@ -18,7 +19,7 @@ const logs = () => {
         
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-            {isPickingDate && <DatePopup />}
+            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate}/>}
 
             <View style={{width: '100%', height: '100%', position: 'relative', filter: isPickingDate ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: isPickingDate ? 'none' : 'auto'}}>
             
@@ -27,18 +28,20 @@ const logs = () => {
                 <Navbar tabName={"Planner"} currencyAmount={103}/>
                 <CatSelectNavbar tabNames={['Moods', 'Habits', 'Goals']}/>
 
-                <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20, marginBottom: 20}}>
+                <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
                     <TouchableOpacity style={styles.switchButton}>
+                        <Restart style={{marginRight: 6}}/>
                         <Text style={{color: '#52637D'}}>
                             Switch to Calendar
                         </Text>
-                        <CalendarIcon style={{marginLeft: 10}}/>
                     </TouchableOpacity>
                 </View>
 
+                <View style={styles.sepBar}/>
+
                 <View>
                     <TouchableOpacity style={styles.dateButton} onPress={() => setIsPickingDate(true)}>
-                        <Text style={{color: '#52637D', marginRight: 2, fontWeight: 500}}>April, 2025</Text>
+                        <Text style={{color: '#52637D', marginRight: 2, fontWeight: 400, marginLeft: 4}}>April, 2025</Text>
                         <ChevronDown />
                     </TouchableOpacity>
                 </View>
@@ -84,10 +87,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#CDD8EA',
-        borderRadius: 20,
+        borderRadius: 8,
         backgroundColor: 'white',
-        padding: 10,
-        paddingLeft: 20,
-        paddingRight: 20
+        padding: 8,
+        paddingLeft: 30,
+        paddingRight: 30
+    },
+    sepBar: {
+        height: 1,
+        width: '100%',
+        marginTop: 16,
+        marginBottom: 16,
+        backgroundColor: '#E4E7EC'
     }
 })
