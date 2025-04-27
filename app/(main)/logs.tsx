@@ -9,19 +9,22 @@ import CalendarIcon from '@/assets/svgs/calendar.svg'
 import ChevronDown from '@/assets/svgs/chevron_down.svg'
 import DatePopup from "@/components/DatePopup"
 import Restart from '@/assets/svgs/restart.svg'
+import MoodPopup from "@/components/MoodPopup"
 
 
 const logs = () => {
 
     const [isPickingDate, setIsPickingDate] = useState(false)
+    const [isPckingMood, setIsPickingMood] = useState(false);
 
     return (
         
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
             {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate}/>}
+            {isPckingMood && <MoodPopup setIsPickingMood={setIsPickingMood}/>}
 
-            <View style={{width: '100%', height: '100%', position: 'relative', filter: isPickingDate ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: isPickingDate ? 'none' : 'auto'}}>
+            <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPckingMood) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPckingMood) ? 'none' : 'auto'}}>
             
             <View style={{flex: 1, backgroundColor: '#FDFDFD', alignItems: 'center', overflowY: 'auto'}}>
 
@@ -29,7 +32,7 @@ const logs = () => {
                 <CatSelectNavbar tabNames={['Moods', 'Habits', 'Goals']}/>
 
                 <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
-                    <TouchableOpacity style={styles.switchButton}>
+                    <TouchableOpacity style={styles.switchButton} onPress={() => setIsPickingMood(true)}>
                         <Restart style={{marginRight: 6}}/>
                         <Text style={{color: '#52637D'}}>
                             Switch to Calendar

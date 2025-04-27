@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 type PopupNavTypes = {
     buttonText: String;
-    setOpenPopup: (arg: boolean) => (void);
+    setOpenPopup: any;
     processPostReq: () => (void);
 }
 
