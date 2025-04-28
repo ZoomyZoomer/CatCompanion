@@ -5,13 +5,14 @@ type PopupNavTypes = {
     buttonText: String;
     setOpenPopup: any;
     processPostReq: () => (void);
+    setPage: any;
 }
 
-const PopupNav = ({buttonText, setOpenPopup, processPostReq} : PopupNavTypes) => {
+const PopupNav = ({buttonText, setOpenPopup, processPostReq, setPage} : PopupNavTypes) => {
     return (
-        <View style={{justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%'}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', width: '100%', position: 'absolute', bottom: 26}}>
 
-            <TouchableOpacity style={styles.slideButton} onPress={() => {processPostReq(); setOpenPopup(false)}}>
+            <TouchableOpacity style={styles.slideButton} onPress={() => {processPostReq(); setOpenPopup(false); setPage((prev: any) => prev + 1)}}>
                 <Text style={{color: 'white', fontWeight: 500, fontSize: 14}}>{buttonText}</Text>
             </TouchableOpacity>
 

@@ -5,39 +5,13 @@ import MoodSelector from "./MoodSelector"
 
 import ChevronDown from '@/assets/svgs/chevron_down.svg'
 
-const LogDay = () => {
-    const itemSet = [
-        {setName: 'Morning Routine', 
-            items: [
-                {itemName: 'Coffee', itemDesc: 'I drank Coffee', itemIcon: require('@/assets/pngs/itemLogs/coffee.png')},
-                {itemName: 'Sleep', itemDesc: 'Quality of Sleep', itemIcon: require('@/assets/pngs/itemLogs/pillow.png')},
-                {itemName: 'Breakfast', itemDesc: 'I ate Breakfast', itemIcon: require('@/assets/pngs/itemLogs/breakfast.png')},
-                {itemName: 'Shower', itemDesc: 'I Showered today', itemIcon: require('@/assets/pngs/itemLogs/bathtub.png')},
-                {itemName: 'Journal', itemDesc: 'I Journaled plans', itemIcon: require('@/assets/pngs/itemLogs/agenda.png')},
-                {itemName: 'Social', itemDesc: 'Checked Socials', itemIcon: require('@/assets/pngs/itemLogs/comment.png')}
-            ]
-        },
-        {setName: 'School & Work',
-            items: [
-                {itemName: 'Test', itemDesc: 'I had an Exam', itemIcon: require('@/assets/pngs/itemLogs/test.png')},
-                {itemName: 'Class', itemDesc: 'I had Class', itemIcon: require('@/assets/pngs/itemLogs/blackboard.png')},
-                {itemName: 'Work', itemDesc: 'I went to Work', itemIcon: require('@/assets/pngs/itemLogs/briefcase.png')},
-                {itemName: 'Deadline', itemDesc: 'I met a Deadline', itemIcon: require('@/assets/pngs/itemLogs/deadline.png')},
-                {itemName: 'Traffic', itemDesc: 'I saw Traffic', itemIcon: require('@/assets/pngs/itemLogs/traffic.png')}
-            ]
-        },
-        {setName: 'School & Work',
-            items: [
-                {itemName: 'Test', itemDesc: 'I had an Exam', itemIcon: require('@/assets/pngs/itemLogs/test.png')},
-                {itemName: 'Class', itemDesc: 'I had Class', itemIcon: require('@/assets/pngs/itemLogs/blackboard.png')},
-                {itemName: 'Work', itemDesc: 'I went to Work', itemIcon: require('@/assets/pngs/itemLogs/briefcase.png')},
-                {itemName: 'Deadline', itemDesc: 'I met a Deadline', itemIcon: require('@/assets/pngs/itemLogs/deadline.png')},
-                {itemName: 'Traffic', itemDesc: 'I saw Traffic', itemIcon: require('@/assets/pngs/itemLogs/traffic.png')}
-            ]
-        }
-    ]
+import itemSet from '@/staticData/itemSet'
 
-    const bounceAnim = useRef(new Animated.Value(0)).current
+const LogDay = ({selectedItems, setSelectedItems} : any) => {
+
+    const bounceAnim = useRef(new Animated.Value(0)).current;
+    const scrollViewRef = useRef(null);
+    const [showScrollButton, setShowScrollButton] = useState(true); // 👈 new state
 
     useEffect(() => {
         Animated.loop(
@@ -53,35 +27,62 @@ const LogDay = () => {
                     useNativeDriver: true
                 })
             ])
-        ).start()
-    }, [])
+        ).start();
+    }, []);
 
-    const [selectedItems, setSelectedItems] = useState([])
+    const scrollToBottom = () => {
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToEnd({ animated: true });
+        }
+    };
+
+    const handleScroll = (event) => {
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const isAtBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - 20; // 👈 little buffer
+        setShowScrollButton(!isAtBottom);
+    };
 
     return (
-        <View style={{height: 'auto', padding: 20, paddingTop: 0, width: '100%', position: 'relative'}}>
-
+        <View style={{ padding: 20, paddingTop: 0, width: '100%', position: 'relative' }}>
             <InfoSection 
                 mainText={'What to do'}
                 subText={"Pick the top most notable events you experienced today, good or bad."}
             />
 
-            <View style={{position: 'relative', height: '60%'}}>
-                <ScrollView style={styles.mainContent} showsVerticalScrollIndicator={false}>
+            <View style={{ position: 'relative', height: 340 }}>
+                <ScrollView
+                    ref={scrollViewRef}
+                    style={styles.mainContent}
+                    showsVerticalScrollIndicator={false}
+                    onScroll={handleScroll} // 👈 track scrolling
+                    scrollEventThrottle={16} // 👈 smoother tracking (16ms ~ 60fps)
+                >
                     {itemSet.map((itemSet, index) => (
-                        <MoodSelector key={index} items={itemSet.items} title={itemSet.setName} selectedItems={selectedItems} setSelectedItems={selectedItems}/>
+                        <MoodSelector 
+                            key={index}
+                            items={itemSet.items}
+                            title={itemSet.setName}
+                            selectedItems={selectedItems}
+                            setSelectedItems={setSelectedItems}
+                        />
                     ))}
                 </ScrollView>
-                <Animated.View style={[{ transform: [{ translateY: bounceAnim }, { translateX: -15 }], position: 'absolute', bottom: -24, left: '50%' }]}>
-                    <TouchableOpacity style={styles.moreCircle}>
-                        <ChevronDown stroke={'white'} />
-                    </TouchableOpacity>
-                </Animated.View>
+
+                {showScrollButton && ( // 👈 only show if not at bottom
+                    <Animated.View style={[{
+                        transform: [{ translateY: bounceAnim }, { translateX: -15 }],
+                        position: 'absolute',
+                        bottom: -24,
+                        left: '50%'
+                    }]}>
+                        <TouchableOpacity style={styles.moreCircle} onPress={scrollToBottom}>
+                            <ChevronDown stroke={'white'} />
+                        </TouchableOpacity>
+                    </Animated.View>
+                )}
             </View>
-
-
         </View>
-    )
+    );
 }
 
 export default LogDay

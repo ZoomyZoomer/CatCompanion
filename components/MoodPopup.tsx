@@ -1,10 +1,11 @@
 import { Easing, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 
 import Close from '@/assets/svgs/close.svg'
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from "react-native-reanimated"
 import PopupNav from "./PopupNav"
 import LogDay from "./LogDay"
+import RateDay from "./RateDay"
 
 const MoodPopup = ({setIsPickingMood} : any) => {
 
@@ -21,6 +22,9 @@ const MoodPopup = ({setIsPickingMood} : any) => {
         transform: [{ scale: scale.value }]
       }))
 
+      const [pageInd, setPageInd] = useState(0);
+      const [selectedItems, setSelectedItems] = useState([]);
+
     return (
         <Animated.View style={[styles.popup_container, animatedStyle]}>
 
@@ -29,10 +33,10 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
                     <View style={{ justifyContent: 'center', alignItems: 'center', width: '100%', position: 'relative' }}>
 
-                    <Text style={styles.header_text}>Log Your Day</Text>
+                    <Text style={styles.header_text}>{pageInd === 0 ? 'Log Your Day' : 'Rate Your Day'}</Text>
 
                     <Text style={styles.header_subtext}>
-                    Great for self reflection
+                    {pageInd === 0 ? 'Great for self reflection' : 'How did things go today?'}
                     </Text>
 
                     <TouchableOpacity style={styles.close} onPress={() => setIsPickingMood(false)}>
@@ -43,9 +47,10 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
                 </View>
 
-                <LogDay />
+                {pageInd === 0 ? <LogDay selectedItems={selectedItems} setSelectedItems={setSelectedItems} /> : <RateDay selectedItems={selectedItems}/>}
 
-                <View>ok</View>
+                  <PopupNav buttonText={pageInd === 0 ? 'Next' : 'Confirm'} setOpenPopup={() => {}} processPostReq={() => {}} setPage={setPageInd}/>
+
             </View>
 
         </Animated.View>
