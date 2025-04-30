@@ -6,6 +6,11 @@ const MoodItem = ({item, selectedItems, setSelectedItems} : any) => {
     const [isSelected, setIsSelected] = useState(false);
 
     const verifySelection = () => {
+
+        if ((selectedItems.length >= 3) && !isSelected){
+            return;
+        }
+
         if (isSelected) {
             // Remove it from selectedItems
             setSelectedItems((prev: any) =>

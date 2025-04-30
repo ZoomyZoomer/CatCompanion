@@ -5,7 +5,7 @@ const itemSet = [
             {itemName: 'Sleep', itemDesc: 'Quality of Sleep', itemIcon: require('@/assets/pngs/itemLogs/pillow.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['My', 0, 'today was', 1]},
             {itemName: 'Breakfast', itemDesc: 'I ate Breakfast', itemIcon: require('@/assets/pngs/itemLogs/breakfast.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['My', 0, 'today tasted', 1]},
             {itemName: 'Shower', itemDesc: 'I Showered today', itemIcon: require('@/assets/pngs/itemLogs/bathtub.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['My', 0, 'today felt', 1]},
-            {itemName: 'Journal', itemDesc: 'I Journaled plans', itemIcon: require('@/assets/pngs/itemLogs/agenda.png'), adjectives: ['nothing', 'a bit', 'some', 'a lot', 'plenty'], sentence: ['I', 0, 1, 'today']},
+            {itemName: 'Journal', itemDesc: 'I Journaled plans', itemIcon: require('@/assets/pngs/itemLogs/agenda.png'), adjectives: ['nothing', 'a bit', 'some', 'a lot', 'plenty'], sentence: ['I wrote ', 1, 'in my', 0]},
             {itemName: 'Social', itemDesc: 'Checked Socials', itemIcon: require('@/assets/pngs/itemLogs/comment.png'), adjectives: ['nothing', 'a bit', 'some', 'a lot', 'plenty'], sentence: ['I saw', 1, 'on my', 0]}
         ]
     },

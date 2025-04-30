@@ -46,7 +46,7 @@ const LogDay = ({selectedItems, setSelectedItems} : any) => {
         <View style={{ padding: 20, paddingTop: 0, width: '100%', position: 'relative' }}>
             <InfoSection 
                 mainText={'What to do'}
-                subText={"Pick the top most notable events you experienced today, good or bad."}
+                subText={"Pick the top 3 most notable events you experienced today, good or bad."}
             />
 
             <View style={{ position: 'relative', height: 340 }}>

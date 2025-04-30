@@ -6,13 +6,15 @@ type PopupNavTypes = {
     setOpenPopup: any;
     processPostReq: () => (void);
     setPage: any;
+    selectedItems: any;
+    isFilter: boolean;
 }
 
-const PopupNav = ({buttonText, setOpenPopup, processPostReq, setPage} : PopupNavTypes) => {
+const PopupNav = ({buttonText, setOpenPopup, processPostReq, setPage, isFilter} : PopupNavTypes) => {
     return (
         <View style={{justifyContent: 'center', alignItems: 'center', width: '100%', position: 'absolute', bottom: 26}}>
 
-            <TouchableOpacity style={styles.slideButton} onPress={() => {processPostReq(); setOpenPopup(false); setPage((prev: any) => prev + 1)}}>
+            <TouchableOpacity style={[styles.slideButton, {filter: (isFilter) ? 'grayscale(0.4)' : 'none'}]} onPress={() => {processPostReq(); setOpenPopup(false); setPage((prev: any) => prev + 1)}}>
                 <Text style={{color: 'white', fontWeight: 500, fontSize: 14}}>{buttonText}</Text>
             </TouchableOpacity>
 

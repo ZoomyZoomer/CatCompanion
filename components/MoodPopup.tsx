@@ -6,6 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import PopupNav from "./PopupNav"
 import LogDay from "./LogDay"
 import RateDay from "./RateDay"
+import SelectMood from "./SelectMood"
 
 const MoodPopup = ({setIsPickingMood} : any) => {
 
@@ -24,6 +25,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
       const [pageInd, setPageInd] = useState(0);
       const [selectedItems, setSelectedItems] = useState([]);
+      const [selectedMood, setSelectedMood] = useState<string | null>(null);
 
     return (
         <Animated.View style={[styles.popup_container, animatedStyle]}>
@@ -47,9 +49,9 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
                 </View>
 
-                {pageInd === 0 ? <LogDay selectedItems={selectedItems} setSelectedItems={setSelectedItems} /> : <RateDay selectedItems={selectedItems}/>}
+                {pageInd === 0 ? <SelectMood setSelectedMood={setSelectedMood} selectedMood={selectedMood}/> : (pageInd === 1 ? <LogDay selectedItems={selectedItems} setSelectedItems={setSelectedItems} /> : <RateDay selectedItems={selectedItems}/>)}
 
-                  <PopupNav buttonText={pageInd === 0 ? 'Next' : 'Confirm'} setOpenPopup={() => {}} processPostReq={() => {}} setPage={setPageInd}/>
+                  <PopupNav isFilter={pageInd === 0 ? (selectedMood == null) : selectedItems.length < 3} buttonText={pageInd === 0 ? 'Next' : (pageInd === 1 ? (selectedItems.length < 3 ? `Select ${3 - selectedItems.length} more` : 'Next') : 'Confirm')} setOpenPopup={() => {}} processPostReq={() => {}} setPage={setPageInd} selectedItems={selectedItems}/>
 
             </View>
 

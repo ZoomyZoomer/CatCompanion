@@ -8,7 +8,7 @@ import StarEmpty from '@/assets/svgs/star_empty.svg';
 import CustomSlider from './CustomSlider';
 
 const RateItem = ({ item, ind }: any) => {
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(0);
 
   const scale = useSharedValue(0.7);
 
@@ -42,7 +42,7 @@ const RateItem = ({ item, ind }: any) => {
               <Text style={{ marginLeft: 4, fontSize: 12 }}>{item?.itemName}</Text>
             ) : val === 1 ? (
               <Text style={{ color: '#FCAD72', textDecorationLine: 'underline', marginLeft: 4, fontSize: 12 }}>
-                {item?.adjectives[rating - 1]}
+                {rating > 0 ? item?.adjectives[rating - 1] : '?'}
               </Text>
             ) : (
               <Text style={{ marginLeft: ind !== 0 ? 4 : 0, fontSize: 12 }}>{val}</Text>
@@ -66,7 +66,7 @@ const RateItem = ({ item, ind }: any) => {
           <CustomSlider
             value={rating}
             onValueChange={setRating}
-            minimumValue={1}
+            minimumValue={0}
             maximumValue={5}
             step={1}
             trackHeight={7}
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     paddingLeft: 20,
-    paddingBottom: 16,
+    paddingBottom: 10,
     paddingRight: 6,
     marginTop: 16,
     backgroundColor: 'white',
