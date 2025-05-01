@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Image, View, Text, StyleSheet, Easing } from 'react-native';
 import { useSharedValue, withSequence, withTiming, useAnimatedStyle, withDelay } from 'react-native-reanimated';
 import Reanimated from 'react-native-reanimated';
@@ -7,10 +7,12 @@ import StarFilled from '@/assets/svgs/star_filled.svg';
 import StarEmpty from '@/assets/svgs/star_empty.svg';
 import CustomSlider from './CustomSlider';
 
-const RateItem = ({ item, ind }: any) => {
+const RateItem = ({ item, ind, setRatings }: any) => {
   const [rating, setRating] = useState(0);
+  const prevRating = useRef(0);
 
   const scale = useSharedValue(0.7);
+  const imageScale = useSharedValue(1);
 
   useEffect(() => {
     scale.value = withSequence(
@@ -19,33 +21,52 @@ const RateItem = ({ item, ind }: any) => {
     );
   }, [scale, ind]);
 
-  // Animated style
+  useEffect(() => {
+    if (prevRating.current === 0 && rating > 0) {
+      imageScale.value = withSequence(
+        withTiming(1.2, { duration: 180, easing: Easing.out(Easing.ease) }),
+        withTiming(1, { duration: 180, easing: Easing.out(Easing.ease) })
+      );
+    }
+    prevRating.current = rating;
+  }, [rating, imageScale]);
+
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
 
+  const imageAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: imageScale.value }],
+  }));
+
   return (
     <Reanimated.View style={[styles.item_container, animatedStyle]}>
-      <View style={{ height: '100%', alignItems: 'center', alignSelf: 'flex-start' }}>
-        <View style={[styles.mood_circle, { backgroundColor: '#FFE3CE' }]}>
-          <Image source={item?.itemIcon} style={{ height: 36, width: 36, marginTop: 4 }} />
+      <View style={{ height: '100%', alignItems: 'center', alignSelf: 'flex-start', width: 64 }}>
+        <View style={[styles.mood_circle, { backgroundColor: rating === 0 ? '#E8ECF1' : '#FFE3CE' }]}>
+          <Reanimated.Image
+            source={item?.itemIcon}
+            style={[{ height: 36, width: 36, marginTop: 4 }, imageAnimatedStyle]}
+          />
         </View>
 
-        <Text style={{ color: '#FCAD72', fontSize: 12 }}>{item?.itemName}</Text>
-        <Text style={{ color: '#FFCBA5', fontWeight: 400, fontSize: 8 }}>{item?.itemDesc}</Text>
+        <Text style={{ color: rating === 0 ? '#52637D' : '#FCAD72', fontSize: 12 }}>{item?.itemName}</Text>
+        <Text style={{ color: rating === 0 ? '#94A4BD' : '#FFCBA5', fontWeight: '400', fontSize: 8 }}>{item?.itemDesc}</Text>
       </View>
 
       <View style={{ height: '100%', marginLeft: 20, justifyContent: 'center' }}>
-        <Text style={{ color: '#52637D', fontWeight: 500 }}>
+        <Text style={{ color: '#52637D', fontWeight: '500' }}>
           {item?.sentence?.map((val: any, ind: any) => {
             return val === 0 ? (
-              <Text style={{ marginLeft: 4, fontSize: 12 }}>{item?.itemName}</Text>
+              <Text key={`name-${ind}`} style={{ marginLeft: 4, fontSize: 12 }}>{item?.itemName}</Text>
             ) : val === 1 ? (
-              <Text style={{ color: '#FCAD72', textDecorationLine: 'underline', marginLeft: 4, fontSize: 12 }}>
+              <Text
+                key={`adj-${ind}`}
+                style={{ color: '#FCAD72', textDecorationLine: 'underline', marginLeft: 4, fontSize: 12 }}
+              >
                 {rating > 0 ? item?.adjectives[rating - 1] : '?'}
               </Text>
             ) : (
-              <Text style={{ marginLeft: ind !== 0 ? 4 : 0, fontSize: 12 }}>{val}</Text>
+              <Text key={`val-${ind}`} style={{ marginLeft: ind !== 0 ? 4 : 0, fontSize: 12 }}>{val}</Text>
             );
           })}
         </Text>
@@ -55,9 +76,9 @@ const RateItem = ({ item, ind }: any) => {
             {[...Array(5)].map((_, index) => (
               <React.Fragment key={index}>
                 {index < rating ? (
-                  <StarFilled key={index} fill={'#FCAD72'} style={styles.starIcon} />
+                  <StarFilled fill={'#FCAD72'} style={styles.starIcon} />
                 ) : (
-                  <StarEmpty key={index} stroke={'#FCAD72'} style={styles.starIcon} />
+                  <StarEmpty stroke={'#FCAD72'} style={styles.starIcon} />
                 )}
               </React.Fragment>
             ))}
@@ -65,7 +86,14 @@ const RateItem = ({ item, ind }: any) => {
 
           <CustomSlider
             value={rating}
-            onValueChange={setRating}
+            onValueChange={(val) => {
+              setRating(val);
+              setRatings((prev:any) => {
+                const newRatings = [...prev];
+                newRatings[ind] = val;
+                return newRatings;
+              });
+            }}
             minimumValue={0}
             maximumValue={5}
             step={1}
@@ -76,6 +104,7 @@ const RateItem = ({ item, ind }: any) => {
             thumbColor="#FCAD72"
             style={{ marginTop: 12, width: 110, marginLeft: -8 }}
           />
+
         </View>
       </View>
     </Reanimated.View>

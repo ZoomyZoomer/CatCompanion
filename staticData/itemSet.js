@@ -17,6 +17,24 @@ const itemSet = [
             {itemName: 'Deadline', itemDesc: 'I met a Deadline', itemIcon: require('@/assets/pngs/itemLogs/deadline.png'), adjectives: ['last-minute', 'barely', 'on time', 'early' , 'very early'], sentence: ['I met my', 0, 1]},
             {itemName: 'Traffic', itemDesc: 'I saw Traffic', itemIcon: require('@/assets/pngs/itemLogs/traffic.png'), adjectives: ['plenty of', 'a lot of', 'some', 'a bit of', 'no'], sentence: ['I experienced', 1, 0]}
         ]
+    },
+    {setName: 'Exercise',
+        items: [
+            {itemName: 'Walk', itemDesc: 'I went on a Walk', itemIcon: require('@/assets/pngs/itemLogs/shoe.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['My', 0, 'today felt', 1]},
+            {itemName: 'Stretching', itemDesc: 'I did Stretching', itemIcon: require('@/assets/pngs/itemLogs/flexibility.png'), adjectives: ['no', 'a bit of', 'some', 'a lot of', 'plenty of'], sentence: ['I did', 1, 0]},
+            {itemName: 'Workout', itemDesc: 'I Worked out', itemIcon: require('@/assets/pngs/itemLogs/weight.png'), adjectives: ['very simple', 'light', 'average', 'difficult', 'challenging'], sentence: ['I had a', 1, 0]},
+            {itemName: 'Sports', itemDesc: 'I played a Sport', itemIcon: require('@/assets/pngs/itemLogs/sports.png'), adjectives: ['hated', 'disliked', 'liked', 'enjoyed', 'loved'], sentence: ['I', 1, 'playing', 0, 'today']},
+            {itemName: 'Cardio', itemDesc: 'I did Cardio', itemIcon: require('@/assets/pngs/itemLogs/heart.png'), adjectives: ['very little', 'light', 'moderate', 'intense', 'challenging'], sentence: ['My', 0, 'training was', 1]}
+        ]
+    },
+    {setName: 'Evening Wind-Down',
+        items: [
+            {itemName: 'Dinner', itemDesc: 'I ate Dinner', itemIcon: require('@/assets/pngs/itemLogs/dinner.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['My', 0, 'tonight was', 1]},
+            {itemName: 'Phone', itemDesc: 'Time on Phone', itemIcon: require('@/assets/pngs/itemLogs/phone.png'), adjectives: ['too much', 'a lot', 'a little', 'a bit', 'not at all'], sentence: ['I was on my', 0, 1]},
+            {itemName: 'Book', itemDesc: 'I read a Book', itemIcon: require('@/assets/pngs/itemLogs/book.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['The', 0, 'I read was', 1]},
+            {itemName: 'Show', itemDesc: 'I saw a Show', itemIcon: require('@/assets/pngs/itemLogs/tv.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['The', 0, 'I watched was', 1]},
+            {itemName: 'Nap', itemDesc: 'I took a Nap', itemIcon: require('@/assets/pngs/itemLogs/nap.png'), adjectives: ['bad', 'poor', 'okay', 'good', 'great'], sentence: ['The', 0, 'I took felt', 1]}
+        ]
     }
 ]
 

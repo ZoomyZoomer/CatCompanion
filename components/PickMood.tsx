@@ -36,31 +36,15 @@ const PickMood = ({ image, text, isSelected, onPress }: PickMoodProps) => {
   }, [isSelected]);
 
   return (
-    <TouchableOpacity
-      style={[
-        styles.mood_container,
-        { borderColor: isSelected ? "#FCAD72" : "#CDD8EA" },
-      ]}
-      onPress={onPress}
-    >
-      <View
-        style={[
-          styles.mood_circle,
-          { backgroundColor: isSelected ? "#FFE3CE" : "#E8ECF1" },
-        ]}
-      >
+    <TouchableOpacity style={[styles.mood_container, { borderColor: isSelected ? "#FCAD72" : "#CDD8EA" }]} onPress={onPress}>
+      <View style={[styles.mood_circle, { backgroundColor: isSelected ? "#FFE3CE" : "#E8ECF1" }]}>
         <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
           <View style={styles.imageWrapper}>
             <Image source={image} style={styles.cat} resizeMode="contain" />
           </View>
         </Animated.View>
       </View>
-      <Text
-        style={[
-          styles.mood_text,
-          { color: isSelected ? "#FCAD72" : "#52637D" },
-        ]}
-      >
+      <Text style={[styles.mood_text, { color: isSelected ? "#FCAD72" : "#52637D" }]}>
         {text}
       </Text>
     </TouchableOpacity>
