@@ -37,10 +37,18 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
                     <View style={{ justifyContent: 'center', alignItems: 'center', width: '100%', position: 'relative' }}>
 
-                    <Text style={styles.header_text}>{pageInd === 0 ? 'Log Your Day' : 'Rate Your Day'}</Text>
+                    <Text style={styles.header_text}>
+                      {pageInd === 0 ? 'How Do You Feel?' : 
+                      pageInd === 1 ? 'Log Your Day' : 
+                      pageInd === 2 ? 'Rate Your Day' : 
+                      'Add a Photo'}
+                    </Text>
 
                     <Text style={styles.header_subtext}>
-                    {pageInd === 0 ? 'Great for self reflection' : 'How did things go today?'}
+                      {pageInd === 0 ? "Express your emotions" : 
+                      pageInd === 1 ? 'What did you to today?' : 
+                      pageInd === 2 ? 'How did things go today?' : 
+                      'Create a memory'}
                     </Text>
 
                     <TouchableOpacity style={styles.close} onPress={() => setIsPickingMood(false)}>
@@ -59,7 +67,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
                 <PopupNav 
                   isFilter={pageInd === 0 ? (selectedMood == null) : (pageInd === 1 ? selectedItems.length < 3 : (!ratings[0] || !ratings[1] || !ratings[2]))} 
-                  buttonText={pageInd === 0 ? 'Next' : (pageInd === 1 ? (selectedItems.length < 3 ? `Select ${3 - selectedItems.length} more` : 'Next') : 'Next')} 
+                  buttonText={pageInd === 0 ? 'Next' : (pageInd === 1 ? (selectedItems.length < 3 ? `Select ${3 - selectedItems.length} more` : 'Next') : 'Complete')} 
                   setOpenPopup={() => {}} 
                   processPostReq={() => {}} 
                   setPage={setPageInd} 
