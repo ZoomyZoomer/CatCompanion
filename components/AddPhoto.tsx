@@ -4,9 +4,7 @@ import * as ImagePicker from 'expo-image-picker'
 
 import CameraAdd from '@/assets/svgs/camera_add.svg'
 
-const AddPhoto = () => {
-  const [captionText, setCaptionText] = useState('');
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+const AddPhoto = ({selectedImage, setSelectedImage, captionText, setCaptionText} : any) => {
 
   const pickImage = async () => {
     // Ask for permission if not already granted
@@ -113,9 +111,11 @@ const styles = StyleSheet.create({
     width: 80,
   },
   selected_image: {
-    height: 90,
-    width: 90,
-    resizeMode: 'cover',
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+    borderRadius: 8
   },
   caption_cont: {
     width: '100%',

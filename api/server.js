@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const adventureRoutes = require('./routes/adventureRoutes.js');
+const dailyRoutes = require('./routes/dailyRoutes.js')
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Your API routes
 app.use('/', adventureRoutes);
+app.use('/', dailyRoutes);
 
 // Connect to MongoDB (replace with your real URI)
 mongoose.connect(process.env.MONGO_URI, {
@@ -27,4 +29,6 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Start server
 const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log('Server running');
+});

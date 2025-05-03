@@ -3,7 +3,7 @@ import React from "react"
 import RateItem from "./RateItem"
 import InfoSection from "./InfoSection"
 
-const RateDay = ({selectedItems, setRatings} : any) => {
+const RateDay = ({selectedItems, setRatings, ratings} : any) => {
     return (
         <View style={{ padding: 20, paddingTop: 0, width: '100%', position: 'relative' }}>
 
@@ -15,7 +15,7 @@ const RateDay = ({selectedItems, setRatings} : any) => {
             <View style={{ position: 'relative', height: 376, overflowY: 'auto', overflowX: 'hidden', marginTop: 10 }}>
 
                 {selectedItems.map((item: any, index: any) => (
-                    <RateItem ind={index} item={item} setRatings={setRatings}/>
+                    <RateItem ind={index} item={item} setRatings={setRatings} ratings={ratings}/>
                 ))}
 
             </View>

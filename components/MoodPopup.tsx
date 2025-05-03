@@ -8,6 +8,7 @@ import LogDay from "./LogDay"
 import RateDay from "./RateDay"
 import SelectMood from "./SelectMood"
 import AddPhoto from "./AddPhoto"
+import axios from "axios"
 
 const MoodPopup = ({setIsPickingMood} : any) => {
 
@@ -28,6 +29,47 @@ const MoodPopup = ({setIsPickingMood} : any) => {
       const [selectedItems, setSelectedItems] = useState([]);
       const [selectedMood, setSelectedMood] = useState<string | null>(null);
       const [ratings, setRatings] = useState([0,0,0]);
+      const [selectedImage, setSelectedImage] = useState<string | null>(null);
+      const [captionText, setCaptionText] = useState('');
+
+      const sendInfo = async() => {
+
+        await axios.post('http://10.72.104.118:5000/sendMood', {
+          uid: 0,
+          mood: selectedMood,
+          selectedItems,
+          ratings,
+          selectedImage,
+          caption: captionText
+        })
+
+        setIsPickingMood(false);
+
+      }
+
+      const fetchInfo = async() => {
+
+        const res = await axios.get('http://10.72.104.118:5000/fetchCurrentMood', {
+          params: {
+            uid: 0
+          }
+        }) 
+
+        if (res){
+
+          setSelectedItems([...res.data.logItems.map((thing: any) => thing.item)]);
+          setSelectedMood(res.data.mood);
+          setRatings([...res.data.logItems.map((thing: any) => thing.rating)]);
+          setSelectedImage(res.data.imageUri);
+          setCaptionText(res.data.caption);
+
+        }
+
+      }
+
+      useEffect(() => {
+        fetchInfo();
+      }, [])
 
     return (
         <Animated.View style={[styles.popup_container, animatedStyle]}>
@@ -61,15 +103,15 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
                 {pageInd === 0 ? <SelectMood setSelectedMood={setSelectedMood} selectedMood={selectedMood}/> :
                  (pageInd === 1 ? <LogDay selectedItems={selectedItems} setSelectedItems={setSelectedItems} /> : 
-                 (pageInd === 2 ? <RateDay selectedItems={selectedItems} setRatings={setRatings}/> :
-                  <AddPhoto />
+                 (pageInd === 2 ? <RateDay selectedItems={selectedItems} setRatings={setRatings} ratings={ratings}/> :
+                  <AddPhoto selectedImage={selectedImage} setSelectedImage={setSelectedImage} captionText={captionText} setCaptionText={setCaptionText}/>
                  ))}
 
                 <PopupNav 
                   isFilter={pageInd === 0 ? (selectedMood == null) : (pageInd === 1 ? selectedItems.length < 3 : (!ratings[0] || !ratings[1] || !ratings[2]))} 
-                  buttonText={pageInd === 0 ? 'Next' : (pageInd === 1 ? (selectedItems.length < 3 ? `Select ${3 - selectedItems.length} more` : 'Next') : 'Complete')} 
+                  buttonText={(pageInd === 0 ) || (pageInd === 2) ? 'Next' : (pageInd === 1 ? (selectedItems.length < 3 ? `Select ${3 - selectedItems.length} more` : 'Next') : 'Complete')} 
                   setOpenPopup={() => {}} 
-                  processPostReq={() => {}} 
+                  processPostReq={() => pageInd < 3 ? {} : sendInfo()} 
                   setPage={setPageInd} 
                   selectedItems={selectedItems}
                 />

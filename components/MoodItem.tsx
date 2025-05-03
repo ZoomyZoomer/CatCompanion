@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 const MoodItem = ({item, selectedItems, setSelectedItems} : any) => {
 
@@ -23,6 +23,12 @@ const MoodItem = ({item, selectedItems, setSelectedItems} : any) => {
     
         setIsSelected(prev => !prev);
     }
+
+    useEffect(() => {
+        if (selectedItems.find((xd: any) => xd.id === item.id)){
+            setIsSelected(true);
+        }
+    }, [])
     
 
     return (

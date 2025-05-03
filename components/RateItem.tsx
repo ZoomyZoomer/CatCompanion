@@ -7,8 +7,8 @@ import StarFilled from '@/assets/svgs/star_filled.svg';
 import StarEmpty from '@/assets/svgs/star_empty.svg';
 import CustomSlider from './CustomSlider';
 
-const RateItem = ({ item, ind, setRatings }: any) => {
-  const [rating, setRating] = useState(0);
+const RateItem = ({ item, ind, setRatings, ratings }: any) => {
+  const [rating, setRating] = useState(ratings[ind]);
   const prevRating = useRef(0);
 
   const scale = useSharedValue(0.7);
