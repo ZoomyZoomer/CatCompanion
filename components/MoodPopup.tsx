@@ -55,7 +55,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
           }
         }) 
 
-        if (res){
+        if (res.data){
 
           setSelectedItems([...res.data.logItems.map((thing: any) => thing.item)]);
           setSelectedMood(res.data.mood);

@@ -1,4 +1,5 @@
 const DailyLog = require('../models/DailyLog.js');
+const cloudinary = require('../configs/cloudinaryConfig');
 
 function isSameDay(date1, date2) {
     return (
@@ -8,57 +9,64 @@ function isSameDay(date1, date2) {
     );
   }
 
-const sendMood = async (req, res) => {
-
-    const {uid, mood, selectedItems, ratings, selectedImage, caption} = req.body;
-
+  const sendMood = async (req, res) => {
+    const { uid, mood, selectedItems, ratings, selectedImage, caption } = req.body;
+  
     try {
-
-        let log = await DailyLog.findOne({ uid });
-
-        if (!log){
-            
-            await DailyLog.create({
-                uid,
-                moods: []
-            });
-
-            return res.status(500).json({message: 'DailyLog Schema not found'});
+      let log = await DailyLog.findOne({ uid });
+  
+      if (!log) {
+        await DailyLog.create({
+          uid,
+          moods: []
+        });
+  
+        return res.status(500).json({ message: 'DailyLog Schema not found' });
+      }
+  
+      let imageUrl = null;
+  
+      if (selectedImage) {
+        try {
+          const uploadRes = await cloudinary.uploader.upload(selectedImage, {
+            folder: 'daily_logs', // optional folder name in Cloudinary
+          });
+          imageUrl = uploadRes.secure_url;
+        } catch (err) {
+          console.error('Image upload failed:', err);
+          return res.status(500).json({ message: 'Image upload failed', error: err });
         }
-
-        const relLog = log.moods.find((item) => isSameDay(item.date, new Date()));
-
-        if (relLog){
-
-            relLog.mood = mood;
-            relLog.logItems = [{item: selectedItems[0], rating: ratings[0]}, {item: selectedItems[1], rating: ratings[1]}, {item: selectedItems[2], rating: ratings[2]}];
-            relLog.imageUri = selectedImage;
-            relLog.caption = caption;
-
-            await log.save();
-
-            return res.status(200).json({message: 'Log successfully updated'});
-
-        }
-
-        log.moods.push({
-            date: new Date(), 
-            mood, 
-            logItems: [{item: selectedItems[0], rating: ratings[0]}, {item: selectedItems[1], rating: ratings[1]}, {item: selectedItems[2], rating: ratings[2]}], 
-            imageUri: selectedImage, 
-            caption
-        })
-
+      }
+  
+      const relLog = log.moods.find((item) => isSameDay(item.date, new Date()));
+  
+      const logEntry = {
+        mood,
+        logItems: [
+          { item: selectedItems[0], rating: ratings[0] },
+          { item: selectedItems[1], rating: ratings[1] },
+          { item: selectedItems[2], rating: ratings[2] }
+        ],
+        imageUri: imageUrl,
+        caption
+      };
+  
+      if (relLog) {
+        Object.assign(relLog, logEntry);
         await log.save();
-
-        return res.status(200).json({message: 'Log successfully created'});
-
-    } catch(e) {
-        console.log({error: e});
-        return res.status(500);
+        return res.status(200).json({ message: 'Log successfully updated' });
+      }
+  
+      log.moods.push({ ...logEntry, date: new Date() });
+      await log.save();
+      return res.status(200).json({ message: 'Log successfully created' });
+  
+    } catch (e) {
+      console.log({ error: e });
+      return res.status(500).json({ message: 'Something went wrong', error: e });
     }
-
-}
+  };
+  
 
 const fetchCurrentMood = async (req, res) => {
 
@@ -87,7 +95,35 @@ const fetchCurrentMood = async (req, res) => {
 
 }
 
+const fetchDailyByMonth = async (req, res) => {
+    const { uid, month, year } = req.query;
+  
+    try {
+      const log = await DailyLog.findOne({ uid });
+  
+      if (!log) {
+        return res.status(200).json([]);
+      }
+  
+      const filteredMoods = log.moods.filter((entry) => {
+        const entryDate = new Date(entry.date);
+        return (
+          entryDate.getMonth() === parseInt(month) && // 0-indexed: Jan = 0
+          entryDate.getFullYear() === parseInt(year)
+        );
+      });
+  
+      return res.status(200).json(filteredMoods);
+
+    } catch (e) {
+      console.log({ error: e });
+      return res.status(500).json({ message: 'Failed to fetch daily logs' });
+    }
+  };
+  
+
 module.exports = {
   sendMood,
-  fetchCurrentMood
+  fetchCurrentMood,
+  fetchDailyByMonth
 };

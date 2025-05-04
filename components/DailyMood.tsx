@@ -10,7 +10,7 @@ import Trash from '@/assets/svgs/trash.svg'
 import Edit from '@/assets/svgs/edit.svg'
 import Heart from '@/assets/svgs/heart.svg'
 
-const DailyMood = () => {
+const DailyMood = ({ mood } : any) => {
 
     const [expanded, setExpanded] = useState(false);
     const animatedHeight = useRef(new Animated.Value(40)).current;
@@ -48,7 +48,7 @@ const DailyMood = () => {
                             <Image source={require('@/assets/cats/glasses_cat.png')} style={styles.mood_image}/>
                         </View>
                         <View style={styles.mood}>
-                            <Text style={{color: 'white', fontWeight: 400, fontSize: 10}}>Indifferent</Text>
+                            <Text style={{color: 'white', fontWeight: 400, fontSize: 10}}>{mood.mood}</Text>
                         </View>
 
                     </View>
@@ -59,9 +59,9 @@ const DailyMood = () => {
 
                 <View style={styles.daily_mood_right}>
                     <View style={{flexDirection: 'row', width: '100%', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                        <Mood />
-                        <Mood />
-                        <Mood />
+                        {mood.logItems.map((item : any) => (
+                            <Mood item={item}/>
+                        ))}
                     </View>
                 </View>
 
@@ -74,7 +74,7 @@ const DailyMood = () => {
                 >
                     <View style={{flexDirection: 'row', alignItems: expanded ? 'flex-start' : 'center'}}>
                         <Gallery />
-                        <Text style={{ color: '#8B93A0', marginLeft: 6 }}>my_cat.png</Text>
+                        <Text style={{ color: '#8B93A0', marginLeft: 6 }}>attachment</Text>
                     </View>
 
                     <View style={{ position: 'absolute', right: 10, bottom: 0, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
@@ -85,14 +85,12 @@ const DailyMood = () => {
                     {expanded && 
                     <View style={{width: '100%', flex: 1, flexDirection: 'row', marginTop: 10}}>
                         <View style={styles.image_cont}>  
-                            <Image />
+                            <Image source={mood.imageUri} style={styles.image_style}/>
                         </View>
                         <View style={{marginLeft: 10}}>
                             <Text style={styles.caption}>
-                            “I didn’t really have a picture of a cat, so I just put 
-                            this cute anime image.”
-                            <br />
-                            <Text style={{fontWeight: 300, fontSize: 10}}>- April 23, 2025</Text>
+                            "{mood.caption}"
+                            <Text style={{fontWeight: 300, fontSize: 10}}></Text>
                             </Text>
                         </View>
                     </View>
@@ -176,11 +174,13 @@ const styles = StyleSheet.create({
         borderColor: '#D9D9D9',
         borderRadius: 8,
         width: '40%',
-        backgroundColor: '#FCFCFC'
+        backgroundColor: '#FCFCFC',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     caption: {
         color: '#8B93A0',
-        width: '44%',
+        width: '100%',
         flexWrap: 'wrap',
         flexDirection:  'row',
         fontSize: 12
@@ -188,5 +188,10 @@ const styles = StyleSheet.create({
     notes_icon: {
         marginBottom: -4,
         marginRight: 4
+    },
+    image_style: {
+        height: '90%',
+        width: '90%',
+        resizeMode: 'contain'
     }
 })

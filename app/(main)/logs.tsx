@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import DailyMood from "@/components/DailyMood"
 import CatSelectNavbar from "@/components/CatSelectNavbar"
@@ -10,12 +10,35 @@ import ChevronDown from '@/assets/svgs/chevron_down.svg'
 import DatePopup from "@/components/DatePopup"
 import Restart from '@/assets/svgs/restart.svg'
 import MoodPopup from "@/components/MoodPopup"
+import axios from "axios"
 
 
 const logs = () => {
 
     const [isPickingDate, setIsPickingDate] = useState(false)
     const [isPckingMood, setIsPickingMood] = useState(false);
+
+    const [dailyMoods, setDailyMoods] = useState([]);
+    const [month, setMonth] = useState((new Date().getMonth()))
+    const [year, setYear] = useState((new Date()).getFullYear());
+
+    const fetchDailies = async() => {
+
+        const res = await axios.get('http://10.72.104.118:5000/fetchDailyByMonth', {
+            params: {
+                uid: 0,
+                month,
+                year
+            }
+        })
+
+        setDailyMoods(res.data);
+
+    }
+
+    useEffect(() => {
+        fetchDailies();
+    }, [])
 
     return (
         
@@ -51,9 +74,9 @@ const logs = () => {
 
                 <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20,}}>
 
-                    <DailyMood />
-                    <DailyMood />
-                    <DailyMood />
+                    {dailyMoods.map((mood) => (
+                        <DailyMood mood={mood}/>
+                    ))}
 
                 </View>
 

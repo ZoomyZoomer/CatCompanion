@@ -3,15 +3,15 @@ import { Image, StyleSheet, Text, View } from "react-native"
 
 import Star from '@/assets/svgs/star_filled.svg'
 
-const Mood = () => {
+const Mood = ({ item } : any) => {
  return (
     <View style={styles.mood_container}>
         <View style={styles.mood_circle}>
-            <Image source={require('@/assets/pngs/coffee.png')} style={styles.image}/>
+            <Image source={item.item.itemIcon} style={styles.image}/>
         </View>
         <View style={styles.mood_rating}>
-            <Text style={{color: 'white', fontSize: 10, fontWeight: 500, marginRight: 2}}>2</Text>
-            <Star style={styles.star}/>
+            <Text style={{color: 'white', fontSize: 10, fontWeight: 500, marginRight: 2}}>{item.rating}</Text>
+            <Star fill={'white'} style={styles.star}/>
         </View>
     </View>
  )   
