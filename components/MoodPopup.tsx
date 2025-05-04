@@ -32,18 +32,45 @@ const MoodPopup = ({setIsPickingMood} : any) => {
       const [selectedImage, setSelectedImage] = useState<string | null>(null);
       const [captionText, setCaptionText] = useState('');
 
+      const uploadToCloudinary = async (selectedImageUri : any) => {
+        const formData = new FormData();
+      
+        const response = await fetch(selectedImageUri);
+        const blob = await response.blob();
+      
+        formData.append('file', blob);
+        formData.append('upload_preset', 'unsigned_mood_uploads');
+      
+        const cloudRes = await fetch('https://api.cloudinary.com/v1_1/dwyvozk21/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+      
+        const data = await cloudRes.json();
+        return data.secure_url;
+      };
+      
+
       const sendInfo = async() => {
 
-        await axios.post('http://10.72.104.118:5000/sendMood', {
-          uid: 0,
-          mood: selectedMood,
-          selectedItems,
-          ratings,
-          selectedImage,
-          caption: captionText
-        })
+        const relImageLink = await uploadToCloudinary(selectedImage);
 
-        setIsPickingMood(false);
+        try {
+
+          await axios.post('http://10.75.178.141:5000/sendMood', {
+            uid: 0,
+            mood: selectedMood,
+            selectedItems,
+            ratings,
+            selectedImage: relImageLink,
+            caption: captionText
+          })
+
+          setIsPickingMood(false);
+
+        } catch(e) {
+
+        }
 
       }
 

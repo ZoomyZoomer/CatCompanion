@@ -24,20 +24,6 @@ function isSameDay(date1, date2) {
         return res.status(500).json({ message: 'DailyLog Schema not found' });
       }
   
-      let imageUrl = null;
-  
-      if (selectedImage) {
-        try {
-          const uploadRes = await cloudinary.uploader.upload(selectedImage, {
-            folder: 'daily_logs', // optional folder name in Cloudinary
-          });
-          imageUrl = uploadRes.secure_url;
-        } catch (err) {
-          console.error('Image upload failed:', err);
-          return res.status(500).json({ message: 'Image upload failed', error: err });
-        }
-      }
-  
       const relLog = log.moods.find((item) => isSameDay(item.date, new Date()));
   
       const logEntry = {
@@ -47,7 +33,7 @@ function isSameDay(date1, date2) {
           { item: selectedItems[1], rating: ratings[1] },
           { item: selectedItems[2], rating: ratings[2] }
         ],
-        imageUri: imageUrl,
+        imageUri: selectedImage,
         caption
       };
   

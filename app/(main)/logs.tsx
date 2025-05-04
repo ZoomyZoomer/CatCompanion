@@ -12,7 +12,6 @@ import Restart from '@/assets/svgs/restart.svg'
 import MoodPopup from "@/components/MoodPopup"
 import axios from "axios"
 
-
 const logs = () => {
 
     const [isPickingDate, setIsPickingDate] = useState(false)
@@ -24,7 +23,7 @@ const logs = () => {
 
     const fetchDailies = async() => {
 
-        const res = await axios.get('http://10.72.104.118:5000/fetchDailyByMonth', {
+        const res = await axios.get('http://10.75.178.141:5000/fetchDailyByMonth', {
             params: {
                 uid: 0,
                 month,

@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     mood_circle: {
         backgroundColor: '#FFE3CE',
         borderRadius: '100%',
-        height: 36,
-        width: 36,
+        height: 38,
+        width: 38,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -42,16 +42,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#FCAD72',
         borderRadius: 8,
         width: '100%',
-        marginTop: 8,
+        marginTop: 12,
         height: 16,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
     image: {
-        height: 26,
-        width: 26,
-        marginTop: 4
+        height: 28,
+        width: 28,
+        marginTop: 4,
+        resizeMode: 'contain'
     },
     star: {
         height: 12,

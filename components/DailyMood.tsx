@@ -15,6 +15,18 @@ const DailyMood = ({ mood } : any) => {
     const [expanded, setExpanded] = useState(false);
     const animatedHeight = useRef(new Animated.Value(40)).current;
 
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+        month: 'long', // full month name
+        day: '2-digit', // day as two digits
+      }).format(new Date(mood.date));
+
+    const catMap = {
+        'Upset': require('@/assets/cats/angry_cat.png'),
+        'Sad': require('@/assets/cats/sad_cat.png'),
+        'Okay': require('@/assets/cats/okay_cat.png'),
+        'Happy': require('@/assets/cats/happy_cat.png')
+    }
+
     const toggleExpand = () => {
         Animated.timing(animatedHeight, {
             toValue: expanded ? 40 : 150, // adjust values as needed
@@ -30,7 +42,7 @@ const DailyMood = ({ mood } : any) => {
         <View style={{width: '100%', marginTop: 30}}>
 
             <View style={{marginBottom: 6, position: 'relative', width: '100%'}}>
-                <Text style={{color: '#52637D', fontWeight: 500, marginLeft: 4}}>April 23</Text>
+                <Text style={{color: '#52637D', fontWeight: 500, marginLeft: 4}}>{formattedDate}</Text>
                 <View style={{position: 'absolute', right: 4, flexDirection: 'row'}}>
                     <TouchableOpacity style={{marginRight: 6}}><Heart /></TouchableOpacity>
                     <TouchableOpacity style={{marginRight: 6}}><Edit /></TouchableOpacity>
@@ -45,7 +57,7 @@ const DailyMood = ({ mood } : any) => {
                     <View>
 
                         <View style={styles.daily_mood_circle}>
-                            <Image source={require('@/assets/cats/glasses_cat.png')} style={styles.mood_image}/>
+                            <Image source={catMap[mood.mood]} style={styles.mood_image}/>
                         </View>
                         <View style={styles.mood}>
                             <Text style={{color: 'white', fontWeight: 400, fontSize: 10}}>{mood.mood}</Text>
@@ -148,8 +160,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     mood_image: {
-        height: '65%',
-        width: '75%'
+        height: '75%',
+        width: '85%',
+        resizeMode: 'contain',
+        marginTop: 10
     },
     separator: {
         backgroundColor: '#D9D9D9',
@@ -180,7 +194,7 @@ const styles = StyleSheet.create({
     },
     caption: {
         color: '#8B93A0',
-        width: '100%',
+        width: 200,
         flexWrap: 'wrap',
         flexDirection:  'row',
         fontSize: 12
