@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react"
-import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Mood from "./Mood"
 
 import Gallery from '@/assets/svgs/gallery.svg'
@@ -9,6 +9,7 @@ import Notes from '@/assets/svgs/notes_gray.svg'
 import Trash from '@/assets/svgs/trash.svg'
 import Edit from '@/assets/svgs/edit.svg'
 import Heart from '@/assets/svgs/heart.svg'
+import HeartFilled from '@/assets/svgs/heart_filled.svg'
 
 const DailyMood = ({ mood } : any) => {
 
@@ -36,17 +37,54 @@ const DailyMood = ({ mood } : any) => {
     
         setExpanded(!expanded);
     };
+
+    const [liked, setLiked] = useState(false);
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handleHeartPress = () => {
+    setLiked(prev => !prev);
+
+    // Trigger the heartbeat animation
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 1.4,
+        duration: 150,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 150,
+        easing: Easing.in(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      // Optional: reset liked back to false after animation
+      // setLiked(false);
+    });
+  };
     
 
     return (
         <View style={{width: '100%', marginTop: 30}}>
 
-            <View style={{marginBottom: 6, position: 'relative', width: '100%'}}>
-                <Text style={{color: '#52637D', fontWeight: 500, marginLeft: 4}}>{formattedDate}</Text>
-                <View style={{position: 'absolute', right: 4, flexDirection: 'row'}}>
-                    <TouchableOpacity style={{marginRight: 6}}><Heart /></TouchableOpacity>
-                    <TouchableOpacity style={{marginRight: 6}}><Edit /></TouchableOpacity>
-                    <TouchableOpacity><Trash /></TouchableOpacity>
+            <View style={{ marginBottom: 6, position: "relative", width: "100%" }}>
+                <Text style={{ color: "#52637D", fontWeight: "500", marginLeft: 4 }}>
+                    {formattedDate}
+                </Text>
+                <View style={{ position: "absolute", right: 4, flexDirection: "row" }}>
+                    <TouchableOpacity onPress={handleHeartPress} style={{ marginRight: 6 }}>
+                    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                        {liked ? <HeartFilled /> : <Heart />}
+                    </Animated.View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={{ marginRight: 6 }}>
+                    <Edit />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                    <Trash />
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -60,7 +98,7 @@ const DailyMood = ({ mood } : any) => {
                             <Image source={catMap[mood.mood]} style={styles.mood_image}/>
                         </View>
                         <View style={styles.mood}>
-                            <Text style={{color: 'white', fontWeight: 400, fontSize: 10}}>{mood.mood}</Text>
+                            <Text style={{color: 'white', fontWeight: 500, fontSize: 12}}>{mood.mood}</Text>
                         </View>
 
                     </View>
@@ -86,7 +124,7 @@ const DailyMood = ({ mood } : any) => {
                 >
                     <View style={{flexDirection: 'row', alignItems: expanded ? 'flex-start' : 'center'}}>
                         <Gallery />
-                        <Text style={{ color: '#8B93A0', marginLeft: 6 }}>attachment</Text>
+                        <Text style={{ color: '#8B93A0', marginLeft: 6 }}>daily_photo.png</Text>
                     </View>
 
                     <View style={{ position: 'absolute', right: 10, bottom: 0, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>

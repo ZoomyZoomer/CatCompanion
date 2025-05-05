@@ -12,6 +12,8 @@ import Restart from '@/assets/svgs/restart.svg'
 import MoodPopup from "@/components/MoodPopup"
 import axios from "axios"
 
+import Swap from '@/assets/svgs/swap.svg'
+
 const logs = () => {
 
     const [isPickingDate, setIsPickingDate] = useState(false)
@@ -20,10 +22,11 @@ const logs = () => {
     const [dailyMoods, setDailyMoods] = useState([]);
     const [month, setMonth] = useState((new Date().getMonth()))
     const [year, setYear] = useState((new Date()).getFullYear());
+    
 
     const fetchDailies = async() => {
 
-        const res = await axios.get('http://10.75.178.141:5000/fetchDailyByMonth', {
+        const res = await axios.get('http://10.72.104.118:5000/fetchDailyByMonth', {
             params: {
                 uid: 0,
                 month,
@@ -43,7 +46,7 @@ const logs = () => {
         
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate}/>}
+            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies}/>}
             {isPckingMood && <MoodPopup setIsPickingMood={setIsPickingMood}/>}
 
             <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPckingMood) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPckingMood) ? 'none' : 'auto'}}>
@@ -53,22 +56,21 @@ const logs = () => {
                 <Navbar tabName={"Planner"} currencyAmount={103}/>
                 <CatSelectNavbar tabNames={['Moods', 'Habits', 'Goals']}/>
 
-                <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
-                    <TouchableOpacity style={styles.switchButton} onPress={() => setIsPickingMood(true)}>
-                        <Restart style={{marginRight: 6}}/>
-                        <Text style={{color: '#52637D'}}>
-                            Switch to Calendar
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                <View style={{width: '90%', alignItems: 'center', marginTop: 20, flexDirection: 'row', position: 'relative'}}>
 
-                <View style={styles.sepBar}/>
-
-                <View>
-                    <TouchableOpacity style={styles.dateButton} onPress={() => setIsPickingDate(true)}>
-                        <Text style={{color: '#52637D', marginRight: 2, fontWeight: 400, marginLeft: 4}}>April, 2025</Text>
-                        <ChevronDown />
+                    <View style={styles.dateBox}>
+                        <Text style={{color: '#52637D'}}>Date</Text>
+                    </View>
+                    <TouchableOpacity style={styles.switchButton} onPress={() => setIsPickingDate(true)}>
+                        <Text style={{color: '#52637D', marginRight: 6}}>April, 2025</Text>
+                        <ChevronDown stroke={'#52637D'} style={{marginTop: 2}}/>
                     </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.swapView}>
+                        <Swap style={{marginTop: 2}}/>
+                        <Text style={{color: '#52637D', marginLeft: 4}}>View</Text>
+                    </TouchableOpacity>
+
                 </View>
 
                 <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20,}}>
@@ -96,15 +98,19 @@ export default logs
 const styles = StyleSheet.create({
     switchButton: {
         borderWidth: 1,
-        borderRadius: 8,
+        borderRadius: 12,
         borderColor: '#CDD8EA',
-        width: '100%',
+        width: '40%',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: 'white',
         paddingTop: 10,
-        paddingBottom: 10
+        paddingBottom: 10,
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        height: 36,
+        borderLeftWidth: 0
     },
     dateButton: {
         flexDirection: 'row',
@@ -124,5 +130,32 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginBottom: 16,
         backgroundColor: '#E4E7EC'
+    },
+    dateBox: {
+        backgroundColor: '#FCFCFC',
+        borderColor: '#CDD8EA',
+        borderWidth: 1,
+        borderRadius: 12,
+        height: 36,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 16,
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0
+    },
+    swapView: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        right: 0,
+        backgroundColor: 'white',
+        borderColor: '#CDD8EA',
+        borderWidth: 1,
+        borderRadius: 12,
+        height: 36,
+        paddingLeft: 16,
+        paddingRight: 16
     }
 })

@@ -57,7 +57,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
         try {
 
-          await axios.post('http://10.75.178.141:5000/sendMood', {
+          await axios.post('http://10.72.104.118:5000/sendMood', {
             uid: 0,
             mood: selectedMood,
             selectedItems,

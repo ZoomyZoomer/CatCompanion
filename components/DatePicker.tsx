@@ -33,7 +33,7 @@ const yearData = Array.from({ length: LOOP_MULTIPLIER }, (_, i) => {
   return { ...y, id: `y-${i}` };
 });
 
-const DatePicker = () => {
+const DatePicker = ({ onSelectMonth, onSelectYear } : any) => {
   // Month refs and anim
   const scrollYMonth = useRef(new Animated.Value(0)).current;
   const flatListMonthRef = useRef<FlatList>(null);
@@ -52,7 +52,6 @@ const DatePicker = () => {
     flatListYearRef.current?.scrollToOffset({ offset: initialYearIdx * ITEM_HEIGHT, animated: false });
   }, []);
 
-  // Shared snapping logic
   const handleSnap = (
     offsetY: number,
     dataArray: any[],
@@ -60,17 +59,30 @@ const DatePicker = () => {
     initialIdx: number
   ) => {
     const totalH = dataArray.length * ITEM_HEIGHT;
-    // Infinite loop
-    if (offsetY < ITEM_HEIGHT * BASE_MONTHS.length || offsetY > totalH - ITEM_HEIGHT * BASE_MONTHS.length) {
+  
+    // Infinite loop reset
+    if (
+      offsetY < ITEM_HEIGHT * BASE_MONTHS.length ||
+      offsetY > totalH - ITEM_HEIGHT * BASE_MONTHS.length
+    ) {
       ref.current?.scrollToOffset({ offset: initialIdx * ITEM_HEIGHT, animated: false });
       return;
     }
-    // Snap
+  
+    // Snap logic
     const idx = Math.round(offsetY / ITEM_HEIGHT);
     const to = idx * ITEM_HEIGHT;
     ref.current?.scrollToOffset({ offset: to, animated: true });
-    console.log("Selected:", dataArray[idx]);
+  
+    if (dataArray === monthData && onSelectMonth) {
+      const numericMonth = idx % BASE_MONTHS.length; // 0 - 11
+      onSelectMonth(numericMonth); // Pass numeric value
+    } else if (dataArray === yearData && onSelectYear) {
+      const numericYear = START_YEAR + (idx % BASE_YEARS.length); // e.g., 1990+
+      onSelectYear(numericYear); // Pass numeric value
+    }
   };
+  
 
   // Render generic item
   const renderItem = (scrollY: Animated.Value) => ({ item, index }: any) => {
