@@ -3,10 +3,10 @@ import { Image, StyleSheet, Text, View } from "react-native"
 
 import Star from '@/assets/svgs/star_filled.svg'
 
-const Mood = ({ item } : any) => {
+const Mood = ({ item, isToday } : any) => {
  return (
     <View style={styles.mood_container}>
-        <View style={styles.mood_circle}>
+        <View style={[styles.mood_circle, {backgroundColor: isToday ? '#FFE3CE' : '#E8ECF1'}]}>
             <Image source={item.item.itemIcon} style={styles.image}/>
         </View>
         <View style={styles.mood_rating}>

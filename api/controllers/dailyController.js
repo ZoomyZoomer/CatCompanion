@@ -108,8 +108,45 @@ const fetchDailyByMonth = async (req, res) => {
   };
   
 
+  const deleteDaily = async (req, res) => {
+
+    const { uid, date } = req.body;
+  
+    try {
+      const log = await DailyLog.findOne({ uid });
+  
+      if (!log) {
+        return res.status(500).json({ error: 'Daily Log Schema does not exist' });
+      }
+  
+      const targetDateStr = toDateString(date);
+  
+      // Filter out the moods that don't match the date
+      const updatedMoods = log.moods.filter((item) => {
+        return toDateString(item.date) !== targetDateStr;
+      });
+  
+      log.moods = updatedMoods;
+      await log.save();
+  
+      return res.status(200).json({ message: 'Daily log deleted successfully' });
+  
+    } catch (e) {
+      console.log({ error: e });
+      return res.status(500).json({ message: 'Failed to delete daily log' });
+    }
+  };
+  
+  const toDateString = (date) => {
+    const d = new Date(date);
+    return d.toISOString().split('T')[0]; //Year-Month-Day
+  };
+  
+  
+
 module.exports = {
   sendMood,
   fetchCurrentMood,
-  fetchDailyByMonth
+  fetchDailyByMonth,
+  deleteDaily
 };

@@ -13,20 +13,28 @@ import MoodPopup from "@/components/MoodPopup"
 import axios from "axios"
 
 import Swap from '@/assets/svgs/swap.svg'
+import DeletePopup from "@/components/DeletePopup"
 
 const logs = () => {
 
-    const [isPickingDate, setIsPickingDate] = useState(false)
-    const [isPckingMood, setIsPickingMood] = useState(false);
+    const [isPickingDate, setIsPickingDate] = useState(false);
+    const [isPickingMood, setIsPickingMood] = useState(false);
+    const [isDeletingMood, setIsDeletingMood] = useState(false);
 
     const [dailyMoods, setDailyMoods] = useState([]);
+    const [relDate, setRelDate] = useState(null);
     const [month, setMonth] = useState((new Date().getMonth()))
     const [year, setYear] = useState((new Date()).getFullYear());
+
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
     
 
     const fetchDailies = async() => {
 
-        const res = await axios.get('http://10.72.104.118:5000/fetchDailyByMonth', {
+        const res = await axios.get('http://10.75.178.141:5000/fetchDailyByMonth', {
             params: {
                 uid: 0,
                 month,
@@ -46,10 +54,11 @@ const logs = () => {
         
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies}/>}
-            {isPckingMood && <MoodPopup setIsPickingMood={setIsPickingMood}/>}
+            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} month={month} year={year} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies}/>}
+            {isPickingMood && <MoodPopup setIsPickingMood={setIsPickingMood}/>}
+            {isDeletingMood && <DeletePopup setOpen={setIsDeletingMood} text={'Daily Log'} relDate={relDate}/>}
 
-            <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPckingMood) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPckingMood) ? 'none' : 'auto'}}>
+            <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPickingMood || isDeletingMood) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPickingMood || isDeletingMood) ? 'none' : 'auto'}}>
             
             <View style={{flex: 1, backgroundColor: '#FDFDFD', alignItems: 'center', overflowY: 'auto'}}>
 
@@ -62,7 +71,7 @@ const logs = () => {
                         <Text style={{color: '#52637D'}}>Date</Text>
                     </View>
                     <TouchableOpacity style={styles.switchButton} onPress={() => setIsPickingDate(true)}>
-                        <Text style={{color: '#52637D', marginRight: 6}}>April, 2025</Text>
+                        <Text style={{color: '#52637D', marginRight: 6}}>{months[month]}, {year}</Text>
                         <ChevronDown stroke={'#52637D'} style={{marginTop: 2}}/>
                     </TouchableOpacity>
 
@@ -75,8 +84,8 @@ const logs = () => {
 
                 <View style={{width: '90%', justifyContent: 'center', alignItems: 'center', marginTop: 20,}}>
 
-                    {dailyMoods.map((mood) => (
-                        <DailyMood mood={mood}/>
+                    {dailyMoods.reverse().map((mood) => (
+                        <DailyMood mood={mood} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate}/>
                     ))}
 
                 </View>

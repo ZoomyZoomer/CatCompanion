@@ -4,9 +4,8 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import DatePicker from "./DatePicker"
 
 import Close from '@/assets/svgs/close.svg'
-import { AnimatedScrollView } from "react-native-reanimated/lib/typescript/component/ScrollView"
 
-const DatePopup = ({setIsPickingDate, setMonth, setYear, fetchDailies} : any) => {
+const DatePopup = ({setIsPickingDate, setMonth, setYear, fetchDailies, month, year} : any) => {
 
     const scale = useSharedValue(0.7)
     
@@ -37,7 +36,7 @@ const DatePopup = ({setIsPickingDate, setMonth, setYear, fetchDailies} : any) =>
             </View>
 
           <View style={{marginTop: 20}}>
-            <DatePicker onSelectMonth={setMonth} onSelectYear={setYear}/>
+            <DatePicker onSelectMonth={setMonth} onSelectYear={setYear} month={month} year={year}/>
           </View>
 
           <TouchableOpacity style={styles.confirmButton} onPress={() => {fetchDailies(); setIsPickingDate(false)}}>

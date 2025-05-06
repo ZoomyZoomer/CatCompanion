@@ -33,11 +33,11 @@ const yearData = Array.from({ length: LOOP_MULTIPLIER }, (_, i) => {
   return { ...y, id: `y-${i}` };
 });
 
-const DatePicker = ({ onSelectMonth, onSelectYear } : any) => {
+const DatePicker = ({ onSelectMonth, onSelectYear, month, year } : any) => {
   // Month refs and anim
   const scrollYMonth = useRef(new Animated.Value(0)).current;
   const flatListMonthRef = useRef<FlatList>(null);
-  const initialMonthIdx = Math.floor(monthData.length / 2);
+  const initialMonthIdx = Math.floor(month);
   const monthTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Year refs and anim

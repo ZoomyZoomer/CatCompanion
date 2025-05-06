@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import Mood from "./Mood"
 
@@ -11,7 +11,7 @@ import Edit from '@/assets/svgs/edit.svg'
 import Heart from '@/assets/svgs/heart.svg'
 import HeartFilled from '@/assets/svgs/heart_filled.svg'
 
-const DailyMood = ({ mood } : any) => {
+const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate } : any) => {
 
     const [expanded, setExpanded] = useState(false);
     const animatedHeight = useRef(new Animated.Value(40)).current;
@@ -63,13 +63,73 @@ const DailyMood = ({ mood } : any) => {
       // setLiked(false);
     });
   };
+
+  const scaleAnim2 = useRef(new Animated.Value(0.7)).current;
+
+
+  useEffect(() => {
+    const animate = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scaleAnim2, {
+          toValue: 1.4,
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim2, {
+          toValue: 0.7,
+          duration: 1000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    animate.start();
+  }, [scaleAnim2]);
+
+  const scaleAnim3 = useRef(new Animated.Value(0.7)).current;
+
+
+  useEffect(() => {
+    setTimeout(() => {
+        const animate = Animated.loop(
+            Animated.sequence([
+              Animated.timing(scaleAnim3, {
+                toValue: 1.4,
+                duration: 1000,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+              Animated.timing(scaleAnim3, {
+                toValue: 0.7,
+                duration: 1000,
+                easing: Easing.inOut(Easing.ease),
+                useNativeDriver: true,
+              }),
+            ])
+          );
+      
+          animate.start();
+    }, (400))
+  }, [scaleAnim3])
+
+  const [isToday, setIsToday] = useState(false);
+
+  useEffect(() => {
+    const date = new Date();
+    const refDate = new Date(mood.date);
+    if ((refDate.getDate() === date.getDate()) && (refDate.getMonth() === date.getMonth()) && refDate.getFullYear() === date.getFullYear()){
+        setIsToday(true);
+    }
+  }, [])
     
 
     return (
         <View style={{width: '100%', marginTop: 30}}>
 
             <View style={{ marginBottom: 6, position: "relative", width: "100%" }}>
-                <Text style={{ color: "#52637D", fontWeight: "500", marginLeft: 4 }}>
+                <Text style={{ color: isToday ? '#FCAD72' : "#52637D", fontWeight: "500", marginLeft: 4 }}>
                     {formattedDate}
                 </Text>
                 <View style={{ position: "absolute", right: 4, flexDirection: "row" }}>
@@ -79,23 +139,31 @@ const DailyMood = ({ mood } : any) => {
                     </Animated.View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ marginRight: 6 }}>
-                    <Edit />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                    <Trash />
+                    <TouchableOpacity onPress={() => {setRelDate(mood.date); setIsDeletingMood(true)}}>
+                        <Trash />
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <View style={styles.daily_mood_container}>
+            <TouchableOpacity style={styles.daily_mood_container} onPress={() => setIsPickingMood(true)}>
                 
                 <View style={styles.daily_mood_left}>
 
                     <View>
 
-                        <View style={styles.daily_mood_circle}>
+                        <View style={[styles.daily_mood_circle, {backgroundColor: isToday ? '#FFE3CE' : '#E8ECF1'}]}>
                             <Image source={catMap[mood.mood]} style={styles.mood_image}/>
+
+                            {isToday &&(
+                                <>
+                                <Animated.View style={[styles.circle1, {left: -4, transform: [{scale: scaleAnim2}]}]}/>
+                                <Animated.View style={[styles.circle1, {bottom: 18, right: -6, transform: [{scale: scaleAnim3}]}]}/>
+
+                                <Animated.View style={[styles.circle2, {top: 2, left: -6, transform: [{scale: scaleAnim3}]}]}/>
+                                <Animated.View style={[styles.circle2, {right: -12, transform: [{scale: scaleAnim2}]}]}/>
+                                </>
+                            )}
+
                         </View>
                         <View style={styles.mood}>
                             <Text style={{color: 'white', fontWeight: 500, fontSize: 12}}>{mood.mood}</Text>
@@ -110,12 +178,12 @@ const DailyMood = ({ mood } : any) => {
                 <View style={styles.daily_mood_right}>
                     <View style={{flexDirection: 'row', width: '100%', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
                         {mood.logItems.map((item : any) => (
-                            <Mood item={item}/>
+                            <Mood item={item} isToday={isToday}/>
                         ))}
                     </View>
                 </View>
 
-            </View>
+            </TouchableOpacity>
 
             <Animated.View style={[styles.attachments_cont, { height: animatedHeight }]}>
                 <TouchableOpacity 
@@ -225,10 +293,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#D9D9D9',
         borderRadius: 8,
-        width: '40%',
         backgroundColor: '#FCFCFC',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        aspectRatio: 1,
     },
     caption: {
         color: '#8B93A0',
@@ -245,5 +313,21 @@ const styles = StyleSheet.create({
         height: '90%',
         width: '90%',
         resizeMode: 'contain'
+    },
+    circle1: {
+        height: 10,
+        width: 10,
+        borderRadius: 10,
+        backgroundColor: '#FFE3CE',
+        position: 'absolute',
+        bottom: 10
+    },
+    circle2: {
+        height: 16,
+        width: 16,
+        borderRadius: 16,
+        backgroundColor: '#FFE3CE',
+        position: 'absolute',
+        top: 10
     }
 })
