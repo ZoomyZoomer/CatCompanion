@@ -227,7 +227,7 @@ export default DailyMood
 const styles = StyleSheet.create({
     daily_mood_container: {
         borderWidth: 1,
-        borderColor: '#CDD8EA',
+        borderColor: '#D9D9D9',
         borderRadius: 8,
         borderBottomRightRadius: 0,
         borderBottomLeftRadius: 0,
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     },
     attachments_cont: {
         borderWidth: 1,
-        borderColor: '#CDD8EA',
+        borderColor: '#D9D9D9',
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         borderStyle: 'dashed',

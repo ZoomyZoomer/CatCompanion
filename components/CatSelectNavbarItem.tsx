@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     item_container_inactive: {
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
         borderTopRightRadius: '0.8rem',
         borderTopLeftRadius: '0.8rem',
         borderColor: '#CDD8EA',

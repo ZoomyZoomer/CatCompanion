@@ -23,10 +23,12 @@ export default Navbar
 
 const styles = StyleSheet.create({
     navbar_container: {
-        backgroundColor: '#F9F9F9',
+        backgroundColor: 'white',
         width: '100%',
         borderTopRightRadius: '0.8rem',
         borderTopLeftRadius: '0.8rem',
+        borderBottomWidth: 1,
+        borderBottomColor: '#CDD8EA',
         justifyContent: 'center',
         alignItems: 'center',
         height: 70,
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderRadius: '0.8rem',
         position: 'absolute',
-        backgroundColor: 'white',
+        backgroundColor: '#F9F9F9',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',

@@ -38,6 +38,8 @@ const DeletePopup = ({ setOpen, text, relDate } : any) => {
 
     return (
         <Animated.View style={[styles.popup_container, animatedStyle]}>
+
+          <View style={{height: '100%', width: '100%', alignItems: 'center'}}>
             
             <View style={styles.popup_header}>
               <View style={{ justifyContent: 'center', alignItems: 'center', width: '100%', position: 'relative' }}>
@@ -57,13 +59,15 @@ const DeletePopup = ({ setOpen, text, relDate } : any) => {
                 </View>
             </View>
 
-            <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop: 60}}>
+            <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', position: 'absolute', bottom: 30}}>
                 <TouchableOpacity style={styles.cancel_btn} onPress={() => setOpen(false)}>
                     <Text style={{color: '#52637D', fontWeight: 500}}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.delete_btn} onPress={() => deleteDailyLog()}>
                     <Text style={{color: 'white', fontWeight: 500}}>Delete</Text>
                 </TouchableOpacity>
+            </View>
+
             </View>
 
         </Animated.View>
@@ -74,8 +78,8 @@ export default DeletePopup;
 
 const styles = StyleSheet.create({
     popup_container: {
-        height: '48%',
-        width: '76%',
+        height: '46%',
+        width: '78%',
         backgroundColor: '#FDFDFD',
         borderRadius: 8,
         position: 'absolute',

@@ -106,7 +106,33 @@ const fetchDailyByMonth = async (req, res) => {
       return res.status(500).json({ message: 'Failed to fetch daily logs' });
     }
   };
-  
+
+  const fetchMoodStatus = async (req, res) => {
+
+    const { uid } = req.query;
+
+    try {
+
+      const log = await DailyLog.findOne({ uid });
+
+      if (!log) {
+        return res.status(500).json({ error: 'Daily Log Schema does not exist' });
+      }
+
+      const relMood = log.moods.find((mood) => isSameDay(mood.date, new Date()));
+
+      if (!relMood) {
+        return res.status(200).json(false);
+      }
+
+      return res.status(200).json(true);
+
+    } catch (e){
+      console.log({ error: e });
+      return res.status(500).json({ message: 'Failed to fetch mood' });
+    }
+
+  }  
 
   const deleteDaily = async (req, res) => {
 
@@ -148,5 +174,6 @@ module.exports = {
   sendMood,
   fetchCurrentMood,
   fetchDailyByMonth,
-  deleteDaily
+  deleteDaily,
+  fetchMoodStatus
 };

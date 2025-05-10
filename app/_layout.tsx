@@ -1,3 +1,4 @@
+import { MoodProvider } from '@/context/MoodContext';
 import * as Font from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -40,13 +41,13 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <MoodProvider>
       <StatusBar style="dark" />
       <Stack>
       <Stack.Screen name="(main)" options={{ headerShown: false }} />
         <Stack.Screen name="(intro)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-    </>
+    </MoodProvider>
   );
 }
