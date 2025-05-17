@@ -10,8 +10,9 @@ import Trash from '@/assets/svgs/trash.svg'
 import Edit from '@/assets/svgs/edit.svg'
 import Heart from '@/assets/svgs/heart.svg'
 import HeartFilled from '@/assets/svgs/heart_filled.svg'
+import AddCircle from '@/assets/svgs/add-circle.svg'
 
-const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate } : any) => {
+const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate, setIsTimeTraveling } : any) => {
 
     const [expanded, setExpanded] = useState(false);
     const animatedHeight = useRef(new Animated.Value(40)).current;
@@ -121,8 +122,23 @@ const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate } : a
     const refDate = new Date(mood.date);
     if ((refDate.getDate() === date.getDate()) && (refDate.getMonth() === date.getMonth()) && refDate.getFullYear() === date.getFullYear()){
         setIsToday(true);
+    } else {
+        setIsToday(false);
     }
-  }, [])
+  }, [mood])
+
+  const handleClickMood = () => {
+
+    const date = new Date();
+    const refDate = new Date(mood.date);
+
+    if ((refDate.getDate() === date.getDate()) && (refDate.getMonth() === date.getMonth()) && refDate.getFullYear() === date.getFullYear()){
+        setIsPickingMood(true)
+    } else {
+        setIsTimeTraveling(true);
+    }
+
+  }
     
 
     return (
@@ -130,7 +146,7 @@ const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate } : a
 
             <View style={{ marginBottom: 6, position: "relative", width: "100%" }}>
                 <Text style={{ color: isToday ? '#FCAD72' : "#52637D", fontWeight: "500", marginLeft: 4 }}>
-                    {formattedDate}
+                    {isToday ? `${formattedDate} · Today` : formattedDate}
                 </Text>
                 <View style={{ position: "absolute", right: 4, flexDirection: "row" }}>
                     <TouchableOpacity onPress={handleHeartPress} style={{ marginRight: 6 }}>
@@ -145,7 +161,7 @@ const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate } : a
                 </View>
             </View>
 
-            <TouchableOpacity style={styles.daily_mood_container} onPress={() => setIsPickingMood(true)}>
+            <TouchableOpacity style={styles.daily_mood_container} onPress={() => handleClickMood()}>
                 
                 <View style={styles.daily_mood_left}>
 
@@ -192,12 +208,12 @@ const DailyMood = ({ mood, setIsPickingMood, setIsDeletingMood, setRelDate } : a
                 >
                     <View style={{flexDirection: 'row', alignItems: expanded ? 'flex-start' : 'center'}}>
                         <Gallery />
-                        <Text style={{ color: '#8B93A0', marginLeft: 6 }}>daily_photo.png</Text>
+                        <Text style={{ color: '#8B93A0', marginLeft: 6 }}>{mood.imageUri ? 'daily_photo.png' : 'No attachment'}</Text>
                     </View>
 
                     <View style={{ position: 'absolute', right: 10, bottom: 0, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-                        <Text style={{ color: '#8B93A0', marginRight: 6, fontSize: 12 }}>{expanded ? 'Shrink' : 'Expand'}</Text>
-                        {expanded ? <Shrink /> : <Expand />}
+                        <Text style={{ color: '#8B93A0', marginRight: 6, fontSize: 12 }}>{mood.imageUri ? (expanded ? 'Shrink' : 'Expand') : 'Add photo'}</Text>
+                        {mood.imageUri ? (expanded ? <Shrink /> : <Expand />) : <AddCircle />}
                     </View>
 
                     {expanded && 

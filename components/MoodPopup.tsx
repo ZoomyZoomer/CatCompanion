@@ -57,7 +57,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
         try {
 
-          await axios.post('http://10.72.104.118:5000/sendMood', {
+          await axios.post('http://10.0.0.216:5000/sendMood', {
             uid: 0,
             mood: selectedMood,
             selectedItems,
@@ -76,7 +76,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
       const fetchInfo = async() => {
 
-        const res = await axios.get('http://10.72.104.118:5000/fetchCurrentMood', {
+        const res = await axios.get('http://10.0.0.216:5000/fetchCurrentMood', {
           params: {
             uid: 0
           }

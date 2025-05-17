@@ -18,12 +18,14 @@ import DeletePopup from "@/components/DeletePopup"
 import { useMood } from "@/context/MoodContext"
 import MoodsPage from "@/components/MoodsPage"
 import CalendarPage from "@/components/CalendarPage"
+import TimeTravelMood from "@/components/TimeTravelMood"
 
 const logs = () => {
 
     const [isPickingDate, setIsPickingDate] = useState(false);
     const {isPickingMood, setIsPickingMood} = useMood();
     const [isDeletingMood, setIsDeletingMood] = useState(false);
+    const [isTimeTraveling, setIsTimeTraveling] = useState(false);
 
     const [relDate, setRelDate] = useState(null);
     const [month, setMonth] = useState((new Date().getMonth()))
@@ -35,7 +37,7 @@ const logs = () => {
 
     const fetchDailies = async() => {
 
-        const res = await axios.get('http://10.72.104.118:5000/fetchDailyByMonth', {
+        const res = await axios.get('http://10.0.0.216:5000/fetchDailyByMonth', {
             params: {
                 uid: 0,
                 month,
@@ -58,17 +60,18 @@ const logs = () => {
             {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} month={month} year={year} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies}/>}
             {isPickingMood && <MoodPopup setIsPickingMood={setIsPickingMood}/>}
             {isDeletingMood && <DeletePopup setOpen={setIsDeletingMood} text={'Daily Log'} relDate={relDate}/>}
+            {isTimeTraveling && <TimeTravelMood setIsTimeTraveling={setIsTimeTraveling}/>}
 
-            <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPickingMood || isDeletingMood) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPickingMood || isDeletingMood) ? 'none' : 'auto'}}>
+            <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling) ? 'none' : 'auto'}}>
             
-            <View style={{flex: 1, backgroundColor: '#FBFBFB', alignItems: 'center', overflowY: 'auto'}}>
+            <View style={{flex: 1, backgroundColor: '#FBFBFB', alignItems: 'center', paddingBottom: 140, overflowY: 'auto'}}>
 
                 <Navbar tabName={"Planner"} currencyAmount={103}/>
                 <CatSelectNavbar tabNames={['Moods', 'Calendar', 'Goals']} setCurrTab={setCurrTab} currTab={currTab}/>
 
                 {
-                    currTab === 0 ? <MoodsPage setIsPickingDate={setIsPickingDate} setIsPickingMood={setIsDeletingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} dailyMoods={dailyMoods} month={month} year={year} /> :
-                    currTab === 1 ? <CalendarPage dailyMoods={dailyMoods}/> : <></>
+                    currTab === 0 ? <MoodsPage setIsPickingDate={setIsPickingDate} setIsPickingMood={setIsDeletingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} dailyMoods={dailyMoods} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/> :
+                    currTab === 1 ? <CalendarPage dailyMoods={dailyMoods} setIsPickingMood={setIsDeletingMood} setRelDate={setRelDate} setIsPickingDate={setIsPickingDate} setIsDeletingMood={setIsDeletingMood} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/> : <></>
                 }
                            
 

@@ -6,7 +6,7 @@ import ChevronDown from '@/assets/svgs/chevron_down.svg'
 import Swap from '@/assets/svgs/swap.svg'
 import axios from "axios";
 
-const MoodsPage = ({setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRelDate, dailyMoods, month, year} : any) => {
+const MoodsPage = ({setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRelDate, dailyMoods, month, year, setIsTimeTraveling} : any) => {
 
     const months = [
         "January", "February", "March", "April", "May", "June",
@@ -35,7 +35,7 @@ const MoodsPage = ({setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRe
 
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
                 {dailyMoods.reverse().map((mood : any) => (
-                    <DailyMood mood={mood} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate}/>
+                    <DailyMood mood={mood} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} setIsTimeTraveling={setIsTimeTraveling}/>
                 ))}
             </View>
 

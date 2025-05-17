@@ -41,7 +41,7 @@ function PlusButtonWithEffects({ setIsPickingMood }: { setIsPickingMood: React.D
   const circles = Array.from({ length: 10 }).map(() => useRef(new Animated.Value(0)).current); // 10 circles
 
   const fetchMoodStatus = async() => {
-    const res = await axios.get('http://10.72.104.118:5000/fetchMoodStatus', {
+    const res = await axios.get('http://10.0.0.216:5000/fetchMoodStatus', {
       params: {
         uid: 0
       }
