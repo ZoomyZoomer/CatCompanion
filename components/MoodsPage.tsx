@@ -6,7 +6,7 @@ import ChevronDown from '@/assets/svgs/chevron_down.svg'
 import Swap from '@/assets/svgs/swap.svg'
 import axios from "axios";
 
-const MoodsPage = ({setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRelDate, dailyMoods, month, year, setIsTimeTraveling} : any) => {
+const MoodsPage = ({setCalendarView, setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRelDate, dailyMoods, month, year, setIsTimeTraveling, moodDate} : any) => {
 
     const months = [
         "January", "February", "March", "April", "May", "June",
@@ -26,7 +26,7 @@ const MoodsPage = ({setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRe
                     <ChevronDown stroke={'#52637D'} style={{marginTop: 2}}/>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.swapView}>
+                <TouchableOpacity style={styles.swapView} onPress={() => setCalendarView((prev : boolean) => !prev)}>
                     <Swap style={{marginTop: 2}}/>
                     <Text style={{color: '#52637D', marginLeft: 4}}>View</Text>
                 </TouchableOpacity>
@@ -34,8 +34,8 @@ const MoodsPage = ({setIsPickingDate, setIsPickingMood, setIsDeletingMood, setRe
             </View> 
 
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
-                {dailyMoods.reverse().map((mood : any) => (
-                    <DailyMood mood={mood} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} setIsTimeTraveling={setIsTimeTraveling}/>
+                {dailyMoods.map((mood : any, index: number) => (
+                    <DailyMood moodDate={moodDate} mood={mood} index={index} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} setIsTimeTraveling={setIsTimeTraveling}/>
                 ))}
             </View>
 
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         borderColor: '#CDD8EA',
         borderWidth: 1,
         borderRadius: 12,
-        height: 36,
+        height: 42,
         justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 16,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         borderColor: '#CDD8EA',
         borderWidth: 1,
         borderRadius: 12,
-        height: 36,
+        height: 42,
         paddingLeft: 16,
         paddingRight: 16
     },
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
-        height: 36,
+        height: 42,
         borderLeftWidth: 0
     }
 })

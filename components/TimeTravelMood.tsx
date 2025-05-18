@@ -7,8 +7,9 @@ import Item from "./Item"
 
 import Close from '@/assets/svgs/close.svg'
 import Ticket from '@/assets/svgs/ticket.svg'
+import axios from "axios"
 
-const TimeTravelMood = ({ setIsTimeTraveling } : any) => {
+const TimeTravelMood = ({ setIsTimeTraveling, setIsPickingMood, moodDate } : any) => {
 
     const [activeItem, setActiveItem] = useState(false);
     const scale = useSharedValue(0.7)
@@ -23,6 +24,38 @@ const TimeTravelMood = ({ setIsTimeTraveling } : any) => {
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ scale: scale.value }]
     }))
+
+    const [quantity, setQuantity] = useState(0);
+
+    const handlePress = async() => {
+
+        const res = await axios.post('http://10.0.0.216:5000/useItem', {
+            uid: 0,
+            item_id: 0
+        })
+
+        if (res.status == 200){
+            setIsPickingMood(true);
+            setIsTimeTraveling(false);
+        }
+
+    }
+
+    const fetchQuantity = async() => {
+        const res = await axios.get('http://10.0.0.216:5000/fetchItem', {
+            params: {
+                uid: 0,
+                item_id: 0,
+                item_name: 'Time Travel Ticket'
+            }
+        })
+
+        setQuantity(res.data);
+    }
+
+    useEffect(() => {
+        fetchQuantity();
+    }, [])
 
     return (
         <Animated.View style={[styles.popup_container, animatedStyle]}>
@@ -41,7 +74,7 @@ const TimeTravelMood = ({ setIsTimeTraveling } : any) => {
                         Edit your old mood log
                     </Text>
 
-                    <TouchableOpacity style={styles.close} onPress={() => setIsTimeTraveling(false)}>
+                    <TouchableOpacity style={styles.close} onPress={() => {moodDate.current = new Date(); setIsTimeTraveling(false)}}>
                         <Close />
                     </TouchableOpacity>
 
@@ -57,12 +90,12 @@ const TimeTravelMood = ({ setIsTimeTraveling } : any) => {
                     />
 
                     <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 60}}>
-                        <Item image_source={require('@/assets/pngs/ticket.png')} quantity={3} activeItem={activeItem} setActiveItem={setActiveItem}/>
+                        <Item image_source={require('@/assets/pngs/ticket.png')} quantity={quantity} activeItem={activeItem} setActiveItem={setActiveItem}/>
                     </View>
 
                     <Text style={{color: '#AFAEAE', marginTop: 10, fontSize: 12}}>Click to use</Text>
 
-                    <TouchableOpacity style={activeItem ? styles.confirmBtn : styles.confirmBtnNull}>
+                    <TouchableOpacity style={activeItem ? styles.confirmBtn : styles.confirmBtnNull} onPress={() => handlePress()}>
                         <Text style={{marginRight: activeItem ? 6 : 0, color: activeItem ? 'white' : '#52637D', fontWeight: 500}}>{activeItem ? 'Use 1x Time Travel Ticket' : 'Select an item to use'}</Text>
                         {activeItem && <Ticket style={{marginTop: 2}}/>}
                     </TouchableOpacity>

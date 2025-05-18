@@ -14,17 +14,19 @@ const CatSelectNavbar = ({tabNames, setCurrTab, currTab} : any) => {
     return (
         <View style={styles.navbar_container}>
 
-            <TouchableOpacity style={{height: '70%', width: '28%', justifyContent: currTab === 0 ? 'flex-start' : 'flex-end', marginLeft: 2, marginRight: 2}} onPress={() => setCurrTab(0)}>
+            <TouchableOpacity style={{height: '70%', width: tabNames[2] ? '28%' : '40%', justifyContent: currTab === 0 ? 'flex-start' : 'flex-end', marginLeft: 2, marginRight: 2}} onPress={() => setCurrTab(0)}>
                 <CatSelectNavbarItem isActive={currTab === 0} Icon={currTab === 0 ? KeyFilled : KeyEmpty} tabName={tabNames[0]}/>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{height: '70%', width: '28%', justifyContent: currTab === 1 ? 'flex-start' : 'flex-end', marginLeft: 2, marginRight: 2}} onPress={() => setCurrTab(1)}>
+            <TouchableOpacity style={{height: '70%', width: tabNames[2] ? '28%' : '40%', justifyContent: currTab === 1 ? 'flex-start' : 'flex-end', marginLeft: 2, marginRight: 2}} onPress={() => setCurrTab(1)}>
                 <CatSelectNavbarItem isActive={currTab === 1} Icon={currTab === 1 ? EmojiFilled : EmojiEmpty} tabName={tabNames[1]}/>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{height: '70%', width: '28%', justifyContent: currTab === 2 ? 'flex-start' : 'flex-end', marginLeft: 2, marginRight: 2}} onPress={() => setCurrTab(2)}>
-                <CatSelectNavbarItem isActive={currTab === 2} Icon={currTab === 2 ? StarFilled : StarEmpty} tabName={tabNames[2]}/>
-            </TouchableOpacity>
+            {tabNames[2] && (
+                <TouchableOpacity style={{height: '70%', width: '28%', justifyContent: currTab === 2 ? 'flex-start' : 'flex-end', marginLeft: 2, marginRight: 2}} onPress={() => setCurrTab(2)}>
+                    <CatSelectNavbarItem isActive={currTab === 2} Icon={currTab === 2 ? StarFilled : StarEmpty} tabName={tabNames[2]}/>
+                </TouchableOpacity>
+            )}
 
         </View>
     )

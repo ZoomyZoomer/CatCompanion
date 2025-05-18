@@ -10,7 +10,7 @@ function isSameDay(date1, date2) {
   }
 
   const sendMood = async (req, res) => {
-    const { uid, mood, selectedItems, ratings, selectedImage, caption } = req.body;
+    const { uid, mood, selectedItems, ratings, selectedImage, caption, date } = req.body;
   
     try {
       let log = await DailyLog.findOne({ uid });
@@ -24,7 +24,7 @@ function isSameDay(date1, date2) {
         return res.status(500).json({ message: 'DailyLog Schema not found' });
       }
   
-      const relLog = log.moods.find((item) => isSameDay(item.date, new Date()));
+      const relLog = log.moods.find((item) => isSameDay(item.date, new Date(date)));
   
       const logEntry = {
         mood,
@@ -43,7 +43,7 @@ function isSameDay(date1, date2) {
         return res.status(200).json({ message: 'Log successfully updated' });
       }
   
-      log.moods.push({ ...logEntry, date: new Date() });
+      log.moods.push({ ...logEntry, date: new Date(date) });
       await log.save();
       return res.status(200).json({ message: 'Log successfully created' });
   
@@ -56,7 +56,7 @@ function isSameDay(date1, date2) {
 
 const fetchCurrentMood = async (req, res) => {
 
-    const { uid } = req.query
+    const { uid, date } = req.query
 
     try {
 
@@ -66,7 +66,7 @@ const fetchCurrentMood = async (req, res) => {
             return res.status(200).json(null);
         }
 
-        const relLog = log.moods.find((item) => isSameDay(item.date, new Date()));
+        const relLog = log.moods.find((item) => isSameDay(item.date, new Date(date)));
 
         if (!relLog){
             return res.status(200).json(null);

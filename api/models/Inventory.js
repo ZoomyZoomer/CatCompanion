@@ -9,6 +9,7 @@ const item = new mongoose.Schema({
 });
 
 const inventory = new mongoose.Schema({
+  uid: Number,
   items: [item]
 });
 

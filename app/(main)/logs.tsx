@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 import DailyMood from "@/components/DailyMood"
 import CatSelectNavbar from "@/components/CatSelectNavbar"
@@ -32,6 +32,7 @@ const logs = () => {
     const [year, setYear] = useState((new Date()).getFullYear());
 
     const [currTab, setCurrTab] = useState(0);
+    const [calendarView, setCalendarView] = useState(false);
 
     const [dailyMoods, setDailyMoods] = useState([]);
 
@@ -45,33 +46,35 @@ const logs = () => {
             }
         })
 
-        setDailyMoods(res.data);
+        setDailyMoods(res.data.reverse());
 
     }
 
     useEffect(() => {
         fetchDailies();
-    }, [])
+    }, [isPickingMood])
+
+    const moodDate= useRef(new Date());
 
     return (
         
         <View style={{width: '100%', height: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} month={month} year={year} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies}/>}
-            {isPickingMood && <MoodPopup setIsPickingMood={setIsPickingMood}/>}
+            {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} month={month} year={year} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies} moodDate={moodDate} setMoodDate={setMoodDate}/>}
+            {isPickingMood && <MoodPopup setIsPickingMood={setIsPickingMood} moodDate={moodDate}/>}
             {isDeletingMood && <DeletePopup setOpen={setIsDeletingMood} text={'Daily Log'} relDate={relDate}/>}
-            {isTimeTraveling && <TimeTravelMood setIsTimeTraveling={setIsTimeTraveling}/>}
+            {isTimeTraveling && <TimeTravelMood setIsTimeTraveling={setIsTimeTraveling} setIsPickingMood={setIsPickingMood} moodDate={moodDate}/>}
 
             <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling) ? 'none' : 'auto'}}>
             
             <View style={{flex: 1, backgroundColor: '#FBFBFB', alignItems: 'center', paddingBottom: 140, overflowY: 'auto'}}>
 
                 <Navbar tabName={"Planner"} currencyAmount={103}/>
-                <CatSelectNavbar tabNames={['Moods', 'Calendar', 'Goals']} setCurrTab={setCurrTab} currTab={currTab}/>
+                <CatSelectNavbar tabNames={['Moods', 'Goals']} setCurrTab={setCurrTab} currTab={currTab}/>
 
                 {
-                    currTab === 0 ? <MoodsPage setIsPickingDate={setIsPickingDate} setIsPickingMood={setIsDeletingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} dailyMoods={dailyMoods} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/> :
-                    currTab === 1 ? <CalendarPage dailyMoods={dailyMoods} setIsPickingMood={setIsDeletingMood} setRelDate={setRelDate} setIsPickingDate={setIsPickingDate} setIsDeletingMood={setIsDeletingMood} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/> : <></>
+                    !calendarView ? <MoodsPage moodDate={moodDate} setCalendarView={setCalendarView} setIsPickingDate={setIsPickingDate} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} dailyMoods={dailyMoods} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/> :
+                    <CalendarPage moodDate={moodDate} setCalendarView={setCalendarView} dailyMoods={dailyMoods} setIsPickingMood={setIsPickingMood} setRelDate={setRelDate} setIsPickingDate={setIsPickingDate} setIsDeletingMood={setIsDeletingMood} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/>
                 }
                            
 

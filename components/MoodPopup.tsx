@@ -10,7 +10,7 @@ import SelectMood from "./SelectMood"
 import AddPhoto from "./AddPhoto"
 import axios from "axios"
 
-const MoodPopup = ({setIsPickingMood} : any) => {
+const MoodPopup = ({setIsPickingMood, moodDate} : any) => {
 
     const scale = useSharedValue(0.7)
     
@@ -63,9 +63,11 @@ const MoodPopup = ({setIsPickingMood} : any) => {
             selectedItems,
             ratings,
             selectedImage: relImageLink,
-            caption: captionText
+            caption: captionText,
+            date: moodDate.current
           })
 
+          moodDate.current = new Date();
           setIsPickingMood(false);
 
         } catch(e) {
@@ -78,7 +80,8 @@ const MoodPopup = ({setIsPickingMood} : any) => {
 
         const res = await axios.get('http://10.0.0.216:5000/fetchCurrentMood', {
           params: {
-            uid: 0
+            uid: 0,
+            date: moodDate.current
           }
         }) 
 
@@ -120,7 +123,7 @@ const MoodPopup = ({setIsPickingMood} : any) => {
                       'Create a memory'}
                     </Text>
 
-                    <TouchableOpacity style={styles.close} onPress={() => setIsPickingMood(false)}>
+                    <TouchableOpacity style={styles.close} onPress={() => {moodDate.current = (new Date()); setIsPickingMood(false)}}>
                         <Close />
                     </TouchableOpacity>
 

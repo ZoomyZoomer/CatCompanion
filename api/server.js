@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const adventureRoutes = require('./routes/adventureRoutes.js');
 const dailyRoutes = require('./routes/dailyRoutes.js')
+const inventoryRoutes = require('./routes/inventoryRoutes.js')
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // Your API routes
 app.use('/', adventureRoutes);
 app.use('/', dailyRoutes);
+app.use('/', inventoryRoutes);
 
 // Connect to MongoDB (replace with your real URI)
 mongoose.connect(process.env.MONGO_URI, {

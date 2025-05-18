@@ -7,7 +7,7 @@ const Item = ({ image_source, quantity, activeItem, setActiveItem }: any) => {
   const scaleAnim = useSharedValue(1);
 
   const handlePress = () => {
-    setActiveItem(prev => !prev);
+    setActiveItem((prev : any) => !prev);
 
     // Run popup animation with Reanimated
     scaleAnim.value = withSequence(
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderColor: '#FCAD72',
     borderRadius: 8,
     borderWidth: 2,
-    backgroundColor: '#FFEDE0',
+    backgroundColor: 'white',
     width: 70,
     height: 70,
     justifyContent: 'center',
