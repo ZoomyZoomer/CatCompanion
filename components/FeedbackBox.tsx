@@ -1,12 +1,64 @@
-import React from "react"
-import { StyleSheet, TouchableOpacity, Text, TextInput, View } from "react-native"
+import React, { useEffect, useState } from "react"
+import { ActivityIndicator, Easing, Switch, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming, runOnJS } from "react-native-reanimated"
 
 import Close from '@/assets/svgs/close.svg'
 import Clipboard from '@/assets/svgs/clipb.svg'
+import axios from "axios"
+
+const allowedChars = 75;
+
 
 const FeedbackBox = ({ setShowFeedback } : any) => {
+
+    const scale = useSharedValue(0.7)
+            
+        useEffect(() => {
+        scale.value = withSequence(
+            withTiming(1.05, { duration: 220, easing: Easing.out(Easing.ease) }),
+            withTiming(1, { duration: 180, easing: Easing.out(Easing.ease) })
+        )
+        }, [])
+            
+        const animatedStyle = useAnimatedStyle(() => ({
+            transform: [{ scale: scale.value }]
+        }))
+
+    const [feedbackText, setFeedbackText] = useState('');
+    const [subject, setSubject] = useState('Icon Suggestion');
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSend = async() => {
+
+      setIsLoading(true);
+
+      axios.post('http://10.0.0.216:5000/sendFeedback', {
+        uid: 0,
+        feedbackText,
+        subject
+      })
+
+      setTimeout(() => {
+        setIsLoading(false);
+        closePopup();
+      }, 800)
+
+    }
+
+    const closePopup = () => {
+        scale.value = withSequence(
+          withTiming(0.9, { duration: 80, easing: Easing.out(Easing.ease) }),
+          withTiming(0, { duration: 70, easing: Easing.in(Easing.ease) }, (finished) => {
+            if (finished) {
+              runOnJS(setShowFeedback)(false);
+            }
+          })
+        );
+      };
+
     return (
-        <View style={styles.popup_container}>
+        <Animated.View style={[styles.popup_container, animatedStyle]}>
             <View style={{height: '100%', width: '100%', position: 'relative', alignItems: 'center'}}>
             <View style={styles.popup_header}>
 
@@ -16,7 +68,7 @@ const FeedbackBox = ({ setShowFeedback } : any) => {
                     Feedback Box
                 </Text>
 
-                <TouchableOpacity style={styles.close} onPress={() => setShowFeedback(false)}>
+                <TouchableOpacity style={styles.close} onPress={() => closePopup()}>
                     <Close />
                 </TouchableOpacity>
 
@@ -29,7 +81,7 @@ const FeedbackBox = ({ setShowFeedback } : any) => {
                         <Clipboard />
                     </View>
                     <View style={styles.feedback_right}>
-                        <Text style={{color: '#7C889A'}}>Icon Suggestion</Text>
+                        <Text style={{color: '#7C889A'}}>{subject}</Text>
                     </View>
                 </View>
 
@@ -37,19 +89,31 @@ const FeedbackBox = ({ setShowFeedback } : any) => {
                     <View style={{position: 'relative'}}>
                         <TextInput 
                             style={styles.input}
+                            onChangeText={setFeedbackText}
+                            value={feedbackText}
+                            maxLength={75}
+                            multiline={true}
+                            underlineColorAndroid="transparent"
                         />
                         <View style={styles.invis}>
                             <Text style={{color: '#7C889A', marginBottom: -7, fontSize: 16}}>Feedback</Text>
                         </View>
-                        <Text style={styles.num_char}>0/50 characters</Text>
+                        <Text style={[styles.num_char, {color: feedbackText.length >= allowedChars ? '#F2A9A9' : '#D9D9D9'}]}>{feedbackText.length}/{allowedChars} characters</Text>
                     </View>
                 </View>
-
-                <TouchableOpacity style={styles.button}>
-                    <Text style={{color: 'white', fontSize: 16, fontWeight: 500}}>Send</Text>
+                
+                <TouchableOpacity style={[styles.button, {backgroundColor: feedbackText.length >= 5 ? '#FCAD72' : '#E8ECF1'}]} onPress={() => handleSend()}>
+                    {!isLoading && (
+                      <Text style={{color: feedbackText.length >= 5 ? 'white' : '#52637D', fontSize: 14, fontWeight: 500}}>
+                        {feedbackText.length >= 5 ? 'Send' : 'Type valid feedback'}
+                      </Text>
+                    )}
+                    {isLoading && (
+                      <ActivityIndicator size='small' color='white'/>
+                    )}
                 </TouchableOpacity>
             </View>
-        </View>
+        </Animated.View>
     )
 }
 
@@ -119,7 +183,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: 'white',
         width: 276,
-        height: 70
+        height: 76,
+        color: '#7C889A',
+        fontFamily: '-apple-system',
+        textAlignVertical: 'top',
+        textAlign: 'left',
+        padding: 16,
       },
       invis: {
         position: 'absolute',
@@ -135,14 +204,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 10,
         bottom: 4,
-        color: '#D9D9D9',
         fontSize: 12
       },
       button: {
         backgroundColor: '#FCAD72',
         borderRadius: 40,
-        width: 140,
-        height: 54,
+        width: 300,
+        height: 46,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',

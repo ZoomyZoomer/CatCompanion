@@ -1,128 +1,200 @@
-import React, { useState } from "react"
-import { Switch, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
-import Chevron from '@/assets/svgs/chevron_down.svg'
+import React, { useState, useEffect } from "react";
+import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withDelay } from "react-native-reanimated";
+import Chevron from '@/assets/svgs/chevron_down.svg';
+import Checkmark from '@/assets/svgs/checkmark.svg'
 
-const HabitForm = ({ setValidEntry } : any) => {
+const HabitForm = ({ setValidEntry }: any) => {
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [type, setType] = useState('time');
-    setValidEntry(true);
+  const [habitName, setHabitName] = useState('');
+  const [motivator, setMotivator] = useState('');
 
-    return (
-                <View style={{width: '100%', padding: 30}}>
+  // Animation values for Habit Name checkbox
+  const fillAnimHabit = useSharedValue(30);
+  const checkmarkScaleHabit = useSharedValue(0);
 
-                    <Text style={{color: '#52637D', marginLeft: 10, fontWeight: 500, marginBottom: 6}}>Name of Habit</Text>
-                    <TextInput 
-                        placeholder="Play Tennis.. (Max 20 char)"
-                        placeholderTextColor='#ACACAC'
-                        style={styles.input}
-                    />
+  // Animation values for Motivator checkbox
+  const fillAnimMotivator = useSharedValue(30);
+  const checkmarkScaleMotivator = useSharedValue(0);
 
-                    <Text style={{color: '#52637D', marginLeft: 10, fontWeight: 500, marginBottom: 6, marginTop: 20}}>
-                        Tags
-                        <Text style={{color: '#ACACAC', fontSize: 12, marginLeft: 4}}>{`(Separate by comma)`}</Text>
-                    </Text>
-                    <TextInput 
-                        placeholder="Exercise, sports, outdoors, ..."
-                        placeholderTextColor='#ACACAC'
-                        style={[styles.input, {height: 90, paddingTop: 10}]}
-                        multiline={true}
-                        textAlignVertical="top"
-                    />
+  // Animate Habit Name checkbox
+  useEffect(() => {
+    if (habitName.length >= 5) {
+      fillAnimHabit.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.exp) });
+      checkmarkScaleHabit.value = withDelay(200, withTiming(1, { duration: 150, easing: Easing.out(Easing.back(2)) }));
+    } else {
+      fillAnimHabit.value = withTiming(30, { duration: 200, easing: Easing.in(Easing.linear) });
+      checkmarkScaleHabit.value = withTiming(0, { duration: 200 });
+    }
+  }, [habitName]);
 
-                        <View style={{marginTop: 40, width: '100%', position: 'relative', justifyContent: 'center'}}>
-                            <Text style={{color: '#52637D', marginLeft: 10, fontWeight: 500}}>Type of Habit</Text>
-                            <View style={{position: 'absolute', right: 0, flexDirection: 'row'}}>
-                                <TouchableOpacity style={[type === 'quantity' ? styles.labelActive : styles.label, {marginRight: 4}]} onPress={() => setType('quantity')}>
-                                    <Text style={{color: type === 'quantity' ? 'white' : '#52637D'}}>Quantity</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={type === 'time' ? styles.labelActive : styles.label} onPress={() => setType('time')}>
-                                    <Text style={{color: type === 'time' ? 'white' : '#52637D'}}>Time</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+  // Animate Motivator checkbox
+  useEffect(() => {
+    if (motivator.length >= 10) {
+      fillAnimMotivator.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.exp) });
+      checkmarkScaleMotivator.value = withDelay(200, withTiming(1, { duration: 150, easing: Easing.out(Easing.back(2)) }));
+    } else {
+      fillAnimMotivator.value = withTiming(30, { duration: 200, easing: Easing.in(Easing.linear) });
+      checkmarkScaleMotivator.value = withTiming(0, { duration: 200 });
+    }
+  }, [motivator]);
 
-                    
-                        <View style={{marginTop: 26, width: '100%', position: 'relative', justifyContent: 'center'}}>
-                            <Text style={{color: '#52637D', marginLeft: 10, fontWeight: 500}}>Amount</Text>
-                            <View style={{position: 'absolute', right: 0, flexDirection: 'row'}}>
-                                <TextInput 
-                                    style={[styles.input, {width: 40, height: 30, paddingLeft: 0, textAlign: 'center',}]}
-                                    placeholder="0"
-                                    placeholderTextColor='#ACACAC'
-                                />
-                                <TouchableOpacity style={[styles.label, {height: 30, marginLeft: 6, borderRadius: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}]}>
-                                    <Text style={{color: '#52637D'}}>min.</Text>
-                                    <Chevron stroke='#52637D' style={{marginTop: 2, marginLeft: 4}}/>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+  // Valid entry check
+  useEffect(() => {
+    if (habitName.length >= 5 && motivator.length >= 10) {
+      setValidEntry(true);
+    } else {
+      setValidEntry(false);
+    }
+  }, [habitName, motivator]);
 
-                        <View style={{marginTop: 40, width: '100%', position: 'relative', justifyContent: 'center'}}>
-                            <Text style={{color: '#52637D', marginLeft: 10, fontWeight: 500}}>Frequency</Text>
-                            <View style={{position: 'absolute', right: 0, top: -5, flexDirection: 'row'}}>
-                                <TouchableOpacity style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12, marginRight: 4}]}><Text style={{color: '#52637D', fontSize: 12}}>Sunday</Text></TouchableOpacity >
-                                <TouchableOpacity  style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12, marginRight: 4}]}><Text style={{color: '#52637D', fontSize: 12}}>Monday</Text></TouchableOpacity >
-                                <TouchableOpacity  style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12}]}><Text style={{color: '#52637D', fontSize: 12}}>Tuesday</Text></TouchableOpacity >
-                            </View>
-                            <View style={{marginTop: 14, flexDirection: 'row', width: '100%', justifyContent: 'right'}}>
-                                <TouchableOpacity  style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12, marginRight: 4}]}><Text style={{color: '#52637D', fontSize: 12}}>Wednesday</Text></TouchableOpacity >
-                                <TouchableOpacity  style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12, marginRight: 4}]}><Text style={{color: '#52637D', fontSize: 12}}>Thursday</Text></TouchableOpacity >
-                                <TouchableOpacity  style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12, marginRight: 4}]}><Text style={{color: '#52637D', fontSize: 12}}>Friday</Text></TouchableOpacity >
-                                <TouchableOpacity  style={[styles.label, {borderRadius: 20, paddingLeft: 12, paddingRight: 12}]}><Text style={{color: '#52637D', fontSize: 12}}>Saturday</Text></TouchableOpacity >
-                            </View>
-                        </View>
+  // Animated styles
+  const fillStyleHabit = useAnimatedStyle(() => ({
+    transform: [{ translateY: fillAnimHabit.value }]
+  }));
 
-                        <View style={{marginTop: 40, width: '100%', position: 'relative', justifyContent: 'center'}}>
-                            <Text style={{color: '#52637D', marginLeft: 10, fontWeight: 500}}>Notification Reminder</Text>
-                            <View style={{position: 'absolute', right: 0}}>
-                                <Switch
-                                    trackColor={{ false: '#E8ECF1', true: '#FCAD72' }}
-                                    thumbColor={isEnabled ? 'white' : 'white'}
-                                    onValueChange={() => setIsEnabled(prev => !prev)}
-                                    value={isEnabled}
-                                />
-                            </View>
-                        </View>
+  const checkmarkStyleHabit = useAnimatedStyle(() => ({
+    transform: [{ scale: checkmarkScaleHabit.value }],
+    opacity: checkmarkScaleHabit.value
+  }));
 
-                </View>
-    )
-}
+  const fillStyleMotivator = useAnimatedStyle(() => ({
+    transform: [{ translateY: fillAnimMotivator.value }]
+  }));
 
-export default HabitForm
+  const checkmarkStyleMotivator = useAnimatedStyle(() => ({
+    transform: [{ scale: checkmarkScaleMotivator.value }],
+    opacity: checkmarkScaleMotivator.value
+  }));
+
+  return (
+    <View style={{ width: '100%', padding: 30 }}>
+
+      <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+
+        {/* Habit Name Field */}
+        <View style={{ position: 'relative', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+          <TextInput
+            style={styles.input}
+            onChangeText={setHabitName}
+            value={habitName}
+            maxLength={20}
+            placeholder="Play with my cat..."
+            placeholderTextColor={'#D9D9D9'}
+            underlineColorAndroid="transparent"
+          />
+          <View style={styles.invis}>
+            <Text style={{ color: '#7C889A', marginBottom: -7, fontSize: 16 }}>Habit Name</Text>
+          </View>
+
+          <Image source={require('@/assets/cats/hanging_cat.png')} style={styles.cat} />
+
+          {/* Habit Name Checkbox */}
+          <View style={[styles.checkbox, { borderColor: habitName.length >= 5 ? '#FCAD72' : '#E8ECF1' }]}>
+            <Animated.View style={[styles.fillCircle, fillStyleHabit]} />
+            <Animated.View style={[styles.checkmarkContainer, checkmarkStyleHabit]}>
+              <Checkmark width={16} height={16} />
+            </Animated.View>
+          </View>
+        </View>
+
+        {/* Motivator Field */}
+        <View style={{ position: 'relative', width: '100%', marginTop: 40 }}>
+          <TextInput
+            style={[styles.input, { height: 120, paddingTop: 16 }]}
+            onChangeText={setMotivator}
+            value={motivator}
+            maxLength={50}
+            multiline={true}
+            placeholder="I really like my cat..."
+            placeholderTextColor={'#D9D9D9'}
+            underlineColorAndroid="transparent"
+          />
+          <View style={[styles.invis, { width: 80 }]}>
+            <Text style={{ color: '#7C889A', marginBottom: -7, fontSize: 16 }}>Motivator</Text>
+          </View>
+
+          {/* Motivator Checkbox */}
+          <View style={[styles.checkbox, { borderColor: motivator.length >= 10 ? '#FCAD72' : '#E8ECF1', top: 16 }]}>
+            <Animated.View style={[styles.fillCircle, fillStyleMotivator]} />
+            <Animated.View style={[styles.checkmarkContainer, checkmarkStyleMotivator]}>
+              <Checkmark width={16} height={16} />
+            </Animated.View>
+          </View>
+
+           <Text style={[styles.num_char, {color: motivator.length >= 50 ? '#F2A9A9' : '#D9D9D9'}]}>{motivator.length}/{50} characters</Text>
+          
+
+        </View>
+
+      </View>
+
+    </View>
+  );
+};
+
+export default HabitForm;
 
 const styles = StyleSheet.create({
-input: {
-        borderColor: '#E4E7EC',
-        borderWidth: 1,
-        width: '100%',
-        height: 40,
-        borderRadius: 4,
-        backgroundColor: 'white',
-        paddingLeft: 16
-      },
-      label: {
-        borderColor: '#CDD8EA',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: 6,
-        paddingLeft: 12,
-        paddingRight: 12,
-        backgroundColor: 'white'
-      },
-      labelActive: {
-        borderColor: '#F89E5B',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: 6,
-        paddingLeft: 12,
-        paddingRight: 12,
-        backgroundColor: '#FCAD72'
-      },
-      box: {
-        borderColor: '#CDD8EA',
-        borderWidth: 1,
-        borderRadius: 8,
-        marginTop: 26
-      }
-})
+  input: {
+    borderColor: '#E4E7EC',
+    borderWidth: 1,
+    width: '100%',
+    height: 60,
+    borderRadius: 8,
+    backgroundColor: 'white',
+    paddingLeft: 26,
+    paddingRight: 60,
+    fontSize: 16,
+    color: '#52637D'
+  },
+  invis: {
+    position: 'absolute',
+    height: 20,
+    width: 100,
+    backgroundColor: '#FDFDFD',
+    left: 20,
+    top: -18,
+    paddingLeft: 6,
+    justifyContent: 'flex-end'
+  },
+  cat: {
+    position: 'absolute',
+    right: 20,
+    bottom: '90%',
+    height: 40,
+    width: 50,
+    resizeMode: 'contain'
+  },
+  checkbox: {
+    position: 'absolute',
+    right: 18,
+    height: 26,
+    width: 26,
+    borderColor: '#E8ECF1',
+    borderWidth: 1,
+    borderRadius: 13,
+    backgroundColor: '#F9F9F9',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  fillCircle: {
+    position: 'absolute',
+    height: 26,
+    width: 26,
+    borderRadius: 13,
+    backgroundColor: '#FCAD72'
+  },
+  checkmarkContainer: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  num_char: {
+    position: 'absolute',
+    right: 10,
+    bottom: 4,
+    fontSize: 12
+}
+});

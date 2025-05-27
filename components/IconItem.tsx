@@ -55,8 +55,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     icon: {
-        height: 36,
-        width: 36,
-        marginTop: 6
+        height: 38,
+        width: 38,
+        marginTop: 6,
+        resizeMode: 'contain'
     }
 })

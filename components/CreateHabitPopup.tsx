@@ -7,6 +7,7 @@ import HabitForm from "./HabitForm"
 import PopupButton from "./PopupButton"
 import SelectIcon from "./SelectIcon"
 import FeedbackBox from "./FeedbackBox"
+import HabitAmount from "./HabitAmount"
 
 const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
 
@@ -48,14 +49,16 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
                         <Text style={styles.header_text}>
                             {
                             pageCount === 0 ? 'Create a Habit' :
-                            'Select an Icon'
+                            pageCount === 1 ? 'Select an Icon' :
+                            'Select Habit Type'
                             }
                         </Text>
 
                         <Text style={styles.header_subtext}>
                             {
                             pageCount === 0 ? "Let's achieve some consistency" :
-                            'Something unique'
+                            pageCount === 1 ? 'Something unique' :
+                            'How are we keeping track?'
                             }
                         </Text>
 
@@ -69,7 +72,8 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
 
                     {
                     pageCount === 0 ? <HabitForm setValidEntry={setValidEntry}/> :
-                    <SelectIcon setValidEntry={setValidEntry} setShowFeedback={setShowFeedback}/>
+                    pageCount === 1 ? <SelectIcon setValidEntry={setValidEntry} setShowFeedback={setShowFeedback}/> :
+                    <HabitAmount setValidEntry={setValidEntry}/>
                     }
                     
 
@@ -89,7 +93,7 @@ export default CreateHabitPopup
 
 const styles = StyleSheet.create({
     popup_container: {
-        height: '80%',
+        height: 570,
         width: '90%',
         backgroundColor: '#FDFDFD',
         borderRadius: 8,

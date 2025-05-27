@@ -27,69 +27,67 @@ export default function CustomSlider({
   value,
   onValueChange,
   minimumValue = 0,
-  maximumValue = 1,
-  step = 0.01,
-  trackHeight = 4,
-  thumbSize = 20,
-  trackColor = '#ddd',
+  maximumValue,
+  step = 1,
+  trackHeight = 18,
+  thumbSize = 26,
+  trackColor = '#F1F1F1',
   minimumTrackColor = '#FCAD72',
   thumbColor = '#FCAD72',
   style,
 }: CustomSliderProps) {
   const pan = useRef(new Animated.Value(0)).current;
   const trackWidth = useRef(0);
-  const [internalValue, setInternalValue] = useState(value);
-  const [filledTrackWidth, setFilledTrackWidth] = useState(0); // Store filled track width
+  const currentX = useRef(0); // This is the key part
 
   // Whenever `value` prop changes from outside, sync thumb position
+  const syncPosition = (val: number) => {
+    const percent = (val - minimumValue) / (maximumValue - minimumValue);
+    const newX = percent * trackWidth.current;
+    pan.setValue(newX);
+    currentX.current = newX;
+  };
+
   useEffect(() => {
     if (trackWidth.current > 0) {
-      const percent = (value - minimumValue) / (maximumValue - minimumValue);
-      Animated.timing(pan, {
-        toValue: percent * trackWidth.current,
-        useNativeDriver: false,
-      }).start();
-      setInternalValue(value);
-      setFilledTrackWidth(percent * trackWidth.current); // Set the initial filled track width
+      syncPosition(value);
     }
   }, [value]);
 
-  // Handle layout to get track width
   const onTrackLayout = (e: LayoutChangeEvent) => {
     trackWidth.current = e.nativeEvent.layout.width;
-    // sync initial
-    const percent = (value - minimumValue) / (maximumValue - minimumValue);
-    pan.setValue(percent * trackWidth.current);
-    setFilledTrackWidth(percent * trackWidth.current); // Update filled track width
+    syncPosition(value);
   };
 
-  // PanResponder
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        pan.setOffset((pan as any)._value);
-        pan.setValue(0);
-      },
-      onPanResponderMove: (_: GestureResponderEvent, gs: PanResponderGestureState) => {
-        let newX = gs.dx + (pan as any)._offset;
-        // clamp
-        newX = Math.max(0, Math.min(newX, trackWidth.current));
-        pan.setValue(newX - (pan as any)._offset);
-        // compute value
-        const percent = newX / trackWidth.current;
-        let newVal = minimumValue + percent * (maximumValue - minimumValue);
-        // snap to step
-        newVal = Math.round(newVal / step) * step;
-        setInternalValue(newVal);
-        onValueChange(newVal);
-        setFilledTrackWidth(newX); // Update the filled track width during movement
-      },
-      onPanResponderRelease: () => {
-        pan.flattenOffset();
-      },
-    })
-  ).current;
+  const startX = useRef(0); // add this to track starting thumb X on gesture start
+
+// PanResponder
+const panResponder = useRef(
+  PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderGrant: () => {
+      pan.stopAnimation();
+      startX.current = currentX.current; // record position at gesture start
+    },
+    onPanResponderMove: (_: GestureResponderEvent, gs: PanResponderGestureState) => {
+      let newX = startX.current + gs.dx;
+      newX = Math.max(0, Math.min(newX, trackWidth.current));
+      pan.setValue(newX);
+
+      const percent = newX / trackWidth.current;
+      let newVal = minimumValue + percent * (maximumValue - minimumValue);
+      newVal = Math.round(newVal / step) * step;
+      onValueChange(newVal);
+    },
+    onPanResponderRelease: (_: GestureResponderEvent, gs: PanResponderGestureState) => {
+      let finalX = startX.current + gs.dx;
+      finalX = Math.max(0, Math.min(finalX, trackWidth.current));
+      currentX.current = finalX; // commit new position
+      pan.flattenOffset();
+    },
+  })
+).current;
+
 
   return (
     <View style={[{ height: Math.max(thumbSize, trackHeight) }, style]}>
@@ -115,7 +113,7 @@ export default function CustomSlider({
           left: thumbSize / 2,
           top: (thumbSize - trackHeight) / 2,
           borderRadius: trackHeight / 2,
-          width: filledTrackWidth, // Use the filled track width state
+          width: pan, // <- direct animated value for filled track
         }}
       />
       {/* thumb */}

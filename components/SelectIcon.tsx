@@ -8,17 +8,14 @@ const SelectIcon = ({ setValidEntry, setShowFeedback } : any) => {
 
     const icons = [
         {icon: require('@/assets/icons/clipboard.png'), name: 'Writing'},
-        {icon: require('@/assets/icons/coffee.png'), name: 'Coffee'},
         {icon: require('@/assets/icons/flexibility.png'), name: 'Stretching'},
         {icon: require('@/assets/icons/heart.png'), name: 'Cardio'},
         {icon: require('@/assets/icons/laptop.png'), name: 'Technology'},
         {icon: require('@/assets/icons/paint-brush.png'), name: 'Creativity'},
-        {icon: require('@/assets/icons/pillow.png'), name: 'Sleep'},
         {icon: require('@/assets/icons/reading.png'), name: 'Reading'},
         {icon: require('@/assets/icons/shoe_icon.png'), name: 'Running'},
         {icon: require('@/assets/icons/sports.png'), name: 'Sports'},
-        {icon: require('@/assets/icons/water-bottle.png'), name: 'Water'},
-        {icon: require('@/assets/icons/weight.png'), name: 'Weights'}
+        {icon: require('@/assets/icons/water-bottle.png'), name: 'Water'}
     ]
 
     useEffect(() => {
@@ -26,7 +23,7 @@ const SelectIcon = ({ setValidEntry, setShowFeedback } : any) => {
     }, [activeIcon])
 
     return (
-        <View style={{width: '100%', padding: 20}}>
+        <View style={{width: '100%', padding: 20, paddingTop: 10}}>
             <View style={styles.container}>
                 <View style={{width: '100%', height: '85%', padding: 16}}>
                     <View style={styles.iconsContainer}>
@@ -53,7 +50,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
         backgroundColor: 'white',
-        height: 480,
+        paddingBottom: 15,
+        height: 370,
         width: '100%',
     },
     suggestion: {
