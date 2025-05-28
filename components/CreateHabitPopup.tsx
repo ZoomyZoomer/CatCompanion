@@ -8,6 +8,7 @@ import PopupButton from "./PopupButton"
 import SelectIcon from "./SelectIcon"
 import FeedbackBox from "./FeedbackBox"
 import HabitAmount from "./HabitAmount"
+import HabitRewards from "./HabitRewards"
 
 const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
 
@@ -71,9 +72,10 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
                     </View>
 
                     {
-                    pageCount === 0 ? <HabitForm setValidEntry={setValidEntry}/> :
-                    pageCount === 1 ? <SelectIcon setValidEntry={setValidEntry} setShowFeedback={setShowFeedback}/> :
-                    <HabitAmount setValidEntry={setValidEntry}/>
+                        pageCount === 0 ? <HabitForm setValidEntry={setValidEntry}/> :
+                        pageCount === 1 ? <SelectIcon setValidEntry={setValidEntry} setShowFeedback={setShowFeedback}/> :
+                        pageCount === 2 ? <HabitAmount setValidEntry={setValidEntry}/> :
+                        <HabitRewards />
                     }
                     
 

@@ -30,7 +30,7 @@ export default function CustomSlider({
   maximumValue,
   step = 1,
   trackHeight = 18,
-  thumbSize = 26,
+  thumbSize = 28,
   trackColor = '#F1F1F1',
   minimumTrackColor = '#FCAD72',
   thumbColor = '#FCAD72',

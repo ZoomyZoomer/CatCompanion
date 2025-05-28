@@ -16,6 +16,11 @@ const HabitAmount = ({ setValidEntry }: any) => {
     }
   }, [amount]);
 
+  useEffect(() => {
+    setAmount(0);
+    setTime(0);
+  }, [active])
+
   const quantityScale = useRef(new Animated.Value(1)).current;
   const timeScale = useRef(new Animated.Value(1)).current;
 
@@ -85,17 +90,17 @@ const HabitAmount = ({ setValidEntry }: any) => {
       <View style={styles.slider_container}>
         <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
           <View style={{ marginBottom: -5 }}>
-            <Text style={{ color: '#FCAD72', fontSize: 36, fontWeight: '500' }}>{amount}</Text>
+            <Text style={{ color: '#FCAD72', fontSize: 36, fontWeight: '500' }}>{active === 'Quantity' ? amount : time}</Text>
           </View>
           <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', height: '100%' }}>
-            <Text style={{ color: '#FCAD72', fontSize: 14, marginLeft: 4 }}>{active === 'Quantity' ? 'units' : active === 'Time' ? 'minutes' : '???'}</Text>
+            <Text style={{ color: '#FCAD72', fontSize: 14, marginLeft: 4 }}>{active === 'Quantity' ? 'units' : active === 'Time' ? 'minutes' : 'cats'}</Text>
           </View>
         </View>
         {active !== 'Time' && (
             <CustomSlider value={amount} onValueChange={setAmount} maximumValue={100}/>
         )}
         {active === 'Time' && (
-            <CustomSlider value={amount} onValueChange={setAmount} maximumValue={180}/>
+            <CustomSlider value={time} onValueChange={setTime} maximumValue={180}/>
         )}
         
       </View>
