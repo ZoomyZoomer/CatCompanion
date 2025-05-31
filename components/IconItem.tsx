@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Image, StyleSheet, TouchableOpacity, Text, View, Animated } from "react-native"
 
-const IconItem = ({ icon, name, index, activeIcon, setActiveIcon } : any) => {
+const IconItem = ({ icon, name, png, index, activeIcon, setActiveIcon } : any) => {
 
     const [isActive, setIsActive] = useState(false);
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-  if (activeIcon !== index) {
+  if (activeIcon !== png) {
     setIsActive(false);
     scaleAnim.setValue(1);
   } else {
@@ -29,7 +29,7 @@ const IconItem = ({ icon, name, index, activeIcon, setActiveIcon } : any) => {
 }, [activeIcon]);
 
     return (
-        <TouchableOpacity style={{width: 74, margin: 7, justifyContent: 'center', alignItems: 'center', marginTop: 10}} onPress={() => {setActiveIcon(index), setIsActive(true)}}>
+        <TouchableOpacity style={{width: 74, margin: 7, justifyContent: 'center', alignItems: 'center', marginTop: 10}} onPress={() => {setActiveIcon(png), setIsActive(true)}}>
 
             <View style={[styles.circle, {backgroundColor: isActive ? '#FFE3CE' : '#E8ECF1', borderColor: isActive ? '#FFD8BB' : '#DDE6F1'}]}>
                 <Animated.Image source={icon} style={[styles.icon, { transform: [{ scale: scaleAnim }] }]}/>

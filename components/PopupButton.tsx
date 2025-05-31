@@ -1,16 +1,32 @@
+import axios from "axios"
 import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
-const PopupButton = ({ buttonText, setPageCount, maxPage, currPage, validEntry } : any) => {
+const PopupButton = ({ buttonText, setPageCount, maxPage, currPage, validEntry, sendReq} : any) => {
+
+    const handlePress = () => {
+
+        if (maxPage - 1 === currPage){
+            sendReq();
+            return;
+        }
+
+        if (validEntry){
+            setPageCount((prev : number) => prev + 1);
+            return;
+        }
+
+    }
+
     return (
-        <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{flexDirection: 'row', width: '100%', justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
+        <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', zIndex: 1}}>
+            <View style={{flexDirection: 'row', width: '100%', zIndex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 20}}>
                 {Array.from({ length: maxPage }, (_, i) => (
                     <View style={i === currPage ? styles.active : styles.inactive}/>
                 ))}
             </View>
-            <TouchableOpacity style={[styles.button, {backgroundColor: validEntry ? '#FCAD72' : '#E8ECF1'}]} onPress={() => validEntry && setPageCount((prev : number) => prev + 1)}>
-                <Text style={{color: validEntry ? 'white' : '#7C889A', fontWeight: 500}}>{buttonText}</Text>
+            <TouchableOpacity style={[styles.button, {backgroundColor: validEntry ? '#FCAD72' : '#E8ECF1'}]} onPress={() => handlePress()}>
+                <Text style={{color: validEntry ? 'white' : '#7C889A', fontWeight: 500}}>{maxPage - 1 !== currPage ? buttonText : 'Confirm'}</Text>
             </TouchableOpacity>
         </View>
     )

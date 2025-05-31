@@ -2,20 +2,18 @@ import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import IconItem from "./IconItem"
 
-const SelectIcon = ({ setValidEntry, setShowFeedback } : any) => {
-
-    const [activeIcon, setActiveIcon] = useState(null);
+const SelectIcon = ({ setValidEntry, setShowFeedback, activeIcon, setActiveIcon } : any) => {
 
     const icons = [
-        {icon: require('@/assets/icons/clipboard.png'), name: 'Writing'},
-        {icon: require('@/assets/icons/flexibility.png'), name: 'Stretching'},
-        {icon: require('@/assets/icons/heart.png'), name: 'Cardio'},
-        {icon: require('@/assets/icons/laptop.png'), name: 'Technology'},
-        {icon: require('@/assets/icons/paint-brush.png'), name: 'Creativity'},
-        {icon: require('@/assets/icons/reading.png'), name: 'Reading'},
-        {icon: require('@/assets/icons/shoe_icon.png'), name: 'Running'},
-        {icon: require('@/assets/icons/sports.png'), name: 'Sports'},
-        {icon: require('@/assets/icons/water-bottle.png'), name: 'Water'}
+        {path: require('@/assets/icons/clipboard.png'), icon: 'clipboard.png', name: 'Writing'},
+        {path: require('@/assets/icons/flexibility.png'), icon: 'flexibility.png', name: 'Stretching'},
+        {path: require('@/assets/icons/heart.png'), icon: 'heart.png', name: 'Cardio'},
+        {path: require('@/assets/icons/laptop.png'), icon: 'laptop.png', name: 'Technology'},
+        {path: require('@/assets/icons/paint-brush.png'), icon: 'paint-brush.png', name: 'Creativity'},
+        {path: require('@/assets/icons/reading.png'), icon: 'reading.png', name: 'Reading'},
+        {path: require('@/assets/icons/shoe_icon.png'), icon: 'shoe_icon.png', name: 'Running'},
+        {path: require('@/assets/icons/sports.png'), icon: 'sports.png', name: 'Sports'},
+        {path: require('@/assets/icons/water-bottle.png'), icon: 'water-bottle.png', name: 'Water'}
     ]
 
     useEffect(() => {
@@ -28,7 +26,7 @@ const SelectIcon = ({ setValidEntry, setShowFeedback } : any) => {
                 <View style={{width: '100%', height: '85%', padding: 16}}>
                     <View style={styles.iconsContainer}>
                         {icons.map((icon, index) => (
-                            <IconItem icon={icon.icon} name={icon.name} index={index} activeIcon={activeIcon} setActiveIcon={setActiveIcon}/>
+                            <IconItem icon={icon.path} png={icon.icon} name={icon.name} index={index} activeIcon={activeIcon} setActiveIcon={setActiveIcon}/>
                         ))}
                     </View>
                 </View>

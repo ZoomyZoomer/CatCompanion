@@ -6,6 +6,7 @@ const adventureRoutes = require('./routes/adventureRoutes.js');
 const dailyRoutes = require('./routes/dailyRoutes.js')
 const inventoryRoutes = require('./routes/inventoryRoutes.js')
 const customerServiceRoutes = require('./routes/customerServiceRoutes.js')
+const habitRoutes = require('./routes/habitRoutes.js')
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use('/', adventureRoutes);
 app.use('/', dailyRoutes);
 app.use('/', inventoryRoutes);
 app.use('/', customerServiceRoutes);
+app.use('/', habitRoutes);
 
 // Connect to MongoDB (replace with your real URI)
 mongoose.connect(process.env.MONGO_URI, {

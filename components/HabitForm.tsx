@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, withDelay } from "react-native-reanimated";
 import Chevron from '@/assets/svgs/chevron_down.svg';
 import Checkmark from '@/assets/svgs/checkmark.svg'
 
-const HabitForm = ({ setValidEntry }: any) => {
+import Arrow from '@/assets/svgs/chevron_down.svg'
 
-  const [habitName, setHabitName] = useState('');
-  const [motivator, setMotivator] = useState('');
+const HabitForm = ({ setValidEntry, showDropDown, setShowDropDown, dropDownValue, setDropDownValue, habitName, setHabitName, motivator, setMotivator }: any) => {
 
   // Animation values for Habit Name checkbox
   const fillAnimHabit = useSharedValue(30);
@@ -67,6 +66,11 @@ const HabitForm = ({ setValidEntry }: any) => {
     opacity: checkmarkScaleMotivator.value
   }));
 
+  const dropDownOptions = [
+    'Day', 'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+    'Thursday', 'Friday', 'Saturday'
+  ]
+
   return (
     <View style={{ width: '100%', padding: 30 }}>
 
@@ -104,7 +108,7 @@ const HabitForm = ({ setValidEntry }: any) => {
             style={[styles.input, { height: 120, paddingTop: 16 }]}
             onChangeText={setMotivator}
             value={motivator}
-            maxLength={50}
+            maxLength={40}
             multiline={true}
             placeholder="I really like my cat..."
             placeholderTextColor={'#D9D9D9'}
@@ -122,9 +126,56 @@ const HabitForm = ({ setValidEntry }: any) => {
             </Animated.View>
           </View>
 
-           <Text style={[styles.num_char, {color: motivator.length >= 50 ? '#F2A9A9' : '#D9D9D9'}]}>{motivator.length}/{50} characters</Text>
+           <Text style={[styles.num_char, {color: motivator.length >= 40 ? '#F2A9A9' : '#D9D9D9'}]}>{motivator.length}/{40} characters</Text>
           
 
+        </View>
+
+        <View style={{width: '100%', marginTop: 30, position: 'relative', justifyContent: 'center', zIndex: 900}}>
+          <Text style={{color: '#7C889A', fontSize: 16}}>Availability</Text>
+          <View style={{position: 'absolute', right: 0, flexDirection: 'row', zIndex: 900}}>
+            <View style={styles.left_cont}>
+              <Text style={{color: '#52637D'}}>Every</Text>
+            </View>
+            <TouchableOpacity style={styles.right_cont} onPress={() => setShowDropDown((prev : any) => !prev)}>
+              <Text style={{color: '#52637D'}}>{dropDownValue}</Text>
+              <Arrow stroke={'#52637D'} style={{marginTop: 4, marginLeft: 4, position: 'absolute', right: 14}}/>
+              {showDropDown && (
+                <View style={{
+                  position: 'absolute',
+                  zIndex: 900,
+                  height: 105,
+                  overflowY: 'auto',
+                  top: '100%',
+                  left: 0,
+                  width: '100%',
+                  borderColor: '#E4E7EC',
+                  borderWidth: 1,
+                  paddingTop: 6,
+                  paddingBottom: 6,
+                  paddingLeft: 14,
+                  backgroundColor: 'white'
+                }}>
+                  {dropDownOptions.map((option) => {
+                    if (option !== dropDownValue) {
+                      return (
+                        <TouchableOpacity
+                          key={option}
+                          style={styles.item}
+                          onPress={() => {
+                            setDropDownValue(option);
+                            setShowDropDown(false);
+                          }}
+                        >
+                          <Text style={{ color: '#52637D' }}>{option}</Text>
+                        </TouchableOpacity>
+                      );
+                    }
+                  })}
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
 
       </View>
@@ -196,5 +247,39 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: 4,
     fontSize: 12
-}
+  },
+  left_cont: {
+    borderColor: '#CDD8EA',
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: "#FCFCFC",
+    padding: 6,
+    paddingLeft: 14,
+    paddingRight: 14,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0
+  },
+  right_cont: {
+    borderColor: '#CDD8EA',
+    borderWidth: 1,
+    borderRadius: 8,
+    backgroundColor: "white",
+    padding: 6,
+    paddingLeft: 14,
+    paddingRight: 14,
+    borderLeftWidth: 0,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: 120,
+    position: 'relative',
+    zIndex: 900
+  },
+  item: {
+    width: '100%',
+    zIndex: 999,
+    paddingTop: 4,
+    paddingBottom: 4
+  }
 });

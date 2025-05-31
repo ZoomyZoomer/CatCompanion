@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import Habit from "./Habit"
@@ -9,8 +9,28 @@ import Swap from '@/assets/svgs/swap.svg'
 import Paperclip from '@/assets/svgs/paperclip.svg'
 import AddCircle from '@/assets/svgs/add-circle.svg'
 import NullHabit from "./NullHabit"
+import axios from "axios"
 
-const TaskSection = ({ setShowHabitPopup } : any) => {
+const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog } : any) => {
+
+    const [habits, setHabits] = useState([]);
+
+    const fetchHabits = async() => {
+
+        const res = await axios.get('http://10.0.0.216:5000/fetchHabits', {
+            params: {
+                uid: 0
+            }
+        })
+
+        setHabits(res.data);
+
+    }
+
+    useEffect(() => {
+        fetchHabits();
+    }, [showHabitPopup])
+
     return (
         <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
             <View style={styles.header}>
@@ -45,7 +65,15 @@ const TaskSection = ({ setShowHabitPopup } : any) => {
                         <Text style={{color: '#52637D', fontSize: 16, fontWeight: 600, marginLeft: 6}}>Today's Habits</Text>
                     </View>
 
-                    <NullHabit />
+                    {habits.length === 0 && (
+                        <NullHabit />
+                    )}
+
+                    {habits.length > 0 && (
+                        habits.map((habit) => (
+                            <Habit habit={habit} setShowHabitLog={setShowHabitLog}/>
+                        ))
+                    )}
 
                 </View>
             </View>

@@ -9,11 +9,15 @@ import SelectIcon from "./SelectIcon"
 import FeedbackBox from "./FeedbackBox"
 import HabitAmount from "./HabitAmount"
 import HabitRewards from "./HabitRewards"
+import axios from "axios"
 
 const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
 
     const [pageCount, setPageCount] = useState(0);
     const [showFeedback, setShowFeedback] = useState(false);
+
+    const [showDropDown, setShowDropDown] = useState(false);
+    const [dropDownValue, setDropDownValue] = useState('Day');
 
     const scale = useSharedValue(0.7)
         
@@ -34,6 +38,41 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
         setValidEntry(false);
     }, [pageCount])
 
+    const [amount, setAmount] = useState(0);
+    const [time, setTime] = useState(0);
+    const [habitName, setHabitName] = useState('');
+    const [motivator, setMotivator] = useState('');
+    const [activeIcon, setActiveIcon] = useState(null);
+
+    const sendReq = async() => {
+
+        const amountVal = (time > amount ? time * 4 : amount * 3);
+        const typeVal = (time > amount ? 100 : 50);
+        const total = amountVal + typeVal + 160;
+        
+        const currTier = total < 300 ? 0 : (total < 500 ? 1 : 2);
+
+        axios.post('http://10.0.0.216:5000/sendHabit', {
+            uid: 0,
+            habit: {
+                name: habitName,
+                type: time > amount ? 'Time' : 'Quantity',
+                motivator: motivator,
+                icon: activeIcon,
+                amount_required: time > amount ? time : amount,
+                reward_amount: total,
+                reward_tier: currTier,
+                availability: dropDownValue
+            }
+        })
+
+        setTimeout(() => {
+            setShowHabitPopup(false);
+        }, 400)
+
+    }
+    
+
     return (
         <View style={{height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', position: 'absolute', zIndex: 998}}>
 
@@ -51,7 +90,8 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
                             {
                             pageCount === 0 ? 'Create a Habit' :
                             pageCount === 1 ? 'Select an Icon' :
-                            'Select Habit Type'
+                            pageCount === 2 ? 'Select Habit Type' :
+                            'Confirm Your Habit'
                             }
                         </Text>
 
@@ -59,7 +99,8 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
                             {
                             pageCount === 0 ? "Let's achieve some consistency" :
                             pageCount === 1 ? 'Something unique' :
-                            'How are we keeping track?'
+                            pageCount === 2 ? 'How are we keeping track?' :
+                            'View your potential rewards'
                             }
                         </Text>
 
@@ -72,15 +113,15 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
                     </View>
 
                     {
-                        pageCount === 0 ? <HabitForm setValidEntry={setValidEntry}/> :
-                        pageCount === 1 ? <SelectIcon setValidEntry={setValidEntry} setShowFeedback={setShowFeedback}/> :
-                        pageCount === 2 ? <HabitAmount setValidEntry={setValidEntry}/> :
-                        <HabitRewards />
+                        pageCount === 0 ? <HabitForm setValidEntry={setValidEntry} setShowDropDown={setShowDropDown} showDropDown={showDropDown} setDropDownValue={setDropDownValue} dropDownValue={dropDownValue} setHabitName={setHabitName} habitName={habitName} setMotivator={setMotivator} motivator={motivator}/> :
+                        pageCount === 1 ? <SelectIcon setValidEntry={setValidEntry} setShowFeedback={setShowFeedback} setActiveIcon={setActiveIcon} activeIcon={activeIcon}/> :
+                        pageCount === 2 ? <HabitAmount setValidEntry={setValidEntry} amount={amount} setAmount={setAmount} time={time} setTime={setTime}/> :
+                        <HabitRewards setValidEntry={setValidEntry} amount={amount} time={time}/>
                     }
                     
 
-                    <View style={{position: 'absolute', bottom: 20, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-                        <PopupButton buttonText={'Next'} setPageCount={setPageCount} maxPage={4} currPage={pageCount} validEntry={validEntry}/>
+                    <View style={{position: 'absolute', bottom: 20, width: '100%', justifyContent: 'center', alignItems: 'center', zIndex: 1}}>
+                        <PopupButton buttonText={'Next'} setPageCount={setPageCount} maxPage={4} currPage={pageCount} validEntry={validEntry} sendReq={sendReq}/>
                     </View>
 
                 </View>
@@ -95,7 +136,7 @@ export default CreateHabitPopup
 
 const styles = StyleSheet.create({
     popup_container: {
-        height: 570,
+        height: 600,
         width: '90%',
         backgroundColor: '#FDFDFD',
         borderRadius: 8,

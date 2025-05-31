@@ -2,19 +2,17 @@ import React, { useEffect, useRef, useState } from "react"
 import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import CustomSlider from "./CustomSlider";
 
-const HabitAmount = ({ setValidEntry }: any) => {
+const HabitAmount = ({ setValidEntry, amount, setAmount, time, setTime }: any) => {
 
   const [active, setActive] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [time, setTime] = useState(0);
 
   useEffect(() => {
-    if ((amount > 0) && (active.length > 0)) {
+    if (((amount > 0) || (time > 0)) && (active.length > 0)) {
       setValidEntry(true);
     } else {
       setValidEntry(false);
     }
-  }, [amount]);
+  }, [amount, time]);
 
   useEffect(() => {
     setAmount(0);
