@@ -22,6 +22,8 @@ import TimeTravelMood from "@/components/TimeTravelMood"
 import TasksPage from "@/components/TasksPage"
 import CreateHabitPopup from "@/components/CreateHabitPopup"
 import HabitLogPopup from "@/components/HabitLogPopup"
+import RewardPopup from "@/components/RewardPopup"
+import DayPopup from "@/components/DayPopup"
 
 const logs = () => {
 
@@ -31,10 +33,14 @@ const logs = () => {
     const [isTimeTraveling, setIsTimeTraveling] = useState(false);
     const [showHabitPopup, setShowHabitPopup] = useState(false);
     const [showHabitLog, setShowHabitLog] = useState(false);
+    const [showRewardPopup, setShowRewardPopup] = useState(false);
+    const [showDayPicker, setShowDayPicker] = useState(false);
+    const [deletingHabit, setDeletingHabit] = useState(false);
 
     const [relDate, setRelDate] = useState(null);
     const [month, setMonth] = useState((new Date().getMonth()))
     const [year, setYear] = useState((new Date()).getFullYear());
+    const [selectedDay, setSelectedDay] = useState((new Date()).getDate())
 
     const [currTab, setCurrTab] = useState(0);
     const [calendarView, setCalendarView] = useState(false);
@@ -59,7 +65,36 @@ const logs = () => {
         fetchDailies();
     }, [isPickingMood])
 
-    const moodDate= useRef(new Date());
+    const moodDate = useRef(new Date());
+    const habitId = useRef(null);
+
+    const deleteDailyLog = async() => {
+
+        try {
+
+            await axios.post('http://10.75.178.141:5000/deleteDaily', {
+                uid: 0,
+                date: relDate
+            })
+
+            setIsDeletingMood(false);         
+
+        } catch (e) {
+
+        }
+
+    }
+
+    const handleDelete = async() => {
+    
+        await axios.post('http://10.0.0.216:5000/deleteHabit', {
+            uid: 0,
+            hid: habitId.current?.hid
+        })
+
+        setDeletingHabit(false);
+    
+    }
 
     return (
         
@@ -67,12 +102,17 @@ const logs = () => {
 
             {isPickingDate && <DatePopup setIsPickingDate={setIsPickingDate} month={month} year={year} setMonth={setMonth} setYear={setYear} fetchDailies={fetchDailies} moodDate={moodDate} setMoodDate={setMoodDate}/>}
             {isPickingMood && <MoodPopup setIsPickingMood={setIsPickingMood} moodDate={moodDate}/>}
-            {isDeletingMood && <DeletePopup setOpen={setIsDeletingMood} text={'Daily Log'} relDate={relDate}/>}
+            {isDeletingMood && <DeletePopup setOpen={setIsDeletingMood} text={'Daily Log'} callFunc={deleteDailyLog}/>}
             {isTimeTraveling && <TimeTravelMood setIsTimeTraveling={setIsTimeTraveling} setIsPickingMood={setIsPickingMood} moodDate={moodDate}/>}
             {showHabitPopup && <CreateHabitPopup setShowHabitPopup={setShowHabitPopup}/>}
-            {showHabitLog && <HabitLogPopup setShowHabitLog={setShowHabitLog}/>}
+            {showHabitLog && <HabitLogPopup setShowHabitLog={setShowHabitLog} habitInfo={habitId.current} setShowRewardPopup={setShowRewardPopup}/>}
+            {showRewardPopup && <RewardPopup setShowRewardPopup={setShowRewardPopup} habitInfo={habitId.current}/>}
+            {showDayPicker && <DayPopup setSelectedDay={setSelectedDay} selectedDay={selectedDay} setIsPickingDate={setShowDayPicker}/>}
+            {deletingHabit && <DeletePopup setOpen={setDeletingHabit} text={'Habit'} callFunc={handleDelete}/>}
 
-            <View style={{width: '100%', height: '100%', position: 'relative', filter: (isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling || showHabitPopup || showHabitLog) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling || showHabitPopup || showHabitLog) ? 'none' : 'auto'}}>
+
+
+            <View style={{width: '100%', height: '100%', position: 'relative', filter: (deletingHabit || showDayPicker || isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling || showHabitPopup || showHabitLog || showRewardPopup) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (deletingHabit || showDayPicker || isPickingDate || isPickingMood || isDeletingMood || isTimeTraveling || showHabitPopup || showHabitLog || showRewardPopup) ? 'none' : 'auto'}}>
             
             <View style={{flex: 1, backgroundColor: '#FBFBFB', alignItems: 'center', paddingBottom: 140, overflowY: 'auto'}}>
 
@@ -82,7 +122,7 @@ const logs = () => {
                 {
                     currTab === 0 ? (!calendarView ? <MoodsPage moodDate={moodDate} setCalendarView={setCalendarView} setIsPickingDate={setIsPickingDate} setIsPickingMood={setIsPickingMood} setIsDeletingMood={setIsDeletingMood} setRelDate={setRelDate} dailyMoods={dailyMoods} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/> :
                     <CalendarPage moodDate={moodDate} setCalendarView={setCalendarView} dailyMoods={dailyMoods} setIsPickingMood={setIsPickingMood} setRelDate={setRelDate} setIsPickingDate={setIsPickingDate} setIsDeletingMood={setIsDeletingMood} month={month} year={year} setIsTimeTraveling={setIsTimeTraveling}/>) :
-                    <TasksPage setShowHabitPopup={setShowHabitPopup} showHabitPopup={showHabitPopup} setShowHabitLog={setShowHabitLog}/>
+                    <TasksPage deletingHabit={deletingHabit} setDeletingHabit={setDeletingHabit} selectedDay={selectedDay} setShowDayPicker={setShowDayPicker} setShowHabitPopup={setShowHabitPopup} showHabitPopup={showHabitPopup} setShowHabitLog={setShowHabitLog} habitId={habitId} showHabitLog={showHabitLog} setShowRewardPopup={setShowRewardPopup}/>
                 }
                            
 

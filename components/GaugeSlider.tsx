@@ -25,6 +25,7 @@ interface GaugeSliderProps {
   step?: number;                             // default 1
   arcStartAngle?: number;                    // default 150
   arcSweepAngle?: number;                    // default 240
+  tier?: number;
 }
 
 export const GaugeSlider: React.FC<GaugeSliderProps> = ({
@@ -41,7 +42,15 @@ export const GaugeSlider: React.FC<GaugeSliderProps> = ({
   step = 1,
   arcStartAngle = 150,
   arcSweepAngle = 240,
+  tier
 }) => {
+
+  const tiers = [
+    require('@/assets/pngs/message.png'),
+    require('@/assets/pngs/gift-box.png'),
+    require('@/assets/pngs/gift.png')
+  ]
+
   // Animations for the little circles
   const circle1Anim = useRef(new Animated.Value(0)).current;
   const circle3Anim = useRef(new Animated.Value(0)).current;
@@ -231,19 +240,19 @@ export const GaugeSlider: React.FC<GaugeSliderProps> = ({
           left: (size + thumbSize) / 2 - 40,
         }}
       >
-        <View style={styles.circle}>
-          <Image source={require('@/assets/pngs/gift.png')} style={styles.image} />
+        <View style={[styles.circle, {backgroundColor: value === max ? '#FFE3CE' : '#E8ECF1'}]}>
+          <Image source={tiers[tier ? tier : 0]} style={styles.image} />
           <Animated.View
-            style={[styles.circle0, { transform: [{ scale: circle0Scale }] }]}
+            style={[styles.circle0, { transform: [{ scale: circle0Scale }], backgroundColor: value === max ? '#FFE3CE' : '#E8ECF1' }]}
           />
           <Animated.View
-            style={[styles.circle1, { transform: [{ translateX: circle1TranslateX }] }]}
+            style={[styles.circle1, { transform: [{ translateX: circle1TranslateX }], backgroundColor: value === max ? '#FFE3CE' : '#E8ECF1' }]}
           />
           <Animated.View
-            style={[styles.circle2, { transform: [{ scale: circle2Scale }] }]}
+            style={[styles.circle2, { transform: [{ scale: circle2Scale }], backgroundColor: value === max ? '#FFE3CE' : '#E8ECF1' }]}
           />
           <Animated.View
-            style={[styles.circle3, { transform: [{ translateX: circle3TranslateX }] }]}
+            style={[styles.circle3, { transform: [{ translateX: circle3TranslateX }], backgroundColor: value === max ? '#FFE3CE' : '#E8ECF1' }]}
           />
         </View>
       </View>
@@ -303,5 +312,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -10,
     bottom: 0,
-  },
+  }
 });

@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import Close from '@/assets/svgs/close.svg'
 import axios from "axios";
 
-const DeletePopup = ({ setOpen, text, relDate } : any) => {
+const DeletePopup = ({ setOpen, text, callFunc} : any) => {
 
     const scale = useSharedValue(0.7)
         
@@ -18,23 +18,6 @@ const DeletePopup = ({ setOpen, text, relDate } : any) => {
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ scale: scale.value }]
     }))
-
-    const deleteDailyLog = async() => {
-
-        try {
-
-            await axios.post('http://10.75.178.141:5000/deleteDaily', {
-                uid: 0,
-                date: relDate
-            })
-
-            setOpen(false);            
-
-        } catch (e) {
-
-        }
-
-    }
 
     return (
         <Animated.View style={[styles.popup_container, animatedStyle]}>
@@ -63,7 +46,7 @@ const DeletePopup = ({ setOpen, text, relDate } : any) => {
                 <TouchableOpacity style={styles.cancel_btn} onPress={() => setOpen(false)}>
                     <Text style={{color: '#52637D', fontWeight: 500}}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.delete_btn} onPress={() => deleteDailyLog()}>
+                <TouchableOpacity style={styles.delete_btn} onPress={() => callFunc()}>
                     <Text style={{color: 'white', fontWeight: 500}}>Delete</Text>
                 </TouchableOpacity>
             </View>

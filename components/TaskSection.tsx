@@ -9,17 +9,21 @@ import Swap from '@/assets/svgs/swap.svg'
 import Paperclip from '@/assets/svgs/paperclip.svg'
 import AddCircle from '@/assets/svgs/add-circle.svg'
 import NullHabit from "./NullHabit"
+import Close from '@/assets/svgs/close-circle.svg'
+
 import axios from "axios"
 
-const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog } : any) => {
+const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog, habitId, showHabitLog, setShowRewardPopup, setShowDayPicker, selectedDay, setDeletingHabit, deletingHabit } : any) => {
 
     const [habits, setHabits] = useState([]);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchHabits = async() => {
 
         const res = await axios.get('http://10.0.0.216:5000/fetchHabits', {
             params: {
-                uid: 0
+                uid: 0,
+                day: daysOfWeek[selectedDay]
             }
         })
 
@@ -29,7 +33,10 @@ const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog } : an
 
     useEffect(() => {
         fetchHabits();
-    }, [showHabitPopup])
+    }, [showHabitPopup, showHabitLog, deletingHabit, selectedDay])
+
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 
     return (
         <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
@@ -45,15 +52,15 @@ const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog } : an
             <View style={styles.body}>
                 <View style={{width: '100%', position: 'relative', flexDirection: 'row'}}>
 
-                    <View style={styles.date_box}><Text style={{color: '#52637D'}}>Date</Text></View>
-                    <TouchableOpacity style={styles.date}>
-                        <Text style={{color: '#52637D'}}>May 22, 2025</Text>
+                    <View style={styles.date_box}><Text style={{color: '#52637D'}}>Day</Text></View>
+                    <TouchableOpacity style={styles.date} onPress={() => setShowDayPicker(true)}>
+                        <Text style={{color: '#52637D'}}>{daysOfWeek[selectedDay]}</Text>
                         <ChevronDown stroke={'#52637D'} style={{marginTop: 2, marginLeft: 4}}/>
                     </TouchableOpacity> 
 
-                    <TouchableOpacity style={styles.swapView}>
-                        <Swap style={{marginTop: 2}}/>
-                        <Text style={{color: '#52637D', marginLeft: 4}}>View</Text>
+                    <TouchableOpacity style={styles.swapView} onPress={() => setIsDeleting((prev : boolean) => !prev)}>
+                        {!isDeleting && <Close />}
+                        <Text style={{color: '#52637D', marginLeft: 4}}>{!isDeleting ? 'Delete' : 'Cancel'}</Text>
                     </TouchableOpacity>
 
                 </View>
@@ -71,7 +78,7 @@ const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog } : an
 
                     {habits.length > 0 && (
                         habits.map((habit) => (
-                            <Habit habit={habit} setShowHabitLog={setShowHabitLog}/>
+                            <Habit habit={habit} setShowHabitLog={setShowHabitLog} habitId={habitId} setShowRewardPopup={setShowRewardPopup} isDeleting={isDeleting} setDeletingHabit={setDeletingHabit}/>
                         ))
                     )}
 
