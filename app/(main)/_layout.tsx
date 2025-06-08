@@ -171,7 +171,7 @@ function CustomTabBar({ state, descriptors, navigation } : any) {
                   ? 'home'
                   : route.name === 'adventures'
                   ? 'map'
-                  : route.name === 'notifications'
+                  : route.name === 'statistics'
                   ? 'bell'
                   : 'cog'
               }

@@ -73,7 +73,7 @@ const TaskSection = ({ setShowHabitPopup, showHabitPopup, setShowHabitLog, habit
                     </View>
 
                     {habits.length === 0 && (
-                        <NullHabit />
+                        <NullHabit setShowHabit={setShowHabitPopup}/>
                     )}
 
                     {habits.length > 0 && (

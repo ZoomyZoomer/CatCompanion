@@ -52,7 +52,7 @@ const CreateHabitPopup = ({ setShowHabitPopup } : any) => {
         
         const currTier = total < 300 ? 0 : (total < 500 ? 1 : 2);
 
-        axios.post('http://10.0.0.216:5000/sendHabit', {
+        axios.post('http://10.0.0.16:5000/sendHabit', {
             uid: 0,
             habit: {
                 name: habitName,

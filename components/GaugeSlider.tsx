@@ -26,6 +26,7 @@ interface GaugeSliderProps {
   arcStartAngle?: number;                    // default 150
   arcSweepAngle?: number;                    // default 240
   tier?: number;
+  disabled?: boolean
 }
 
 export const GaugeSlider: React.FC<GaugeSliderProps> = ({
@@ -42,7 +43,8 @@ export const GaugeSlider: React.FC<GaugeSliderProps> = ({
   step = 1,
   arcStartAngle = 150,
   arcSweepAngle = 240,
-  tier
+  tier,
+  disabled
 }) => {
 
   const tiers = [
@@ -158,32 +160,32 @@ export const GaugeSlider: React.FC<GaugeSliderProps> = ({
 
   // PanResponder sits on an invisible full-size overlay
   const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (
-        e: GestureResponderEvent,
-        _g: PanResponderGestureState,
-      ) => {
-        const { locationX, locationY } = e.nativeEvent;
-        const dx = locationX - center.x;
-        const dy = locationY - center.y;
-        let theta = (Math.atan2(dy, dx) * 180) / Math.PI;
-        if (theta < 0) theta += 360;
-        const delta = (theta - arcStartAngle + 360) % 360;
-        // if within our sweep:
-        if (delta <= arcSweepAngle) {
-          // map to raw value
-          const rawVal = min + (delta / arcSweepAngle) * (max - min);
-          const snapped = clampAndSnap(rawVal, min, max, step);
-          if (snapped !== currentValue) {
-            setCurrentValue(snapped);
-            onValueChange?.(snapped);
-          }
+  PanResponder.create({
+    onStartShouldSetPanResponder: () => !disabled,
+    onMoveShouldSetPanResponder: () => !disabled,
+    onPanResponderMove: (
+      e: GestureResponderEvent,
+      _g: PanResponderGestureState,
+    ) => {
+      if (disabled) return;
+      const { locationX, locationY } = e.nativeEvent;
+      const dx = locationX - center.x;
+      const dy = locationY - center.y;
+      let theta = (Math.atan2(dy, dx) * 180) / Math.PI;
+      if (theta < 0) theta += 360;
+      const delta = (theta - arcStartAngle + 360) % 360;
+      if (delta <= arcSweepAngle) {
+        const rawVal = min + (delta / arcSweepAngle) * (max - min);
+        const snapped = clampAndSnap(rawVal, min, max, step);
+        if (snapped !== currentValue) {
+          setCurrentValue(snapped);
+          onValueChange?.(snapped);
         }
-      },
-    }),
-  ).current;
+      }
+    },
+  })
+).current;
+
 
   // if parent ever changes the `value` prop, snap & update
   useEffect(() => {

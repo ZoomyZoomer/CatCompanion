@@ -3,9 +3,9 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import Star from '@/assets/svgs/star_filled_dark.svg'
 
-const NullHabit = () => {
+const NullHabit = ({ setShowHabit } : any) => {
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={() => setShowHabit(true)}>
 
             <View style={styles.left_cont}>
                 <View style={styles.circle}>

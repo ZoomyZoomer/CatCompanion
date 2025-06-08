@@ -72,7 +72,7 @@ const logs = () => {
 
         try {
 
-            await axios.post('http://10.75.178.141:5000/deleteDaily', {
+            await axios.post('http://10.0.0.216:5000/deleteDaily', {
                 uid: 0,
                 date: relDate
             })

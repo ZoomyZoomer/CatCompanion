@@ -29,7 +29,7 @@ const HabitLogPopup = ({ setShowHabitLog, habitInfo, setShowRewardPopup } : any)
 
     const recordHabit = async() => {
 
-        await axios.post('http://10.0.0.216:5000/recordHabit', {
+        await axios.post('http://10.0.0.16:5000/recordHabit', {
             uid: 0,
             hid: habitInfo.hid,
             habitDetails: {date: new Date(), amount_completed: value}
@@ -90,6 +90,7 @@ const HabitLogPopup = ({ setShowHabitLog, habitInfo, setShowRewardPopup } : any)
                             arcSweepAngle={260}
                             max={habitInfo.max}
                             tier={habitInfo.tier}
+                            disabled={habitInfo?.amount_completed / habitInfo?.max < 1 ? false : true}
                         />
                         <View style={{position: 'absolute', bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
                             <Text style={{fontSize: 36, color: '#FCAD72', fontWeight: 500}}>{value}</Text>
@@ -105,8 +106,8 @@ const HabitLogPopup = ({ setShowHabitLog, habitInfo, setShowRewardPopup } : any)
 
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={() => recordHabit()}>
-                    <Text style={{color: 'white', fontWeight: 500}}>Log Habit</Text>
+                <TouchableOpacity style={[styles.button, {backgroundColor: habitInfo?.amount_completed / habitInfo?.max < 1 ? '#FCAD72' : '#E8ECF1', pointerEvents: habitInfo?.amount_completed / habitInfo?.max < 1 ? 'auto' : 'none'}]} onPress={() => recordHabit()}>
+                    <Text style={{color: habitInfo?.amount_completed / habitInfo?.max < 1 ? 'white' : '#52637D', fontWeight: 500 }}>{habitInfo?.amount_completed / habitInfo?.max < 1 ? 'Log Habit' : 'Habit Completed'}</Text>
                 </TouchableOpacity>
 
             </View>
