@@ -1,13 +1,22 @@
 import React from "react"
-import { Image, StyleSheet, Text, View } from "react-native"
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 import Star from '@/assets/svgs/star_filled.svg'
+import Arrow from '@/assets/svgs/right-arrow2.svg'
 
-const HighestRated = () => {
+const HighestRated = ({ setShowMore } : any) => {
     return (
         <View style={styles.stat_container}>
-          <Text style={{color: '#52637D', fontWeight: 500, fontSize: 16}}>Highest Rated</Text>
-          <Text style={{color: '#687994'}}>Most enjoyable activities</Text>
+
+          <View style={{width: '100%', position: 'relative', justifyContent: 'center'}}>
+            <Text style={{color: '#52637D', fontWeight: 500, fontSize: 16}}>
+              Highest Rated
+            </Text>
+            <TouchableOpacity style={{position: 'absolute', right: 0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={() => {setShowMore(true)}}>
+              <Text style={{color: '#8394AE', right: 4}}>More</Text>
+              <Arrow />
+            </TouchableOpacity>
+          </View>
 
           <View style={{width: '100%', marginTop: 30, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 
@@ -53,6 +62,14 @@ const HighestRated = () => {
               <Text style={styles.place_text}>3</Text>
             </View>
 
+          </View>
+
+          <View style={{width: '100%', justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+            <Text style={{color: '#52637D', fontWeight: 400}}>
+              You enjoy drinking 
+              <Text style={{color: '#FCAD72', fontWeight: 500, textDecorationLine: 'underline', marginLeft: 4, marginRight: 4}}>Coffee</Text>
+              the most.
+            </Text>
           </View>
 
         </View>

@@ -7,7 +7,7 @@ import Swap from '@/assets/svgs/swap.svg'
 const MoodWheel = () => {
     return (
         <View style={styles.stat_container}>
-            <Text style={{color: '#52637D', fontWeight: 500, fontSize: 16}}>Mood Wheel</Text>
+            <Text style={{color: '#52637D', fontWeight: 500, fontSize: 16}}>Mood Chart</Text>
             <Text style={{color: '#687994'}}>
                 Your 
                 <Text style={{fontWeight: 500}}> most </Text> 
