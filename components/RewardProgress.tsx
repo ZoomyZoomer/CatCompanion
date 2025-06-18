@@ -7,12 +7,9 @@ const RewardProgress = () => {
     return (
         <View style={styles.stat_container}>
 
-            <Text style={{color: '#52637D', fontWeight: 500, fontSize: 16}}>Rewards</Text>
-            <Text style={{color: '#687994'}}>
-                You've collected
-            <Text style={{fontWeight: 500}}> 23 </Text> 
-                rewards
-            </Text>
+            <View style={{width: '100%'}}>
+                <Text style={{color: '#52637D', fontWeight: 500, fontSize: 16}}>Rewards</Text>
+            </View>
 
             <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
 
@@ -32,7 +29,7 @@ const RewardProgress = () => {
                         <View style={styles.circle}>
                             <Image source={require('@/assets/pngs/message.png')} style={styles.icon}/>
                         </View>
-                        <Text style={{color: '#52637D', fontWeight: 500, marginTop: 6}}>Envelope</Text>
+                        <Text style={{color: '#52637D', fontWeight: 500, marginTop: 12}}>Envelope</Text>
                         <View style={[styles.counter, {flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}]}>
                             <Text style={{color: '#52637D', marginRight: 4}}>240</Text>
                             <Star />
@@ -48,7 +45,7 @@ const RewardProgress = () => {
                         <View style={styles.circle}>
                             <Image source={require('@/assets/pngs/gift-box.png')} style={styles.icon}/>
                         </View>
-                        <Text style={{color: '#52637D', fontWeight: 500, marginTop: 6}}>Heart Box</Text>
+                        <Text style={{color: '#52637D', fontWeight: 500, marginTop: 12}}>Heart Box</Text>
                         <View style={[styles.counter, {flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}]}>
                             <Text style={{color: '#52637D', marginRight: 4}}>550</Text>
                             <Star />
@@ -64,7 +61,7 @@ const RewardProgress = () => {
                         <View style={styles.circle}>
                             <Image source={require('@/assets/pngs/gift.png')} style={styles.icon}/>
                         </View>
-                        <Text style={{color: '#52637D', fontWeight: 500, marginTop: 6}}>Present</Text>
+                        <Text style={{color: '#52637D', fontWeight: 500, marginTop: 12}}>Present</Text>
                         <View style={[styles.counter, {flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}]}>
                             <Text style={{color: '#52637D', marginRight: 4}}>960</Text>
                             <Star />
@@ -117,7 +114,7 @@ const styles = StyleSheet.create({
         padding: 8,
         paddingLeft: 14,
         paddingRight: 14,
-        backgroundColor: '#FCFCFC',
+        backgroundColor: 'white',
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
         justifyContent: 'center',
@@ -159,7 +156,7 @@ const styles = StyleSheet.create({
         padding: 4,
         paddingLeft: 10,
         paddingRight: 10,
-        marginTop: 4,
+        marginTop: 6,
     },
     quant_container: {
         position: 'absolute',

@@ -162,6 +162,49 @@ const fetchDailyByMonth = async (req, res) => {
       return res.status(500).json({ message: 'Failed to delete daily log' });
     }
   };
+
+  const fetchHighestRatedItems = async (req, res) => {
+  const { uid } = req.query;
+  
+  try {
+    const log = await DailyLog.findOne({ uid });
+    const moods = log.moods;
+
+    // key by item.id, store id, name, sum & count
+    const stats = {};
+    moods.forEach(({ logItems }) => {
+      logItems.forEach(({ item, rating }) => {
+        const { id, itemName } = item;
+        if (!stats[id]) {
+          stats[id] = { 
+            id, 
+            itemName, 
+            sum: 0, 
+            count: 0 
+          };
+        }
+        stats[id].sum   += rating;
+        stats[id].count += 1;
+      });
+    });
+
+    // Build an array with id, name and average rating
+    const averages = Object.values(stats).map(({ id, itemName, sum, count }) => ({
+      id,
+      itemName,
+      avgRating: sum / count,
+    }));
+
+    // Sort descending by average rating
+    averages.sort((a, b) => b.avgRating - a.avgRating);
+
+    return res.status(200).json(averages);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: 'Failed to fetch items' });
+  }
+};
+
   
   const toDateString = (date) => {
     const d = new Date(date);
@@ -175,5 +218,6 @@ module.exports = {
   fetchCurrentMood,
   fetchDailyByMonth,
   deleteDaily,
-  fetchMoodStatus
+  fetchMoodStatus,
+  fetchHighestRatedItems
 };

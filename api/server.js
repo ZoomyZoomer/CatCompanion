@@ -26,7 +26,7 @@ app.use('/', customerServiceRoutes);
 app.use('/', habitRoutes);
 
 // Connect to MongoDB (replace with your real URI)
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect('mongodb+srv://kamilcwisniewski:freexqcOW12345@cluster0.2lesege.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

@@ -13,7 +13,7 @@ export default function Statistics() {
   return (
     <View style={{height: '100%', width: '100%', position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
 
-      {showMore && <MoreHighestRated />}
+      {showMore && <MoreHighestRated setOpen={setShowMore}/>}
 
       <View style={{ backgroundColor: 'rgb(251, 251, 251)', flex: 1, alignItems: 'center', width: '100%', overflowY: 'auto', paddingBottom: 100, paddingTop: 40, filter: (showMore) ? 'brightness(0.3) grayscale(0.4)' : 'none', pointerEvents: (showMore) ? 'none' : 'auto'}}>
 
@@ -21,10 +21,10 @@ export default function Statistics() {
 
           <HighestRated setShowMore={setShowMore}/>
           <View style={{width: '100%', marginTop: 30}}>
-            <MoodBar />
+            <RewardProgress />
           </View>
           <View style={{width: '100%', marginTop: 30}}>
-            <RewardProgress />
+            <MoodBar />
           </View>
           <View style={{width: '100%', marginTop: 30}}>
             <TaskTime />

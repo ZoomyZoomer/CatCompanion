@@ -8,34 +8,25 @@ const MoodBar = () => {
             <Text style={{color: '#687994'}}>
                 You mostly feel
             <Text style={{fontWeight: 500}}> Okay </Text> 
+
+            <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={styles.circle}>
+                    <Image source={require('@/assets/cats/angry_cat.png')} style={styles.cat}/>
+                </View>
+            </View>
+
             <View style={styles.bar_container}>
                 <View style={[styles.bar_line, {borderTopLeftRadius: 40, borderBottomLeftRadius: 40, backgroundColor: '#FFE3CE', width: '20%'}]}>
-                    <View style={[styles.percent_box, {top: '120%'}]}>
-                        <Text style={{color: '#687994'}}>16%</Text>
-                    </View>
+   
                 </View>
                 <View style={[styles.bar_line, {backgroundColor: '#FBC895', width: '35%'}]}>
-                    <View style={[styles.percent_box, {bottom: '120%'}]}>
-                        <Text style={{color: '#687994'}}>34%</Text>
-                    </View>
+    
                 </View>
                 <View style={[styles.bar_line, {backgroundColor: '#FCAD72', width: '10%'}]}>
-                    <View style={[styles.percent_box, {top: '120%'}]}>
-                        <Text style={{color: '#687994'}}>9%</Text>
-                    </View>
+
                 </View>
                 <View style={[styles.bar_line, {borderTopRightRadius: 40, borderBottomRightRadius: 40, backgroundColor: '#FF8F73', width: '35%'}]}>
-                    <View style={[styles.percent_box, {bottom: '120%'}]}>
-                        <Text style={{color: '#687994'}}>35%</Text>
-                    </View>
-                </View>
-                <View style={{position: 'absolute', bottom: '110%', left: '50%'}}>
-                    <View style={{position: 'relative', justifyContent: 'center', alignItems: 'center'}}>
-                        <View style={styles.mood_circle}>
-                            <Image source={require('@/assets/cats/happy_cat.png')} style={styles.mood}/>
-                        </View>
-                        <View style={styles.triangle}/>
-                    </View>
+
                 </View>
             </View>
             </Text>
@@ -65,7 +56,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 36,
         flexDirection: 'row',
-        marginTop: 100,
         position: 'relative'
     },
     bar_line: {
@@ -122,5 +112,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 12
+    },
+    cat: {
+        height: 54,
+        width: 54,
+        resizeMode: 'contain',
+        marginTop: 4
+    },
+    circle: {
+        height: 60,
+        width: 60,
+        borderRadius: '100%',
+        backgroundColor: '#FFE3CE',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
